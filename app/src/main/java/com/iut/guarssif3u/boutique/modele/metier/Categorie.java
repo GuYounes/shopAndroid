@@ -41,6 +41,7 @@ public class Categorie {
 
     /**
      * Retourne l'id de la catégorie
+     *
      * @return
      * id de la categorie
      */
