@@ -7,7 +7,7 @@ package com.iut.guarssif3u.boutique.modele.metier;
 public class Categorie {
 
     /**
-     * Id de la catégorie
+     * id de la catégorie
      */
     protected int id;
 
