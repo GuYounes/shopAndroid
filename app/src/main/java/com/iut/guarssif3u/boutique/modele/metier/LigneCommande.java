@@ -71,6 +71,9 @@ public class LigneCommande {
      *
      * @param id
      * id à passer à la ligne
+     *
+     * @throws IllegalArgumentException
+     * si l'id est négatif
      */
     public void setId(int id) {
         if(id < 0) throw new IllegalArgumentException("L'id ne peut pas être négatif");
@@ -132,6 +135,9 @@ public class LigneCommande {
      *
      * @param quantite
      * La quantité de l'article auquel la ligne fait référence
+     *
+     * @throws IllegalArgumentException
+     * si la quantité est négative
      */
     public void setQuantite(int quantite) {
         if(quantite < 0) throw new IllegalArgumentException("La quantite ne peut pas être négative");

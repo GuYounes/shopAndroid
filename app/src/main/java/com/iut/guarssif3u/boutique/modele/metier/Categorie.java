@@ -48,8 +48,12 @@ public class Categorie {
 
     /**
      * change l'id de la catégorie
+     *
      * @param id
      * nouvel id
+     *
+     * @throws IllegalArgumentException
+     * si l'id est négatif
      */
     public void setId(int id) {
         if(id < 0) throw new IllegalArgumentException("L'id ne peut pas être négatif");

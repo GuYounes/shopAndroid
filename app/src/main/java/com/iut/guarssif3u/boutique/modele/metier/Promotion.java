@@ -35,12 +35,16 @@ public class Promotion {
 
     /**
      * Constructeur
+     *
      * @param article
      * article cilbé
+     *
      * @param date_debut
      * date de debut de la pormotion
+     *
      * @param date_fin
      * date de fin de la promotion
+     *
      * @param pourcentage
      * pourcentage de reduction
      */
@@ -98,6 +102,7 @@ public class Promotion {
      * @param date_fin
      */
     public void setDate_fin(Date date_fin) {
+        if(date_fin.compareTo(this.date_debut) < 0 ) throw new IllegalArgumentException("La date de fin ne peut pas être plus tôt que la date de début");
         this.date_fin = date_fin;
     }
 
@@ -115,6 +120,7 @@ public class Promotion {
      * nouveau pourcentage
      */
     public void setPourcentage(float pourcentage) {
+        if(pourcentage < 0 || pourcentage > 1) throw new IllegalArgumentException("Le pourecentage est compris entre 0% et 100%");
         this.pourcentage = pourcentage;
     }
 
