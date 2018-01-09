@@ -33,6 +33,7 @@ public class Client {
 
     /**
      * Constructeur
+     *
      * @param nom
      * nom du client
      * @param prenom
@@ -48,6 +49,7 @@ public class Client {
 
     /**
      * Retourne l'id du client
+     *
      * @return
      * id du client
      */
@@ -57,8 +59,12 @@ public class Client {
 
     /**
      * Change l'id du client
+     *
      * @param id
      * nouvel id
+     *
+     * @throws IllegalArgumentException
+     * si l'id est negatif
      */
     public void setId(int id) {
         if(id < 0) throw new IllegalArgumentException("L'id ne peut pas être négatif");
@@ -67,6 +73,7 @@ public class Client {
 
     /**
      * Retourne le nom du client
+     *
      * @return
      * nom du client
      */
@@ -76,6 +83,7 @@ public class Client {
 
     /**
      * Change le nom du client
+     *
      * @param nom
      * nouveau nom
      */
@@ -85,6 +93,7 @@ public class Client {
 
     /**
      * Retourne le prenom du client
+     *
      * @return
      * prenom du client
      */
@@ -94,6 +103,7 @@ public class Client {
 
     /**
      * Change le prenom du client
+     *
      * @param prenom
      * nouveau prenom
      */
@@ -103,6 +113,7 @@ public class Client {
 
     /**
      * Retourne la ville du client
+     *
      * @return
      * ville du client
      */
@@ -112,6 +123,7 @@ public class Client {
 
     /**
      * Change la ville du client
+     *
      * @param ville
      * nouvelle ville
      */
@@ -121,7 +133,10 @@ public class Client {
 
     /**
      * Equals id nom prenom ville
+     *
      * @param o
+     * objet de type Client
+     *
      * @return
      * true si this == 0, sinon false
      */
@@ -140,6 +155,7 @@ public class Client {
 
     /**
      * Hashcode id nom prenom ville
+     *
      * @return
      */
     @Override

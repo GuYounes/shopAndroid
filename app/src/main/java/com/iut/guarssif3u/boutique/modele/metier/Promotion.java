@@ -35,6 +35,7 @@ public class Promotion {
 
     /**
      * Constructeur
+     *
      * @param article
      * article cilbé
      * @param date_debut
@@ -53,6 +54,7 @@ public class Promotion {
 
     /**
      * Retourne l'article ciblé par la promotion
+     *
      * @return
      * article ciblé par la promotion
      */
@@ -62,6 +64,7 @@ public class Promotion {
 
     /**
      * Change l'article ciblé par la promotion
+     *
      * @param article
      * nouvel article
      */
@@ -71,6 +74,7 @@ public class Promotion {
 
     /**
      * Retourne la date de debut la promotion
+     *
      * @return
      * date de debut de la promotion
      */
@@ -80,6 +84,7 @@ public class Promotion {
 
     /**
      * Change la date de debut de la promotion
+     *
      * @param date_debut
      * nouvelle date
      */
@@ -89,6 +94,7 @@ public class Promotion {
 
     /**
      * Retourne la date de fin de la promotion
+     *
      * @return
      * date de fin de la promotion
      */
@@ -98,6 +104,7 @@ public class Promotion {
 
     /**
      * Change la date de fin de la promotion
+     *
      * @param date_fin
      * nouvelle date
      */
@@ -107,6 +114,7 @@ public class Promotion {
 
     /**
      * Retourne le pourcentage de reduction de la promotion
+     *
      * @return
      * le pourcentage de reduction de la promotion
      */
@@ -116,6 +124,7 @@ public class Promotion {
 
     /**
      * Change le pourcentage de reduction de la promotion
+     *
      * @param pourcentage
      * nouveau pourcentage
      */
@@ -125,7 +134,10 @@ public class Promotion {
 
     /**
      * Equals article date_debeut date_fin
+     *
      * @param o
+     * objet de type Promotion
+     *
      * @return
      * true si this == o, sinon false
      */
@@ -144,6 +156,7 @@ public class Promotion {
 
     /**
      * Hashcode article date_debut date_fin
+     *
      * @return
      */
     @Override

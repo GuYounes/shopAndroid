@@ -28,6 +28,7 @@ public class Categorie {
 
     /**
      * Constructeur
+     *
      * @param nom
      * nom de la catégorie
      * @param visuel
@@ -40,6 +41,7 @@ public class Categorie {
 
     /**
      * Retourne l'id de la catégorie
+     *
      * @return
      * id de la categorie
      */
@@ -49,8 +51,12 @@ public class Categorie {
 
     /**
      * Change l'id de la catégorie
+     *
      * @param id
      * nouvel id
+     *
+     * @throws IllegalArgumentException
+     * si l'id est negatif
      */
     public void setId(int id) {
         if(id < 0) throw new IllegalArgumentException("L'id ne peut pas être négatif");
@@ -59,6 +65,7 @@ public class Categorie {
 
     /**
      * Retourne le nom de la catégorie
+     *
      * @return
      * nom de la categorie
      */
@@ -68,6 +75,7 @@ public class Categorie {
 
     /**
      * Change le nom de la catégorie
+     *
      * @param nom
      * nouveau nom
      */
@@ -76,7 +84,8 @@ public class Categorie {
     }
 
     /**
-     * Vetourne le visuel de la catégorie
+     * Retourne le visuel de la catégorie
+     *
      * @return
      * visuel de la categorie
      */
@@ -86,6 +95,7 @@ public class Categorie {
 
     /**
      * Change le visuel de la catégorie
+     *
      * @param visuel
      * visuel de la categorie
      */
@@ -95,7 +105,10 @@ public class Categorie {
 
     /**
      * Equals id nom visuel
+     *
      * @param o
+     * objet de type Categorie
+     *
      * @return
      * true si this == o, sinon false
      */
@@ -113,6 +126,7 @@ public class Categorie {
 
     /**
      * Hashcode id nom visuel
+     *
      * @return
      */
     @Override
