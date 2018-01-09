@@ -52,7 +52,7 @@ public class Categorie {
      * Change l'id de la catégorie
      *
      * @param id
-     * nouvel id
+     * Nouvel id
      *
      * @throws IllegalArgumentException
      * si l'id est négatif
