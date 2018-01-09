@@ -7,7 +7,7 @@ package com.iut.guarssif3u.boutique.modele.metier;
 public class Categorie {
 
     /**
-     * id de la catégorie
+     * Id de la catégorie
      */
     protected int id;
 
@@ -28,6 +28,7 @@ public class Categorie {
 
     /**
      * Constructeur
+     *
      * @param nom
      * nom de la catégorie
      * @param visuel
@@ -39,15 +40,16 @@ public class Categorie {
     }
 
     /**
-     * retourne l'id de la catégorie
+     * Retourne l'id de la catégorie
      * @return
+     * id de la categorie
      */
     public int getId() {
         return id;
     }
 
     /**
-     * change l'id de la catégorie
+     * Change l'id de la catégorie
      *
      * @param id
      * nouvel id
@@ -61,15 +63,18 @@ public class Categorie {
     }
 
     /**
-     * retourne le nom de la catégorie
+     * Retourne le nom de la catégorie
+     *
      * @return
+     * nom de la categorie
      */
     public String getNom() {
         return nom;
     }
 
     /**
-     * change le nom de la catégorie
+     * Change le nom de la catégorie
+     *
      * @param nom
      * nouveau nom
      */
@@ -78,15 +83,18 @@ public class Categorie {
     }
 
     /**
-     * retourne le visuel de la catégorie
+     * Retourne le visuel de la catégorie
+     *
      * @return
+     * visuel de la categorie
      */
     public String getVisuel() {
         return visuel;
     }
 
     /**
-     * change le visuel de la catégorie
+     * Change le visuel de la catégorie
+     *
      * @param visuel
      */
     public void setVisuel(String visuel) {
@@ -94,9 +102,13 @@ public class Categorie {
     }
 
     /**
-     * equals id nom visuel
+     * Equals id nom visuel
+     *
      * @param o
+     * objet de type Categorie
+     *
      * @return
+     * true si this == o, sinon false
      */
     @Override
     public boolean equals(Object o) {
@@ -111,7 +123,8 @@ public class Categorie {
     }
 
     /**
-     * hashcode id nom visuel
+     * Hashcode id nom visuel
+     *
      * @return
      */
     @Override
