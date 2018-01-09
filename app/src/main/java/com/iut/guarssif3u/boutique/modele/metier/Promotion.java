@@ -9,22 +9,22 @@ import java.util.Date;
 public class Promotion {
 
     /**
-     * article ciblé par la promotion
+     * Article ciblé par la promotion
      */
     protected Article article;
 
     /**
-     * date de debut de la promotion
+     * Date de debut de la promotion
      */
     protected Date date_debut;
 
     /**
-     * date de fin de la promotion
+     * Date de fin de la promotion
      */
     protected Date date_fin;
 
     /**
-     * pourcentage de reduction
+     * Pourcentage de reduction
      */
     protected float pourcentage;
 
@@ -56,15 +56,18 @@ public class Promotion {
     }
 
     /**
-     * retourne l'article ciblé par la promotion
+     * Retourne l'article ciblé par la promotion
+     *
      * @return
+     * article ciblé par la promotion
      */
     public Article getArticle() {
         return article;
     }
 
     /**
-     * change l'article ciblé par la promotion
+     * Change l'article ciblé par la promotion
+     *
      * @param article
      * nouvel article
      */
@@ -73,15 +76,18 @@ public class Promotion {
     }
 
     /**
-     * retourne la date de debut la promotion
+     * Retourne la date de debut la promotion
+     *
      * @return
+     * date de debut de la promotion
      */
     public Date getDate_debut() {
         return date_debut;
     }
 
     /**
-     * change la date de debut de la promotion
+     * Change la date de debut de la promotion
+     *
      * @param date_debut
      * nouvelle date
      */
@@ -90,16 +96,20 @@ public class Promotion {
     }
 
     /**
-     * retourne la date de fin de la promotion
+     * Retourne la date de fin de la promotion
+     *
      * @return
+     * date de fin de la promotion
      */
     public Date getDate_fin() {
         return date_fin;
     }
 
     /**
-     * change la date de fin de la promotion
+     * Change la date de fin de la promotion
+     *
      * @param date_fin
+     * nouvelle date
      */
     public void setDate_fin(Date date_fin) {
         if(date_fin.compareTo(this.date_debut) < 0 ) throw new IllegalArgumentException("La date de fin ne peut pas être plus tôt que la date de début");
@@ -107,15 +117,18 @@ public class Promotion {
     }
 
     /**
-     * retourne le pourcentage de reduction de la promotion
+     * Retourne le pourcentage de reduction de la promotion
+     *
      * @return
+     * le pourcentage de reduction de la promotion
      */
     public float getPourcentage() {
         return pourcentage;
     }
 
     /**
-     * change le pourcentage de reduction de la promotion
+     * Change le pourcentage de reduction de la promotion
+     *
      * @param pourcentage
      * nouveau pourcentage
      */
@@ -125,9 +138,13 @@ public class Promotion {
     }
 
     /**
-     * equals article date_debeut date_fin
+     * Equals article date_debeut date_fin
+     *
      * @param o
+     * objet de type Promotion
+     *
      * @return
+     * true si this == o, sinon false
      */
     @Override
     public boolean equals(Object o) {
@@ -143,7 +160,8 @@ public class Promotion {
     }
 
     /**
-     * hashcode article date_debut date_fin
+     * Hashcode article date_debut date_fin
+     *
      * @return
      */
     @Override

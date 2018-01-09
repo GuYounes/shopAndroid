@@ -7,22 +7,22 @@ package com.iut.guarssif3u.boutique.modele.metier;
 public class Client {
 
     /**
-     * id du client
+     * Id du client
      */
     protected int id;
 
     /**
-     * nom du client
+     * Nom du client
      */
     protected String nom;
 
     /**
-     * prenom du client
+     * Prenom du client
      */
     protected String prenom;
 
     /**
-     * ville du client
+     * Ville du client
      */
     protected String ville;
 
@@ -33,6 +33,7 @@ public class Client {
 
     /**
      * Constructeur
+     *
      * @param nom
      * nom du client
      * @param prenom
@@ -47,17 +48,23 @@ public class Client {
     }
 
     /**
-     * retourne l'id du client
+     * Retourne l'id du client
+     *
      * @return
+     * id du client
      */
     public int getId() {
         return id;
     }
 
     /**
-     * change l'id du client
+     * Change l'id du client
+     *
      * @param id
      * nouvel id
+     *
+     * @throws IllegalArgumentException
+     * si l'id est negatif
      */
     public void setId(int id) {
         if(id < 0) throw new IllegalArgumentException("L'id ne peut pas être négatif");
@@ -65,15 +72,18 @@ public class Client {
     }
 
     /**
-     * retourne le nom du client
+     * Retourne le nom du client
+     *
      * @return
+     * nom du client
      */
     public String getNom() {
         return nom;
     }
 
     /**
-     * change le nom du client
+     * Change le nom du client
+     *
      * @param nom
      * nouveau nom
      */
@@ -82,15 +92,18 @@ public class Client {
     }
 
     /**
-     * retourne le prenom du client
+     * Retourne le prenom du client
+     *
      * @return
+     * prenom du client
      */
     public String getPrenom() {
         return prenom;
     }
 
     /**
-     * change le prenom du client
+     * Change le prenom du client
+     *
      * @param prenom
      * nouveau prenom
      */
@@ -99,15 +112,18 @@ public class Client {
     }
 
     /**
-     * retourne la ville du client
+     * Retourne la ville du client
+     *
      * @return
+     * ville du client
      */
     public String getVille() {
         return ville;
     }
 
     /**
-     * change la ville du client
+     * Change la ville du client
+     *
      * @param ville
      * nouvelle ville
      */
@@ -116,9 +132,13 @@ public class Client {
     }
 
     /**
-     * equals id nom prenom ville
+     * Equals id nom prenom ville
+     *
      * @param o
+     * objet de type Client
+     *
      * @return
+     * true si this == 0, sinon false
      */
     @Override
     public boolean equals(Object o) {
@@ -134,7 +154,8 @@ public class Client {
     }
 
     /**
-     * equals id nom prenom ville
+     * Hashcode id nom prenom ville
+     *
      * @return
      */
     @Override
