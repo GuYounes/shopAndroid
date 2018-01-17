@@ -1,10 +1,13 @@
 package com.iut.guarssif3u.boutique.modele.metier;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by Vicek on 09/01/2018.
  */
 
-public class Categorie {
+public class Categorie implements Parcelable {
 
     /**
      * Id de la catégorie
@@ -29,14 +32,31 @@ public class Categorie {
     /**
      * Constructeur
      *
+     * @param id
+     * id de la categorie
+     *
      * @param nom
      * nom de la catégorie
+     *
      * @param visuel
      * visuel de la catégorie
      */
-    public Categorie(String nom, String visuel) {
+    public Categorie(int id, String nom, String visuel) {
+        this.setId(id);
         this.setNom(nom);
         this.setVisuel(visuel);
+    }
+
+    /**
+     * Constructeur
+     *
+     * @param in
+     * Parcel à partir duquel reconstruire l'objet
+     */
+    public Categorie(Parcel in){
+        this.id = in.readInt();
+        this.nom = in.readString();
+        this.visuel = in.readString();
     }
 
     /**
@@ -135,4 +155,30 @@ public class Categorie {
         result = 31 * result + visuel.hashCode();
         return result;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(this.id);
+        parcel.writeString(this.nom);
+        parcel.writeString(this.visuel);
+    }
+
+    public static final Parcelable.Creator<Categorie> CREATOR = new Parcelable.Creator<Categorie>(){
+
+        @Override
+        public Categorie createFromParcel(Parcel source){
+            return new Categorie(source);
+        }
+
+        @Override
+        public Categorie[] newArray(int size){
+            return new Categorie[size];
+        }
+    };
+
 }

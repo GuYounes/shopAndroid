@@ -21,8 +21,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ShopActivity" />
-        <activity android:name=".SalesActivity" />
+        <activity android:name=".BoutiqueActivity" />
+        <activity android:name=".VentesActivity" />
     </application>
 
 </manifest>

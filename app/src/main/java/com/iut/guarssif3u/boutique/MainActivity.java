@@ -82,10 +82,10 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_shop) {
-            Intent intent = new Intent(this, ShopActivity.class);
+            Intent intent = new Intent(this, BoutiqueActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_sales) {
-            Intent intent = new Intent(this, SalesActivity.class);
+            Intent intent = new Intent(this, VentesActivity.class);
             startActivity(intent);
         }
 
