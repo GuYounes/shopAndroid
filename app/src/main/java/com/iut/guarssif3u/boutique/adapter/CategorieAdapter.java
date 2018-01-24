@@ -5,11 +5,14 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.iut.guarssif3u.boutique.R;
@@ -25,40 +28,39 @@ import java.util.ArrayList;
 
 public class CategorieAdapter extends ArrayAdapter<Categorie> {
 
-    private Context context;
+    protected FragmentActivity activity;
     protected Drawable substitut;
+    protected ProgressBar loader;
 
-    public CategorieAdapter(Context context, ArrayList<Categorie> liste){
-        super(context, 0, liste);
-        this.context = context;
+    public CategorieAdapter(FragmentActivity activity, ArrayList<Categorie> liste, Drawable subsitut){
+        super(activity, 0, liste);
+        this.activity = activity;
+        this.substitut = subsitut;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
-        Categorie categorie = getItem(position);
+        Categorie categorie = (Categorie) getItem(position);
 
-        try {
-            substitut = Drawable.createFromStream(context.getAssets().open("crayon.png", AssetManager.ACCESS_STREAMING),null);
-        } catch (IOException e){
-
-        }
         if(convertView == null){
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_list_categorie, parent, false);
         }
+
+        this.loader = convertView.findViewById(R.id.loader);
 
         TextView tvNom = (TextView) convertView.findViewById(R.id.nom);
         tvNom.setText(categorie.getNom());
 
         ImageView iconeVisuel = (ImageView) convertView.findViewById(R.id.visuel);
         if(iconeVisuel.getDrawable() == null){
-            ImageFromURL ifu = new ImageFromURL((Activity)context, iconeVisuel, substitut);
-            ifu.execute("http://infodb.iutmetz.univ-lorraine.fr/~guarssif3u/ppo/ecommerce/" + categorie.getVisuel());
+            ImageFromURL ifu = new ImageFromURL(this, iconeVisuel, substitut, loader);
+            ifu.execute("https://infodb.iutmetz.univ-lorraine.fr/~guarssif3u/ppo/ecommerce/" + categorie.getVisuel());
         }
 
         ImageView iconeModifier = (ImageView) convertView.findViewById(R.id.modifier);
         if(iconeVisuel.getDrawable() == null){
             try {
-                iconeModifier.setImageDrawable(Drawable.createFromStream(context.getAssets().open("crayon.png"), null));
+                iconeModifier.setImageDrawable(Drawable.createFromStream(activity.getAssets().open("crayon.png"), null));
             } catch (IOException e){
 
             }
@@ -67,7 +69,7 @@ public class CategorieAdapter extends ArrayAdapter<Categorie> {
         ImageView iconeSupprimer = (ImageView) convertView.findViewById(R.id.supprimer);
         if(iconeVisuel.getDrawable() == null){
             try {
-                iconeSupprimer.setImageDrawable(Drawable.createFromStream(context.getAssets().open("corbeille.png", AssetManager.ACCESS_STREAMING), null));
+                iconeSupprimer.setImageDrawable(Drawable.createFromStream(activity.getAssets().open("corbeille.png"), null));
             } catch (IOException e){
 
             }

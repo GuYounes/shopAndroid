@@ -1,27 +1,20 @@
 package com.iut.guarssif3u.boutique;
 
-import android.app.Fragment;
+import android.graphics.drawable.Drawable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ListView;
 
-import com.iut.guarssif3u.boutique.adapter.CategorieAdapter;
 import com.iut.guarssif3u.boutique.adapter.ViewPagerAdapter;
 import com.iut.guarssif3u.boutique.fragment.ArticleFragment;
 import com.iut.guarssif3u.boutique.fragment.CategorieFragment;
 import com.iut.guarssif3u.boutique.fragment.PromotionFragment;
 import com.iut.guarssif3u.boutique.modele.metier.Categorie;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
 
 public class BoutiqueActivity extends AppCompatActivity {
 
@@ -31,6 +24,8 @@ public class BoutiqueActivity extends AppCompatActivity {
     private TabLayout tabLayout;
 
     private ListView listView;
+
+    private Drawable substitut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -7,20 +7,21 @@
 
     <ImageView
         android:id="@+id/visuel"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
         android:layout_weight="20"
         android:layout_margin="10dp"
         android:visibility="gone"
         />
 
     <ProgressBar
+        android:id="@+id/loader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:indeterminate="true"
         android:layout_margin="10dp"
         android:layout_weight="20"
-        android:visibility="gone"
+        android:visibility="invisible"
         />
 
     <TextView
