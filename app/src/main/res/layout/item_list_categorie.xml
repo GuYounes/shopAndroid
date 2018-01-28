@@ -7,15 +7,9 @@
 
     <ImageView
         android:id="@+id/visuel"
-<<<<<<< HEAD
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="30"
-=======
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:layout_weight="20"
->>>>>>> 32649eac61167e1d22045641094e5a3f2b6b4e1b
         android:layout_margin="10dp"
         android:visibility="gone"
         />
@@ -26,13 +20,8 @@
         android:layout_height="wrap_content"
         android:indeterminate="true"
         android:layout_margin="10dp"
-<<<<<<< HEAD
         android:layout_weight="30"
         android:visibility="gone"
-=======
-        android:layout_weight="20"
-        android:visibility="invisible"
->>>>>>> 32649eac61167e1d22045641094e5a3f2b6b4e1b
         />
 
     <TextView
