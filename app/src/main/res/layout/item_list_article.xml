@@ -9,7 +9,7 @@
         android:id="@+id/visuel"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight="30"
+        android:layout_weight="20"
         android:layout_margin="10dp"
         android:visibility="gone"
         />
@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:indeterminate="true"
         android:layout_margin="10dp"
-        android:layout_weight="30"
+        android:layout_weight="20"
         android:visibility="gone"
         />
 
@@ -27,7 +27,19 @@
         android:id="@+id/nom"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight="50"/>
+        android:layout_weight="30"/>
+
+    <TextView
+        android:id="@+id/reference"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="20"/>
+
+    <TextView
+        android:id="@+id/tarif"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="10"/>
 
     <ImageView
         android:id="@+id/modifier"
