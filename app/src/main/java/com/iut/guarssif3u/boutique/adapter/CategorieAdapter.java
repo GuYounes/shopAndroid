@@ -40,7 +40,7 @@ public class CategorieAdapter extends ArrayAdapter<Categorie> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
-        Categorie categorie = (Categorie) getItem(position);
+        Categorie categorie = getItem(position);
 
         if(convertView == null){
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_list_categorie, parent, false);
@@ -48,16 +48,16 @@ public class CategorieAdapter extends ArrayAdapter<Categorie> {
 
         this.loader = convertView.findViewById(R.id.loader);
 
-        TextView tvNom = (TextView) convertView.findViewById(R.id.nom);
+        TextView tvNom = convertView.findViewById(R.id.nom);
         tvNom.setText(categorie.getNom());
 
-        ImageView iconeVisuel = (ImageView) convertView.findViewById(R.id.visuel);
+        ImageView iconeVisuel = convertView.findViewById(R.id.visuel);
         if(iconeVisuel.getDrawable() == null){
             ImageFromURL ifu = new ImageFromURL(this, iconeVisuel, substitut, loader);
             ifu.execute("https://infodb.iutmetz.univ-lorraine.fr/~guarssif3u/ppo/ecommerce/" + categorie.getVisuel());
         }
 
-        ImageView iconeModifier = (ImageView) convertView.findViewById(R.id.modifier);
+        ImageView iconeModifier = convertView.findViewById(R.id.modifier);
         if(iconeVisuel.getDrawable() == null){
             try {
                 iconeModifier.setImageDrawable(Drawable.createFromStream(activity.getAssets().open("crayon.png"), null));
@@ -66,7 +66,7 @@ public class CategorieAdapter extends ArrayAdapter<Categorie> {
             }
         }
 
-        ImageView iconeSupprimer = (ImageView) convertView.findViewById(R.id.supprimer);
+        ImageView iconeSupprimer = convertView.findViewById(R.id.supprimer);
         if(iconeVisuel.getDrawable() == null){
             try {
                 iconeSupprimer.setImageDrawable(Drawable.createFromStream(activity.getAssets().open("corbeille.png"), null));

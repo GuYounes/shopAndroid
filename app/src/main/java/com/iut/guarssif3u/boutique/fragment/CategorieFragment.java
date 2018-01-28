@@ -33,6 +33,14 @@ public class CategorieFragment extends Fragment implements ActiviteEnAttenteAvec
     public CategorieFragment(){};
 
     @Override
+    public void onCreate(Bundle savedInstance){
+        super.onCreate(savedInstance);
+        this.categories = new ArrayList<>();
+
+        setRetainInstance(true);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance){
         View view = inflater.inflate(R.layout.fragment_categorie, null);
 
@@ -44,24 +52,17 @@ public class CategorieFragment extends Fragment implements ActiviteEnAttenteAvec
     }
 
     @Override
-    public void onCreate(Bundle savedInstance){
-        super.onCreate(savedInstance);
-        Bundle args = this.getArguments();
-        //this.categories = args.getParcelableArrayList("categories");
-        this.categories = new ArrayList<>();
-    }
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-    @Override
-    public void onStart(){
-        super.onStart();
-
-        this.listView = getActivity().findViewById(R.id.liste);
-        this.loader = getActivity().findViewById(R.id.loader);
+        this.listView = view.findViewById(R.id.liste);
+        this.loader = view.findViewById(R.id.loader);
 
         CategorieAdapter categorieAdapter = new CategorieAdapter(getActivity(), categories, substitut);
         this.listView.setAdapter(categorieAdapter);
 
         CategorieDAO.getInstance(this, this.loader, this.listView).findAll();
+        this.afficheLoader();
     }
 
     @Override
@@ -75,19 +76,19 @@ public class CategorieFragment extends Fragment implements ActiviteEnAttenteAvec
         this.categories.addAll(liste);
 
         ((BaseAdapter) this.listView.getAdapter()).notifyDataSetChanged();
-        //this.cacheLoaderAfficheContenu();
+        this.cacheLoaderAfficheContenu();
     }
 
     @Override
     public void afficheLoader(){
-        getActivity().findViewById(R.id.loader).setVisibility(View.VISIBLE);
-        getActivity().findViewById(R.id.liste).setVisibility(View.INVISIBLE);
+        this.loader.setVisibility(View.VISIBLE);
+        this.listView.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void cacheLoaderAfficheContenu() {
-        getActivity().findViewById(R.id.loader).setVisibility(View.INVISIBLE);
-        getActivity().findViewById(R.id.liste).setVisibility(View.VISIBLE);
+        this.loader.setVisibility(View.INVISIBLE);
+        this.listView.setVisibility(View.VISIBLE);
     }
 
 }

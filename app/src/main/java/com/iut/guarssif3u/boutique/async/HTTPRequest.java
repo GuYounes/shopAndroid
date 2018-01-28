@@ -26,6 +26,7 @@ import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by younes on 18/01/2018.
@@ -44,8 +45,7 @@ public class HTTPRequest<T extends Object> extends AsyncTask<String, Void, Strin
     protected Object data;
     protected Class deserializationClass;
 
-    public HTTPRequest(ActiviteEnAttenteAvecResultat activite, DAO dao, String method, Object data, Class deserializationClass,
-                       ProgressBar loader, ListView listView){
+    public HTTPRequest(ActiviteEnAttenteAvecResultat activite, DAO dao, String method, Object data, Class deserializationClass, ProgressBar loader, ListView listView){
         this.activite = activite;
         this.dao = dao;
         this.method = method;
@@ -55,9 +55,16 @@ public class HTTPRequest<T extends Object> extends AsyncTask<String, Void, Strin
         this.listView = listView;
     }
 
+    public HTTPRequest(ActiviteEnAttenteAvecResultat activite, DAO dao, String method, Object data, Class deserializationClass){
+        this.activite = activite;
+        this.dao = dao;
+        this.method = method;
+        this.data = data;
+        this.deserializationClass = deserializationClass;
+    }
+
     @Override
     protected void onPreExecute(){
-        this.activite.afficheLoader();
     }
 
     @Override
@@ -92,7 +99,7 @@ public class HTTPRequest<T extends Object> extends AsyncTask<String, Void, Strin
     @Override
     protected void onPostExecute(String result){
         Gson gson = new Gson();
-        ArrayList<T> liste = new ArrayList<T>();
+        ArrayList<T> liste = new ArrayList<>();
 
         if(result != null){
             switch (this.method){
@@ -106,21 +113,10 @@ public class HTTPRequest<T extends Object> extends AsyncTask<String, Void, Strin
 
                     activite.notifyRetourRequeteFindAll(liste);
                     break;
-               /* case (HTTPRequestMethod.POST ): activite.notifyRetourRequete((T) gson.fromJson(result, T));*/
             }
         } else {
 
         }
-
-        this.activite.cacheLoaderAfficheContenu();
     }
 
-    /*public void afficheLoader(){
-        this.loader.setVisibility(View.VISIBLE);
-    }
-
-    public void cacheLoaderAfficheContenu() {
-        this.loader.setVisibility(View.INVISIBLE);
-        this.listView.setVisibility(View.VISIBLE);
-    }*/
 }
