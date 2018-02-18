@@ -25,4 +25,13 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:indeterminate="true" />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/addCategorie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintRight_toLeftOf="parent"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@android:drawable/ic_input_add" />
+
 </android.support.constraint.ConstraintLayout>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.iut.guarssif3u.boutique.addCategorieActivity">
+
+    <TextView
+        android:id="@+id/labelCategorie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ajout d'une catégorie " />
+
+    <LinearLayout
+        android:id="@+id/rowNom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/labelCategorie">
+
+        <TextView
+            android:id="@+id/labelNomCategorie"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nom de la catégorie: "
+             />
+
+        <EditText
+            android:id="@+id/editNomCategorie"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toRightOf="@id/labelNomCategorie" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/rowVisuel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/rowNom">
+
+        <TextView
+            android:id="@+id/labelNomVisuel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nom de la catégorie: " />
+
+        <EditText
+            android:id="@+id/editNomVisuel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toRightOf="@id/labelNomVisuel" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/rowButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/rowVisuel"
+        app:layout_constraintLeft_toRightOf="parent"
+        app:layout_constraintRight_toLeftOf="parent">
+
+        <Button
+            android:id="@+id/btnOkCategorie"
+            android:tag="ajouter"
+            android:onClick="ajouterCategorie"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ajouter" />
+
+        <Button
+            android:id="@+id/btnRetour"
+            android:tag="ajouter"
+            android:onClick="retour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Retour" />
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

@@ -1,5 +1,6 @@
 package com.iut.guarssif3u.boutique;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.iut.guarssif3u.boutique.adapter.ViewPagerAdapter;
 import com.iut.guarssif3u.boutique.fragment.ArticleFragment;
@@ -94,6 +96,22 @@ public class BoutiqueActivity extends AppCompatActivity {
         this.adapter.addFragment(new CategorieFragment(), "Catégories");
         this.adapter.addFragment(new ArticleFragment(), "Articles");
         this.adapter.addFragment(new PromotionFragment(), "Promotions");
+    }
+
+    public void editCategorie(View view) {
+        Categorie categorie = new Categorie();
+        Intent activityLauncher = new Intent(this.getApplication(), addCategorieActivity.class);
+        activityLauncher.putExtra("categorie", categorie);
+        startActivity(activityLauncher);
+    }
+
+    public void deleteCategorie(View view) {
+        // get button position
+        View parentView = (View) view.getParent();
+        ListView listView = (ListView) parentView.getParent();
+        int position = listView.getPositionForView(parentView);
+
+        // delete categorie
     }
 
 }

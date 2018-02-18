@@ -1,7 +1,9 @@
 package com.iut.guarssif3u.boutique.fragment;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,10 +11,12 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.iut.guarssif3u.boutique.DAO.CategorieDAO;
 import com.iut.guarssif3u.boutique.R;
 import com.iut.guarssif3u.boutique.adapter.CategorieAdapter;
+import com.iut.guarssif3u.boutique.addCategorieActivity;
 import com.iut.guarssif3u.boutique.modele.metier.Categorie;
 
 import java.io.IOException;
@@ -22,13 +26,14 @@ import java.util.ArrayList;
  * Created by younes on 12/01/2018.
  */
 
-public class CategorieFragment extends Fragment implements ActiviteEnAttenteAvecResultat<Categorie> {
+public class CategorieFragment extends Fragment implements ActiviteEnAttenteAvecResultat<Categorie>, View.OnClickListener {
 
     protected ArrayList<Categorie> categories;
 
     protected ListView listView;
     protected Drawable substitut;
     protected ProgressBar loader;
+    protected FloatingActionButton addCategorieBtn;
 
     public CategorieFragment(){};
 
@@ -43,6 +48,9 @@ public class CategorieFragment extends Fragment implements ActiviteEnAttenteAvec
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance){
         View view = inflater.inflate(R.layout.fragment_categorie, null);
+
+        addCategorieBtn = (FloatingActionButton) view.findViewById(R.id.addCategorie);
+        addCategorieBtn.setOnClickListener(this);
 
         try {
             this.substitut = Drawable.createFromStream(getActivity().getAssets().open("cintre.png"), null);
@@ -89,6 +97,12 @@ public class CategorieFragment extends Fragment implements ActiviteEnAttenteAvec
     public void cacheLoaderAfficheContenu() {
         this.loader.setVisibility(View.INVISIBLE);
         this.listView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onClick(View view) {
+        Intent activityLauncher = new Intent(this.getActivity(), addCategorieActivity.class);
+        startActivity(activityLauncher);
     }
 
 }
