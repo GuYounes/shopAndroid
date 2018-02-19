@@ -1,7 +1,6 @@
 package com.iut.guarssif3u.boutique;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -10,16 +9,12 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.iut.guarssif3u.boutique.adapter.ViewPagerAdapter;
 import com.iut.guarssif3u.boutique.fragment.ArticleFragment;
 import com.iut.guarssif3u.boutique.fragment.CategorieFragment;
 import com.iut.guarssif3u.boutique.fragment.PromotionFragment;
 import com.iut.guarssif3u.boutique.modele.metier.Categorie;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class BoutiqueActivity extends AppCompatActivity {
 
@@ -52,7 +47,6 @@ public class BoutiqueActivity extends AppCompatActivity {
                     this.adapter.addFragment(getFragment(i), titles[i]);
                 }
         }
-
     }
 
     @Override
@@ -100,7 +94,7 @@ public class BoutiqueActivity extends AppCompatActivity {
 
     public void editCategorie(View view) {
         Categorie categorie = new Categorie();
-        Intent activityLauncher = new Intent(this.getApplication(), addCategorieActivity.class);
+        Intent activityLauncher = new Intent(this.getApplication(), ManageCategorieActivity.class);
         activityLauncher.putExtra("categorie", categorie);
         startActivity(activityLauncher);
     }

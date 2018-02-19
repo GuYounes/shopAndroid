@@ -11,12 +11,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.iut.guarssif3u.boutique.DAO.CategorieDAO;
 import com.iut.guarssif3u.boutique.R;
 import com.iut.guarssif3u.boutique.adapter.CategorieAdapter;
-import com.iut.guarssif3u.boutique.addCategorieActivity;
+import com.iut.guarssif3u.boutique.ManageCategorieActivity;
 import com.iut.guarssif3u.boutique.modele.metier.Categorie;
 
 import java.io.IOException;
@@ -49,7 +48,7 @@ public class CategorieFragment extends Fragment implements ActiviteEnAttenteAvec
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance){
         View view = inflater.inflate(R.layout.fragment_categorie, null);
 
-        addCategorieBtn = (FloatingActionButton) view.findViewById(R.id.addCategorie);
+        addCategorieBtn = view.findViewById(R.id.addCategorie);
         addCategorieBtn.setOnClickListener(this);
 
         try {
@@ -69,7 +68,7 @@ public class CategorieFragment extends Fragment implements ActiviteEnAttenteAvec
         CategorieAdapter categorieAdapter = new CategorieAdapter(getActivity(), categories, substitut);
         this.listView.setAdapter(categorieAdapter);
 
-        CategorieDAO.getInstance(this, this.loader, this.listView).findAll();
+        CategorieDAO.getInstance(this).findAll();
         this.afficheLoader();
     }
 
@@ -101,7 +100,7 @@ public class CategorieFragment extends Fragment implements ActiviteEnAttenteAvec
 
     @Override
     public void onClick(View view) {
-        Intent activityLauncher = new Intent(this.getActivity(), addCategorieActivity.class);
+        Intent activityLauncher = new Intent(this.getActivity(), ManageCategorieActivity.class);
         startActivity(activityLauncher);
     }
 

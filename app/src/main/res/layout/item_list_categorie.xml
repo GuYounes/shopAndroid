@@ -36,7 +36,6 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="10"
-        android:onClick="editCategorie"
         android:src="@drawable/ic_item_list_edit"/>
 
     <ImageView
@@ -44,7 +43,6 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="10"
-        android:onClick="deleteCategorie"
         android:src="@drawable/ic_item_list_delete"/>
 
 </LinearLayout>

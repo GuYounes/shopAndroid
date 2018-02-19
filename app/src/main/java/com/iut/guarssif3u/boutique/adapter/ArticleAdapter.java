@@ -12,22 +12,22 @@ import android.widget.TextView;
 
 import com.iut.guarssif3u.boutique.R;
 import com.iut.guarssif3u.boutique.async.ImageFromURL;
-import com.iut.guarssif3u.boutique.modele.metier.Categorie;
+import com.iut.guarssif3u.boutique.modele.metier.Article;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * Created by younes on 12/01/2018.
+ * Created by younes on 19/02/2018.
  */
 
-public class CategorieAdapter extends ArrayAdapter<Categorie> {
+public class ArticleAdapter extends ArrayAdapter<Article> {
 
     protected FragmentActivity activity;
     protected Drawable substitut;
     protected ProgressBar loader;
 
-    public CategorieAdapter(FragmentActivity activity, ArrayList<Categorie> liste, Drawable subsitut){
+    public ArticleAdapter(FragmentActivity activity, ArrayList<Article> liste, Drawable subsitut){
         super(activity, 0, liste);
         this.activity = activity;
         this.substitut = subsitut;
@@ -35,21 +35,21 @@ public class CategorieAdapter extends ArrayAdapter<Categorie> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
-        Categorie categorie = getItem(position);
+        Article article = getItem(position);
 
         if(convertView == null){
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_list_categorie, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_list_article, parent, false);
         }
 
         this.loader = convertView.findViewById(R.id.loader);
 
         TextView tvNom = convertView.findViewById(R.id.nom);
-        tvNom.setText(categorie.getNom());
+        tvNom.setText(article.getNom());
 
         ImageView iconeVisuel = convertView.findViewById(R.id.visuel);
         if(iconeVisuel.getDrawable() == null){
-            ImageFromURL<Categorie> ifu = new ImageFromURL<>(this, iconeVisuel, substitut, loader);
-            ifu.execute("https://infodb.iutmetz.univ-lorraine.fr/~guarssif3u/ppo/ecommerce/images/categorie/" + categorie.getVisuel());
+            ImageFromURL<Article> ifu = new ImageFromURL<>(this, iconeVisuel, substitut, loader);
+            ifu.execute("https://infodb.iutmetz.univ-lorraine.fr/~guarssif3u/ppo/ecommerce/images/article/" + article.getVisuel());
         }
 
         ImageView iconeModifier = convertView.findViewById(R.id.modifier);
@@ -68,5 +68,4 @@ public class CategorieAdapter extends ArrayAdapter<Categorie> {
 
         return convertView;
     }
-
 }
