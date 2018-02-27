@@ -79,11 +79,11 @@ public class Article implements Parcelable {
 
     protected Article(Parcel in) {
         id = in.readInt();
-        categorie = in.readParcelable(Categorie.class.getClassLoader());
         reference = in.readString();
         nom = in.readString();
         tarif = in.readFloat();
         visuel = in.readString();
+        categorie = in.readParcelable(Categorie.class.getClassLoader());
     }
 
     /**
@@ -243,11 +243,11 @@ public class Article implements Parcelable {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + (categorie != null ? categorie.hashCode() : 0);
         result = 31 * result + (reference != null ? reference.hashCode() : 0);
         result = 31 * result + (nom != null ? nom.hashCode() : 0);
         result = 31 * result + (tarif != +0.0f ? Float.floatToIntBits(tarif) : 0);
         result = 31 * result + (visuel != null ? visuel.hashCode() : 0);
+        result = 31 * result + (categorie != null ? categorie.hashCode() : 0);
         return result;
     }
 
@@ -259,10 +259,11 @@ public class Article implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(this.id);
-        parcel.writeString(this.nom);
         parcel.writeString(this.reference);
+        parcel.writeString(this.nom);
         parcel.writeFloat(this.tarif);
         parcel.writeString(this.visuel);
+        parcel.writeParcelable(this.categorie, i);
     }
 
     public static final Creator<Article> CREATOR = new Creator<Article>() {

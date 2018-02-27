@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +27,7 @@ public class ManageArticleActivity extends AppCompatActivity implements Activite
     protected EditText editTarif;
     protected EditText editNom;
     protected EditText editVisuel;
+    protected Spinner spinnerCategorie;
     private String method;
     private Article newArticle;
 
@@ -46,6 +48,7 @@ public class ManageArticleActivity extends AppCompatActivity implements Activite
         editVisuel = this.findViewById(R.id.editNomVisuel);
         editTarif = this.findViewById(R.id.editTarif);
         editReference = this.findViewById(R.id.editReferenceArticle);
+        spinnerCategorie = this.findViewById(R.id.categorieSpinner);
 
         CategorieDAO categorieDAO = CategorieDAO.getInstance(this);
         categorieDAO.findAll();
@@ -58,7 +61,7 @@ public class ManageArticleActivity extends AppCompatActivity implements Activite
             if(article != null) {
                 lblArticle.setText("Modification article");
                 editNom.setText(article.getNom());
-                editTarif.setText((int) article.getTarif());
+                editTarif.setText(String.valueOf(article.getTarif()));
                 editReference.setText(article.getReference());
                 editVisuel.setText(article.getVisuel());
                 btnOk.setText("Modifier");
