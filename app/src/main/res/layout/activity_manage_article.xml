@@ -4,27 +4,48 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.iut.guarssif3u.boutique.ManageCategorieActivity">
+    tools:context="com.iut.guarssif3u.boutique.ManageArticleActivity">
 
     <TextView
-        android:id="@+id/labelCategorie"
+        android:id="@+id/labelArticle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ajout d'une catégorie " />
+        android:text="Ajout d'un article" />
+
+    <LinearLayout
+        android:id="@+id/rowReference"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/labelArticle">
+
+        <TextView
+            android:id="@+id/labelReferenceArticle"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Référence: " />
+
+        <EditText
+            android:id="@+id/editReferenceArticle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toRightOf="@id/labelReferenceArticle" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/rowNom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/labelCategorie">
+        app:layout_constraintTop_toBottomOf="@id/rowReference">
 
         <TextView
             android:id="@+id/labelNomCategorie"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="Nom de la catégorie: "
-             />
+            android:text="Nom de l'article: "
+            />
 
         <EditText
             android:id="@+id/editNomCategorie"
@@ -43,9 +64,9 @@
 
         <TextView
             android:id="@+id/labelNomVisuel"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="Visuel de la catégorie: " />
+            android:text="Visuel de l'article: " />
 
         <EditText
             android:id="@+id/editNomVisuel"
@@ -56,10 +77,38 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/rowTarif"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/rowVisuel">
+
+        <TextView
+            android:id="@+id/labelTarif"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Tarif: " />
+
+        <EditText
+            android:id="@+id/editTarif"
+            android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toRightOf="@id/labelNomVisuel" />
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/categorieSpinner">
+
+        </android.support.v7.widget.AppCompatSpinner>
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/rowButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/rowVisuel"
+        app:layout_constraintTop_toBottomOf="@id/rowTarif"
         app:layout_constraintLeft_toRightOf="parent"
         app:layout_constraintRight_toLeftOf="parent">
 

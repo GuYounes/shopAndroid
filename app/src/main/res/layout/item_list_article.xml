@@ -28,30 +28,35 @@
         android:id="@+id/nom"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:gravity="center"
         android:layout_weight="30"/>
 
     <TextView
         android:id="@+id/reference"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:gravity="center"
         android:layout_weight="20"/>
 
     <TextView
         android:id="@+id/tarif"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:gravity="center"
         android:layout_weight="10"/>
 
     <ImageView
         android:id="@+id/modifier"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight="10"/>
+        android:layout_weight="10"
+        android:src="@drawable/ic_item_list_edit"/>
 
     <ImageView
         android:id="@+id/supprimer"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight="10"/>
+        android:layout_weight="10"
+        android:src="@drawable/ic_item_list_delete"/>
 
 </LinearLayout>

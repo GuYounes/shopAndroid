@@ -23,7 +23,8 @@
         </activity>
         <activity android:name=".BoutiqueActivity" />
         <activity android:name=".VentesActivity" />
-        <activity android:name=".ManageCategorieActivity"></activity>
+        <activity android:name=".ManageCategorieActivity" />
+        <activity android:name=".ManageArticleActivity"></activity>
     </application>
 
 </manifest>

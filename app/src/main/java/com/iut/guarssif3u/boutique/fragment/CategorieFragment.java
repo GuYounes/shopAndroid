@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.iut.guarssif3u.boutique.DAO.CategorieDAO;
+import com.iut.guarssif3u.boutique.HTTPRequest.HTTPRequestMethod;
 import com.iut.guarssif3u.boutique.R;
 import com.iut.guarssif3u.boutique.adapter.CategorieAdapter;
 import com.iut.guarssif3u.boutique.ManageCategorieActivity;
@@ -67,7 +68,6 @@ public class CategorieFragment extends Fragment implements ActiviteEnAttenteAvec
 
         CategorieAdapter categorieAdapter = new CategorieAdapter(getActivity(), categories, substitut);
         this.listView.setAdapter(categorieAdapter);
-
         CategorieDAO.getInstance(this).findAll();
         this.afficheLoader();
     }
@@ -101,6 +101,7 @@ public class CategorieFragment extends Fragment implements ActiviteEnAttenteAvec
     @Override
     public void onClick(View view) {
         Intent activityLauncher = new Intent(this.getActivity(), ManageCategorieActivity.class);
+        activityLauncher.putExtra("method", HTTPRequestMethod.PUT);
         startActivity(activityLauncher);
     }
 

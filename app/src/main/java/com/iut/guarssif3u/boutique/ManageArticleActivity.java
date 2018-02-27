@@ -1,6 +1,5 @@
 package com.iut.guarssif3u.boutique;
 
-import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,79 +8,93 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.iut.guarssif3u.boutique.DAO.ArticleDAO;
 import com.iut.guarssif3u.boutique.DAO.CategorieDAO;
-import com.iut.guarssif3u.boutique.DAO.DAO;
 import com.iut.guarssif3u.boutique.HTTPRequest.HTTPRequestMethod;
 import com.iut.guarssif3u.boutique.fragment.ActiviteEnAttenteAvecResultat;
-import com.iut.guarssif3u.boutique.modele.metier.Categorie;
+import com.iut.guarssif3u.boutique.modele.metier.Article;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class ManageCategorieActivity extends AppCompatActivity implements ActiviteEnAttenteAvecResultat, View.OnClickListener {
+public class ManageArticleActivity extends AppCompatActivity implements ActiviteEnAttenteAvecResultat, View.OnClickListener {
 
-    protected TextView lblCategorie;
+    protected TextView lblArticle;
     protected Button btnOk;
     protected Button btnRetour;
+    protected EditText editReference;
+    protected EditText editTarif;
     protected EditText editNom;
     protected EditText editVisuel;
     private String method;
-    private Categorie newCategorie;
+    private Article newArticle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_manage_categorie);
+        setContentView(R.layout.activity_manage_article);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
-        lblCategorie = this.findViewById(R.id.labelCategorie);
+        lblArticle = this.findViewById(R.id.labelArticle);
         btnOk = this.findViewById(R.id.btnOkCategorie);
         btnRetour = this.findViewById(R.id.btnRetour);
         editNom = this.findViewById(R.id.editNomCategorie);
         editVisuel = this.findViewById(R.id.editNomVisuel);
+        editTarif = this.findViewById(R.id.editTarif);
+        editReference = this.findViewById(R.id.editReferenceArticle);
+
+        CategorieDAO categorieDAO = CategorieDAO.getInstance(this);
+        categorieDAO.findAll();
 
         method = (String) this.getIntent().getExtras().get("method");
 
         btnOk.setOnClickListener(this);
         if(method.equals(HTTPRequestMethod.PUT)) {
-            Categorie categorie = (Categorie) this.getIntent().getExtras().get("categorie");
-            if(categorie != null) {
-                lblCategorie.setText("Modification catégorie");
-                editNom.setText(categorie.getNom());
-                editVisuel.setText(categorie.getVisuel());
+            Article article = (Article) this.getIntent().getExtras().get("article");
+            if(article != null) {
+                lblArticle.setText("Modification article");
+                editNom.setText(article.getNom());
+                editTarif.setText((int) article.getTarif());
+                editReference.setText(article.getReference());
+                editVisuel.setText(article.getVisuel());
                 btnOk.setText("Modifier");
-                newCategorie = categorie;
+                newArticle = article;
             }
         }
 
     }
 
-    public void ajouterCategorie() {
+    public void ajouterArticle() {
         String nom = editNom.getText().toString();
         String visuel = editVisuel.getText().toString();
+        Float tarif = Float.valueOf(editTarif.getText().toString());
+        String reference = editReference.getText().toString();
 
-        if(nom.length() != 0 && visuel.length() != 0) {
-            // ajout catégorie
-            Categorie newCategorie = new Categorie(nom, visuel);
-            CategorieDAO.getInstance(this).insert(newCategorie);
+        if(nom.length() != 0 && visuel.length() != 0 && tarif > 0 && reference.length() != 0) {
+            // ajout article
+            Article newArticle = new Article(reference, nom, tarif, visuel);
+            ArticleDAO.getInstance(this).insert(newArticle);
             Toast.makeText(this,"Ajout", Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(this,"Les champs saisis sont incorrect !", Toast.LENGTH_LONG).show();
         }
     }
 
-    public void editCategorie() {
+    public void editArticle() {
         String nom = editNom.getText().toString();
         String visuel = editVisuel.getText().toString();
+        Float tarif = Float.valueOf(editTarif.getText().toString());
+        String reference = editReference.getText().toString();
 
-        if(nom.length() != 0 && visuel.length() != 0) {
-            if(newCategorie.getNom() != nom || newCategorie.getVisuel() != visuel) {
-                // modification catégorie
-                Categorie newCategorie = new Categorie(nom, visuel);
-                CategorieDAO.getInstance(this).update(newCategorie);
+        if(nom.length() != 0 && visuel.length() != 0 && tarif > 0 && reference.length() != 0) {
+            if(newArticle.getNom() != nom || newArticle.getVisuel() != visuel || newArticle.getTarif() != tarif || newArticle.getReference() != reference) {
+                // modification article
+                Article newArticle = new Article(reference, nom, tarif, visuel);
+                ArticleDAO.getInstance(this).update(newArticle);
                 Toast.makeText(this,"Modification", Toast.LENGTH_LONG).show();
             }
         } else {
@@ -96,9 +109,9 @@ public class ManageCategorieActivity extends AppCompatActivity implements Activi
     @Override
     public void onClick(View view) {
         if(method == HTTPRequestMethod.POST) {
-            ajouterCategorie();
+            ajouterArticle();
         } else if(method == HTTPRequestMethod.PUT) {
-            editCategorie();
+            editArticle();
         }
     }
 
