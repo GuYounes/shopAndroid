@@ -32,6 +32,20 @@ public class Categorie implements Parcelable {
     /**
      * Constructeur
      *
+     * @param nom
+     * nom de la catégorie
+     *
+     * @param visuel
+     * visuel de la catégorie
+     */
+    public Categorie(String nom, String visuel) {
+        this.setNom(nom);
+        this.setVisuel(visuel);
+    }
+
+    /**
+     * Constructeur
+     *
      * @param id
      * id de la categorie
      *

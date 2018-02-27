@@ -10,9 +10,14 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.iut.guarssif3u.boutique.DAO.ArticleDAO;
+import com.iut.guarssif3u.boutique.HTTPRequest.HTTPRequestMethod;
+import com.iut.guarssif3u.boutique.ManageArticleActivity;
 import com.iut.guarssif3u.boutique.R;
 import com.iut.guarssif3u.boutique.async.ImageFromURL;
+import com.iut.guarssif3u.boutique.fragment.ActiviteEnAttenteAvecResultat;
 import com.iut.guarssif3u.boutique.modele.metier.Article;
 
 import java.io.IOException;
@@ -22,11 +27,14 @@ import java.util.ArrayList;
  * Created by younes on 19/02/2018.
  */
 
-public class ArticleAdapter extends ArrayAdapter<Article> {
+public class ArticleAdapter extends ArrayAdapter<Article> implements ActiviteEnAttenteAvecResultat {
 
     protected FragmentActivity activity;
     protected Drawable substitut;
     protected ProgressBar loader;
+    protected ImageView btnEdit;
+    protected ImageView btnDelete;
+    protected Article article;
 
     public ArticleAdapter(FragmentActivity activity, ArrayList<Article> liste, Drawable subsitut){
         super(activity, 0, liste);
@@ -35,11 +43,34 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent){
-        Article article = getItem(position);
+    public View getView(final int position, View convertView, ViewGroup parent){
+
+        this.article = getItem(position);
+
+        final ArticleDAO articleDAO = ArticleDAO.getInstance(this);
 
         if(convertView == null){
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_list_article, parent, false);
+
+            btnEdit = (ImageView) convertView.findViewById(R.id.modifier);
+            btnDelete = (ImageView) convertView.findViewById(R.id.supprimer);
+
+            btnEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent activityLauncher = new Intent(getContext(), ManageArticleActivity.class);
+                    activityLauncher.putExtra("article", getItem(position));
+                    activityLauncher.putExtra("method", HTTPRequestMethod.PUT);
+                    activity.startActivity(activityLauncher);
+                }
+            });
+            btnDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    articleDAO.update(article);
+                    Toast.makeText(getContext(), "Suppression " + position, Toast.LENGTH_LONG).show();
+                }
+            });
         }
 
         this.loader = convertView.findViewById(R.id.loader);
@@ -74,5 +105,25 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
         }
 
         return convertView;
+    }
+
+    @Override
+    public void afficheLoader() {
+
+    }
+
+    @Override
+    public void cacheLoaderAfficheContenu() {
+
+    }
+
+    @Override
+    public void notifyRetourRequete(Object resultat) {
+
+    }
+
+    @Override
+    public void notifyRetourRequeteFindAll(ArrayList list) {
+
     }
 }

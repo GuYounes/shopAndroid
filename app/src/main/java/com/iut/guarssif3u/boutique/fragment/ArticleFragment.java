@@ -1,5 +1,6 @@
 package com.iut.guarssif3u.boutique.fragment;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,8 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.iut.guarssif3u.boutique.DAO.ArticleDAO;
+import com.iut.guarssif3u.boutique.HTTPRequest.HTTPRequestMethod;
+import com.iut.guarssif3u.boutique.ManageArticleActivity;
 import com.iut.guarssif3u.boutique.R;
 import com.iut.guarssif3u.boutique.adapter.ArticleAdapter;
 import com.iut.guarssif3u.boutique.modele.metier.Article;
@@ -98,7 +101,9 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
 
     @Override
     public void onClick(View v) {
-
+        Intent activityLauncher = new Intent(this.getActivity(), ManageArticleActivity.class);
+        activityLauncher.putExtra("method", HTTPRequestMethod.PUT);
+        startActivity(activityLauncher);
     }
 
 }

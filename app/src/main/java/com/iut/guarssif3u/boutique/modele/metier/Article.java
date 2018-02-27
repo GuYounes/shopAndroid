@@ -1,10 +1,13 @@
 package com.iut.guarssif3u.boutique.modele.metier;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by younes on 09/01/2018.
  */
 
-public class Article {
+public class Article implements Parcelable {
 
     /**
      * Id de l'article
@@ -41,6 +44,13 @@ public class Article {
      */
     public Article(){};
 
+    public Article(String reference, String nom, float tarif, String visuel) {
+        this.setReference(reference);
+        this.setNom(nom);
+        this.setTarif(tarif);
+        this.setVisuel(visuel);
+    }
+
     /**
      * Constructeur
      *
@@ -65,6 +75,15 @@ public class Article {
         this.setNom(nom);
         this.setTarif(tarif);
         this.setVisuel(visuel);
+    }
+
+    protected Article(Parcel in) {
+        id = in.readInt();
+        reference = in.readString();
+        nom = in.readString();
+        tarif = in.readFloat();
+        visuel = in.readString();
+        categorie = in.readParcelable(Categorie.class.getClassLoader());
     }
 
     /**
@@ -224,11 +243,39 @@ public class Article {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + (categorie != null ? categorie.hashCode() : 0);
         result = 31 * result + (reference != null ? reference.hashCode() : 0);
         result = 31 * result + (nom != null ? nom.hashCode() : 0);
         result = 31 * result + (tarif != +0.0f ? Float.floatToIntBits(tarif) : 0);
         result = 31 * result + (visuel != null ? visuel.hashCode() : 0);
+        result = 31 * result + (categorie != null ? categorie.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(this.id);
+        parcel.writeString(this.reference);
+        parcel.writeString(this.nom);
+        parcel.writeFloat(this.tarif);
+        parcel.writeString(this.visuel);
+        parcel.writeParcelable(this.categorie, i);
+    }
+
+    public static final Creator<Article> CREATOR = new Creator<Article>() {
+        @Override
+        public Article createFromParcel(Parcel in) {
+            return new Article(in);
+        }
+
+        @Override
+        public Article[] newArray(int size) {
+            return new Article[size];
+        }
+    };
+
 }
