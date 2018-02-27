@@ -46,7 +46,7 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance){
         View view = inflater.inflate(R.layout.fragment_article, null);
 
-        addArticleBtn = view.findViewById(R.id.addArticle);
+        addArticleBtn = view.findViewById(R.id.add);
         addArticleBtn.setOnClickListener(this);
 
         try {

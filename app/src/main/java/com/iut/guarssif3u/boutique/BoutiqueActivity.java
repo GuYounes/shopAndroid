@@ -92,20 +92,4 @@ public class BoutiqueActivity extends AppCompatActivity {
         this.adapter.addFragment(new PromotionFragment(), "Promotions");
     }
 
-    public void editCategorie(View view) {
-        Categorie categorie = new Categorie();
-        Intent activityLauncher = new Intent(this.getApplication(), ManageCategorieActivity.class);
-        activityLauncher.putExtra("categorie", categorie);
-        startActivity(activityLauncher);
-    }
-
-    public void deleteCategorie(View view) {
-        // get button position
-        View parentView = (View) view.getParent();
-        ListView listView = (ListView) parentView.getParent();
-        int position = listView.getPositionForView(parentView);
-
-        // delete categorie
-    }
-
 }

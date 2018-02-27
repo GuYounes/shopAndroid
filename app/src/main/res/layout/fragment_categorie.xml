@@ -13,7 +13,8 @@
         android:layout_height="match_parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:paddingBottom="80dp"/>
 
     <ProgressBar
         android:id="@+id/loader"
@@ -26,12 +27,15 @@
         android:indeterminate="true" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/addCategorie"
+        android:id="@+id/add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintRight_toLeftOf="parent"
         android:layout_margin="@dimen/fab_margin"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:tint="@color/white"
+        app:borderWidth="0dp"
         app:srcCompat="@android:drawable/ic_input_add" />
 
 </android.support.constraint.ConstraintLayout>

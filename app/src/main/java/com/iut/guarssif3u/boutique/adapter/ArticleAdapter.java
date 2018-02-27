@@ -1,5 +1,6 @@
 package com.iut.guarssif3u.boutique.adapter;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
@@ -45,6 +46,12 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
 
         TextView tvNom = convertView.findViewById(R.id.nom);
         tvNom.setText(article.getNom());
+
+        TextView tvReference = convertView.findViewById(R.id.reference);
+        tvReference.setText(article.getReference());
+
+        TextView tvTarif = convertView.findViewById(R.id.tarif);
+        tvTarif.setText(Float.toString(article.getTarif()) + "€");
 
         ImageView iconeVisuel = convertView.findViewById(R.id.visuel);
         if(iconeVisuel.getDrawable() == null){
