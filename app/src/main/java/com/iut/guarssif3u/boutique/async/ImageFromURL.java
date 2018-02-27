@@ -8,11 +8,13 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.iut.guarssif3u.boutique.R;
 import com.iut.guarssif3u.boutique.adapter.CategorieAdapter;
+import com.iut.guarssif3u.boutique.modele.metier.Article;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,15 +24,15 @@ import java.net.MalformedURLException;
  * Created by younes on 13/01/2018.
  */
 
-public class ImageFromURL extends AsyncTask<String, Integer, Bitmap> {
+public class ImageFromURL<T> extends AsyncTask<String, Integer, Bitmap> {
 
-    protected CategorieAdapter categorieAdapter;
+    protected ArrayAdapter<T> adapter;
     protected ImageView imageView;
     protected Drawable substitut;
     protected ProgressBar loader;
 
-    public ImageFromURL(CategorieAdapter categorieAdapter, ImageView imageView, Drawable substitut, ProgressBar loader){
-        this.categorieAdapter = categorieAdapter;
+    public ImageFromURL(ArrayAdapter<T> adapter, ImageView imageView, Drawable substitut, ProgressBar loader){
+        this.adapter = adapter;
         this.imageView = imageView;
         this.substitut = substitut;
         this.loader = loader;
@@ -47,11 +49,13 @@ public class ImageFromURL extends AsyncTask<String, Integer, Bitmap> {
 
     @Override
     protected void onPostExecute(Bitmap result){
-        if(result == null){
-            imageView.setImageDrawable(substitut);
-        }
-        else {
-            imageView.setImageBitmap(result);
+        if(imageView.getDrawable() == null){
+            if(result == null){
+                imageView.setImageDrawable(substitut);
+            }
+            else {
+                imageView.setImageBitmap(result);
+            }
         }
 
         this.cacheLoadDisplayImage();

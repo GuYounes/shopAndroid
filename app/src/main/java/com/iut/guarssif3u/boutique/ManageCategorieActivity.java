@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import com.iut.guarssif3u.boutique.modele.metier.Categorie;
 
-public class addCategorieActivity extends AppCompatActivity {
+public class ManageCategorieActivity extends AppCompatActivity {
 
     protected TextView lblCategorie;
     protected Button btnOk;
@@ -21,18 +21,18 @@ public class addCategorieActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_categorie);
+        setContentView(R.layout.activity_manage_categorie);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
-        lblCategorie = (TextView) this.findViewById(R.id.labelCategorie);
-        btnOk = (Button) this.findViewById(R.id.btnOkCategorie);
-        btnRetour = (Button) this.findViewById(R.id.btnRetour);
-        editNom = (EditText) this.findViewById(R.id.editNomCategorie);
-        editVisuel = (EditText) this.findViewById(R.id.editNomVisuel);
+        lblCategorie = this.findViewById(R.id.labelCategorie);
+        btnOk = this.findViewById(R.id.btnOkCategorie);
+        btnRetour = this.findViewById(R.id.btnRetour);
+        editNom = this.findViewById(R.id.editNomCategorie);
+        editVisuel = this.findViewById(R.id.editNomVisuel);
 
         Categorie categorie = (Categorie) this.getIntent().getExtras().get("categorie");
         if(categorie != null) {
