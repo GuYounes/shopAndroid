@@ -81,21 +81,22 @@ public class CategorieAdapter extends ArrayAdapter<Categorie> implements Activit
         TextView tvNom = convertView.findViewById(R.id.nom);
         tvNom.setText(categorie.getNom());
 
+        ImageView iconeModifier = convertView.findViewById(R.id.modifier);
+        ImageView iconeSupprimer = convertView.findViewById(R.id.supprimer);
         ImageView iconeVisuel = convertView.findViewById(R.id.visuel);
+
         if(iconeVisuel.getDrawable() == null){
             ImageFromURL<Categorie> ifu = new ImageFromURL<>(this, iconeVisuel, substitut, loader);
             ifu.execute("https://infodb.iutmetz.univ-lorraine.fr/~guarssif3u/ppo/ecommerce/images/categorie/" + categorie.getVisuel());
         }
 
-        ImageView iconeModifier = convertView.findViewById(R.id.modifier);
         if(iconeVisuel.getDrawable() == null){
             try {
                 iconeModifier.setImageDrawable(Drawable.createFromStream(activity.getAssets().open("crayon.png"), null));
             } catch (IOException e){}
         }
 
-        ImageView iconeSupprimer = convertView.findViewById(R.id.supprimer);
-        if(iconeVisuel.getDrawable() == null){
+        if(iconeSupprimer.getDrawable() == null){
             try {
                 iconeSupprimer.setImageDrawable(Drawable.createFromStream(activity.getAssets().open("corbeille.png"), null));
             } catch (IOException e){}
