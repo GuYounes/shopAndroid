@@ -21,7 +21,7 @@ public class BoutiqueActivity extends AppCompatActivity {
     protected ViewPager viewPager;
     protected TabLayout tabLayout;
     protected Bundle savedInstanceState;
-    protected ViewPagerAdapter adapter;
+    public ViewPagerAdapter adapter;
 
 
     @Override

@@ -152,9 +152,7 @@ public class Categorie implements Parcelable {
 
         Categorie categorie = (Categorie) o;
 
-        if (id != categorie.id) return false;
-        if (!nom.equals(categorie.nom)) return false;
-        return visuel.equals(categorie.visuel);
+        return (id == categorie.id);
     }
 
     /**

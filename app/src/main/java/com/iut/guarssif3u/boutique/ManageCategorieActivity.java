@@ -113,7 +113,7 @@ public class ManageCategorieActivity extends AppCompatActivity implements Activi
     }
 
     @Override
-    public void notifyRetourRequete(Object resultat) {
+    public void notifyRetourRequete(Object resultat, String method, String error) {
 
     }
 

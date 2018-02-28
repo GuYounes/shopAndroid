@@ -27,7 +27,7 @@ import java.util.ArrayList;
  * Created by younes on 19/02/2018.
  */
 
-public class ArticleAdapter extends ArrayAdapter<Article> implements ActiviteEnAttenteAvecResultat {
+public class ArticleAdapter extends ArrayAdapter<Article> {
 
     protected FragmentActivity activity;
     protected Drawable substitut;
@@ -47,13 +47,11 @@ public class ArticleAdapter extends ArrayAdapter<Article> implements ActiviteEnA
 
         this.article = getItem(position);
 
-        final ArticleDAO articleDAO = ArticleDAO.getInstance(this);
-
         if(convertView == null){
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_list_article, parent, false);
 
-            btnEdit = (ImageView) convertView.findViewById(R.id.modifier);
-            btnDelete = (ImageView) convertView.findViewById(R.id.supprimer);
+            btnEdit = convertView.findViewById(R.id.modifier);
+            btnDelete = convertView.findViewById(R.id.supprimer);
 
             btnEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -67,7 +65,6 @@ public class ArticleAdapter extends ArrayAdapter<Article> implements ActiviteEnA
             btnDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    articleDAO.update(article);
                     Toast.makeText(getContext(), "Suppression " + position, Toast.LENGTH_LONG).show();
                 }
             });
@@ -105,25 +102,5 @@ public class ArticleAdapter extends ArrayAdapter<Article> implements ActiviteEnA
         }
 
         return convertView;
-    }
-
-    @Override
-    public void afficheLoader() {
-
-    }
-
-    @Override
-    public void cacheLoaderAfficheContenu() {
-
-    }
-
-    @Override
-    public void notifyRetourRequete(Object resultat) {
-
-    }
-
-    @Override
-    public void notifyRetourRequeteFindAll(ArrayList list) {
-
     }
 }
