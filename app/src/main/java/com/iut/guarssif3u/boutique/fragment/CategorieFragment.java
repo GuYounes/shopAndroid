@@ -49,7 +49,7 @@ public class CategorieFragment extends Fragment implements ActiviteEnAttenteAvec
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance){
         View view = inflater.inflate(R.layout.fragment_categorie, null);
 
-        addCategorieBtn = view.findViewById(R.id.addCategorie);
+        addCategorieBtn = view.findViewById(R.id.add);
         addCategorieBtn.setOnClickListener(this);
 
         try {

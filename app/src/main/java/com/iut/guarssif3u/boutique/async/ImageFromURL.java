@@ -49,11 +49,13 @@ public class ImageFromURL<T> extends AsyncTask<String, Integer, Bitmap> {
 
     @Override
     protected void onPostExecute(Bitmap result){
-        if(result == null){
-            imageView.setImageDrawable(substitut);
-        }
-        else {
-            imageView.setImageBitmap(result);
+        if(imageView.getDrawable() == null){
+            if(result == null){
+                imageView.setImageDrawable(substitut);
+            }
+            else {
+                imageView.setImageBitmap(result);
+            }
         }
 
         this.cacheLoadDisplayImage();

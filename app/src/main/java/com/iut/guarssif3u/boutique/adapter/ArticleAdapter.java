@@ -78,6 +78,12 @@ public class ArticleAdapter extends ArrayAdapter<Article> implements ActiviteEnA
         TextView tvNom = convertView.findViewById(R.id.nom);
         tvNom.setText(article.getNom());
 
+        TextView tvReference = convertView.findViewById(R.id.reference);
+        tvReference.setText(article.getReference());
+
+        TextView tvTarif = convertView.findViewById(R.id.tarif);
+        tvTarif.setText(Float.toString(article.getTarif()) + "€");
+
         ImageView iconeVisuel = convertView.findViewById(R.id.visuel);
         if(iconeVisuel.getDrawable() == null){
             ImageFromURL<Article> ifu = new ImageFromURL<>(this, iconeVisuel, substitut, loader);

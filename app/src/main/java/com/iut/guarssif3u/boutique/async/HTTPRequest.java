@@ -22,6 +22,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -45,17 +46,7 @@ public class HTTPRequest<T extends Object> extends AsyncTask<String, Void, Strin
     protected Object data;
     protected Class deserializationClass;
 
-    public HTTPRequest(ActiviteEnAttenteAvecResultat activite, DAO dao, String method, Object data, Class deserializationClass, ProgressBar loader, ListView listView){
-        this.activite = activite;
-        this.dao = dao;
-        this.method = method;
-        this.data = data;
-        this.deserializationClass = deserializationClass;
-        this.loader = loader;
-        this.listView = listView;
-    }
-
-    public HTTPRequest(ActiviteEnAttenteAvecResultat activite, DAO dao, String method, Object data, Class deserializationClass){
+    public HTTPRequest(ActiviteEnAttenteAvecResultat activite, DAO dao, String method, T data, Class deserializationClass){
         this.activite = activite;
         this.dao = dao;
         this.method = method;
@@ -71,8 +62,41 @@ public class HTTPRequest<T extends Object> extends AsyncTask<String, Void, Strin
     protected String doInBackground(String... urls) {
         String urlRequete = urls[0];
         StringBuffer resultat = new StringBuffer(1024);
+
+        switch (this.method){
+            case (HTTPRequestMethod.GET):
+                resultat = doInBackgroundGet(urlRequete);
+                break;
+            case (HTTPRequestMethod.POST):
+                resultat = doInBackgroundPost(urlRequete);
+                break;
+            case (HTTPRequestMethod.PUT):
+                resultat = doInBackgroundPut(urlRequete);
+                break;
+            case (HTTPRequestMethod.DELETE):
+                resultat = doInBackgroundDelete(urlRequete);
+                break;
+        }
+
+        return resultat.toString();
+    }
+
+    @Override
+    protected void onPostExecute(String result){
+        if(result != null){
+            switch (this.method){
+                case (HTTPRequestMethod.GET):
+                    postExecuteGet(result);
+                    break;
+            }
+        }
+    }
+
+    protected StringBuffer doInBackgroundGet(String url){
+        StringBuffer resultat = new StringBuffer(1024);
+
         try{
-            final HttpURLConnection connection = (HttpURLConnection) new URL(urlRequete).openConnection();
+            final HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
             connection.setReadTimeout(1000);
             connection.setConnectTimeout(1500);
             connection.setRequestMethod(this.method);
@@ -93,30 +117,141 @@ public class HTTPRequest<T extends Object> extends AsyncTask<String, Void, Strin
             return null;
         }
 
-        return resultat.toString();
+        return resultat;
     }
 
-    @Override
-    protected void onPostExecute(String result){
+    protected StringBuffer doInBackgroundPost(String url){
+        StringBuffer resultat = new StringBuffer(1024);
+        Gson gson = new Gson();
+
+        try{
+            String json = gson.toJson(this.data);
+
+            final HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+            connection.setReadTimeout(1000);
+            connection.setConnectTimeout(1500);
+            connection.setRequestMethod(this.method);
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setAllowUserInteraction(false);
+            connection.setDoInput(true);
+
+            if (json != null) {
+                //set the content length of the body
+                connection.setRequestProperty("Content-length", json.getBytes().length + "");
+                connection.setDoInput(true);
+                connection.setDoOutput(true);
+                connection.setUseCaches(false);
+
+                //send the json as body of the request
+                OutputStream outputStream = connection.getOutputStream();
+                outputStream.write(json.getBytes("UTF-8"));
+                outputStream.close();
+            }
+
+            connection.connect();
+            InputStream input = connection.getInputStream();
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(input));
+            String line = "";
+            while((line = in.readLine()) != null){
+                resultat.append(line);
+            }
+            in.close();
+
+        } catch (Exception e){
+            this.error = "Error : " + e.getMessage();
+            return null;
+        }
+
+        return resultat;
+    }
+
+    protected StringBuffer doInBackgroundPut(String url){
+        StringBuffer resultat = new StringBuffer(1024);
+        Gson gson = new Gson();
+
+        try{
+            String json = gson.toJson(this.data);
+
+            final HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+            connection.setReadTimeout(1000);
+            connection.setConnectTimeout(1500);
+            connection.setRequestMethod(this.method);
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setAllowUserInteraction(false);
+            connection.setDoInput(true);
+
+            if (json != null) {
+                //set the content length of the body
+                connection.setRequestProperty("Content-length", json.getBytes().length + "");
+                connection.setDoInput(true);
+                connection.setDoOutput(true);
+                connection.setUseCaches(false);
+
+                //send the json as body of the request
+                OutputStream outputStream = connection.getOutputStream();
+                outputStream.write(json.getBytes("UTF-8"));
+                outputStream.close();
+            }
+
+            connection.connect();
+            InputStream input = connection.getInputStream();
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(input));
+            String line = "";
+            while((line = in.readLine()) != null){
+                resultat.append(line);
+            }
+            in.close();
+
+        } catch (Exception e){
+            this.error = "Error : " + e.getMessage();
+            return null;
+        }
+
+        return resultat;
+    }
+
+    protected StringBuffer doInBackgroundDelete(String url){
+        StringBuffer resultat = new StringBuffer(1024);
+
+        try{
+            final HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+            connection.setReadTimeout(1000);
+            connection.setConnectTimeout(1500);
+            connection.setRequestMethod(this.method);
+            connection.setDoInput(true);
+
+            connection.connect();
+            InputStream input = connection.getInputStream();
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(input));
+            String line = "";
+            while((line = in.readLine()) != null){
+                resultat.append(line);
+            }
+            in.close();
+
+        } catch (Exception e){
+            this.error = "Error : " + e.getMessage();
+            return null;
+        }
+
+        return resultat;
+    }
+
+    protected void postExecuteGet(String result){
         Gson gson = new Gson();
         ArrayList<T> liste = new ArrayList<>();
 
-        if(result != null){
-            switch (this.method){
-                case (HTTPRequestMethod.GET):
-                    JsonParser parser = new JsonParser();
-                    JsonArray array = parser.parse(result).getAsJsonArray();
-                    for (int i = 0; i < array.size(); i++) {
-                        Object object = gson.fromJson(array.get(i), this.deserializationClass);
-                        liste.add((T) object);
-                    }
-
-                    activite.notifyRetourRequeteFindAll(liste);
-                    break;
-            }
-        } else {
-
+        JsonParser parser = new JsonParser();
+        JsonArray array = parser.parse(result).getAsJsonArray();
+        for (int i = 0; i < array.size(); i++) {
+            Object object = gson.fromJson(array.get(i), this.deserializationClass);
+            liste.add((T) object);
         }
+
+        activite.notifyRetourRequeteFindAll(liste);
     }
 
 }

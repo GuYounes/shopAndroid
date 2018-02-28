@@ -28,7 +28,7 @@
         android:indeterminate="true"/>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/addArticle"
+        android:id="@+id/add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="parent"
@@ -36,6 +36,9 @@
         app:backgroundTint="@color/colorPrimary"
         app:tint="@color/colorWhite"
         android:layout_margin="@dimen/fab_margin"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:tint="@color/colorWhite"
+        app:borderWidth="0dp"
         app:srcCompat="@android:drawable/ic_input_add" />
 
 </android.support.constraint.ConstraintLayout>
