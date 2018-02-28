@@ -14,34 +14,11 @@
         android:text="@string/ajout_article" />
 
     <LinearLayout
-        android:id="@+id/rowReference"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/labelArticle">
-
-        <TextView
-            android:id="@+id/labelReferenceArticle"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="@string/reference" />
-
-        <EditText
-            android:id="@+id/editReferenceArticle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="50dp"
-            app:layout_constraintLeft_toRightOf="@id/labelReferenceArticle" />
-
-    </LinearLayout>
-
-    <LinearLayout
         android:id="@+id/rowNom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/rowReference">
+        app:layout_constraintTop_toBottomOf="@id/labelArticle">
 
         <TextView
             android:id="@+id/labelNomCategorie"
@@ -131,6 +108,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/euro" />
+
+        <TextView
+            android:id="@+id/labelReferenceArticle"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="@string/reference" />
+
+        <EditText
+            android:id="@+id/editReferenceArticle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="50dp"
+            app:layout_constraintLeft_toRightOf="@id/labelReferenceArticle" />
 
     </LinearLayout>
 

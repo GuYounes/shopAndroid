@@ -44,11 +44,12 @@ public class Article implements Parcelable {
      */
     public Article(){};
 
-    public Article(String reference, String nom, float tarif, String visuel) {
+    public Article(String reference, String nom, float tarif, String visuel, Categorie categorie) {
         this.setReference(reference);
         this.setNom(nom);
         this.setTarif(tarif);
         this.setVisuel(visuel);
+        this.setCategorie(categorie);
     }
 
     /**

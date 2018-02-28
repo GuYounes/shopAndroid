@@ -10,7 +10,10 @@
         android:id="@+id/labelCategorie"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ajout d'une catégorie " />
+        android:textSize="24dp"
+        app:layout_constraintLeft_toRightOf="parent"
+        app:layout_constraintRight_toLeftOf="parent"
+        android:text="@string/ajout_categorie" />
 
     <LinearLayout
         android:id="@+id/rowNom"
@@ -21,15 +24,16 @@
 
         <TextView
             android:id="@+id/labelNomCategorie"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="Nom de la catégorie: "
-             />
+            android:layout_marginLeft="10dp"
+            android:text="@string/nom" />
 
         <EditText
             android:id="@+id/editNomCategorie"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="50dp"
             app:layout_constraintLeft_toRightOf="@id/labelNomCategorie" />
 
     </LinearLayout>
@@ -43,14 +47,16 @@
 
         <TextView
             android:id="@+id/labelNomVisuel"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="Visuel de la catégorie: " />
+            android:layout_marginLeft="10dp"
+            android:text="@string/visuel" />
 
         <EditText
             android:id="@+id/editNomVisuel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="50dp"
             app:layout_constraintLeft_toRightOf="@id/labelNomVisuel" />
 
     </LinearLayout>
@@ -60,6 +66,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/rowVisuel"
+        android:layout_marginTop="20dp"
         app:layout_constraintLeft_toRightOf="parent"
         app:layout_constraintRight_toLeftOf="parent">
 
@@ -68,7 +75,9 @@
             android:tag="ajouter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ajouter" />
+            android:backgroundTint="@color/colorPrimary"
+            android:textColor="@color/colorWhite"
+            android:text="@string/ajouter" />
 
         <Button
             android:id="@+id/btnRetour"
@@ -76,7 +85,7 @@
             android:onClick="retour"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Retour" />
+            android:text="@string/retour" />
 
     </LinearLayout>
 

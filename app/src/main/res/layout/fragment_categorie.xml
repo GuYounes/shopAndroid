@@ -34,6 +34,8 @@
         android:layout_marginTop="150dp"
         app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintRight_toLeftOf="parent"
+        app:backgroundTint="@color/colorPrimary"
+        app:tint="@color/colorWhite"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@android:drawable/ic_input_add" />
 

@@ -2,7 +2,9 @@ package com.iut.guarssif3u.boutique;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -12,8 +14,10 @@ import android.widget.Toast;
 import com.iut.guarssif3u.boutique.DAO.ArticleDAO;
 import com.iut.guarssif3u.boutique.DAO.CategorieDAO;
 import com.iut.guarssif3u.boutique.HTTPRequest.HTTPRequestMethod;
+import com.iut.guarssif3u.boutique.async.HTTPRequest;
 import com.iut.guarssif3u.boutique.fragment.ActiviteEnAttenteAvecResultat;
 import com.iut.guarssif3u.boutique.modele.metier.Article;
+import com.iut.guarssif3u.boutique.modele.metier.Categorie;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,10 +54,12 @@ public class ManageArticleActivity extends AppCompatActivity implements Activite
         editReference = this.findViewById(R.id.editReferenceArticle);
         spinnerCategorie = this.findViewById(R.id.categorieSpinner);
 
-        CategorieDAO categorieDAO = CategorieDAO.getInstance(this);
-        categorieDAO.findAll();
-
         method = (String) this.getIntent().getExtras().get("method");
+
+        if(method.equals(HTTPRequestMethod.PUT)) {
+            CategorieDAO categorieDAO = CategorieDAO.getInstance(this);
+            categorieDAO.findAll();
+        }
 
         btnOk.setOnClickListener(this);
         if(method.equals(HTTPRequestMethod.PUT)) {
@@ -76,10 +82,11 @@ public class ManageArticleActivity extends AppCompatActivity implements Activite
         String visuel = editVisuel.getText().toString();
         Float tarif = Float.valueOf(editTarif.getText().toString());
         String reference = editReference.getText().toString();
+        Categorie categorie = (Categorie) spinnerCategorie.getSelectedItem();
 
         if(nom.length() != 0 && visuel.length() != 0 && tarif > 0 && reference.length() != 0) {
             // ajout article
-            Article newArticle = new Article(reference, nom, tarif, visuel);
+            Article newArticle = new Article(reference, nom, tarif, visuel, categorie);
             ArticleDAO.getInstance(this).insert(newArticle);
             Toast.makeText(this,"Ajout", Toast.LENGTH_LONG).show();
         } else {
@@ -92,11 +99,12 @@ public class ManageArticleActivity extends AppCompatActivity implements Activite
         String visuel = editVisuel.getText().toString();
         Float tarif = Float.valueOf(editTarif.getText().toString());
         String reference = editReference.getText().toString();
+        Categorie categorie = (Categorie) spinnerCategorie.getSelectedItem();
 
         if(nom.length() != 0 && visuel.length() != 0 && tarif > 0 && reference.length() != 0) {
-            if(newArticle.getNom() != nom || newArticle.getVisuel() != visuel || newArticle.getTarif() != tarif || newArticle.getReference() != reference) {
+            if(newArticle.getNom() != nom || newArticle.getVisuel() != visuel || newArticle.getTarif() != tarif || newArticle.getReference() != reference || newArticle.getCategorie() != categorie) {
                 // modification article
-                Article newArticle = new Article(reference, nom, tarif, visuel);
+                Article newArticle = new Article(reference, nom, tarif, visuel, categorie);
                 ArticleDAO.getInstance(this).update(newArticle);
                 Toast.makeText(this,"Modification", Toast.LENGTH_LONG).show();
             }
@@ -111,9 +119,9 @@ public class ManageArticleActivity extends AppCompatActivity implements Activite
 
     @Override
     public void onClick(View view) {
-        if(method == HTTPRequestMethod.POST) {
+        if(method.equals(HTTPRequestMethod.POST)) {
             ajouterArticle();
-        } else if(method == HTTPRequestMethod.PUT) {
+        } else if(method.equals(HTTPRequestMethod.PUT)) {
             editArticle();
         }
     }
@@ -130,12 +138,16 @@ public class ManageArticleActivity extends AppCompatActivity implements Activite
 
     @Override
     public void notifyRetourRequete(Object resultat) {
-
+        Log.i("retour request", resultat.toString());
     }
 
     @Override
     public void notifyRetourRequeteFindAll(ArrayList list) {
-
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerCategorie.setAdapter(adapter);
+        int spinnerPosition = list.indexOf(newArticle.getCategorie());
+        spinnerCategorie.setSelection(spinnerPosition, false);
     }
 
 }

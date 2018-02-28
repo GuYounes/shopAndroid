@@ -136,6 +136,11 @@ public class Categorie implements Parcelable {
         this.visuel = visuel;
     }
 
+    @Override
+    public String toString() {
+        return nom;
+    }
+
     /**
      * Equals id nom visuel
      *
