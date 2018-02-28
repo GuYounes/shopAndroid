@@ -74,7 +74,7 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
     }
 
     @Override
-    public void notifyRetourRequete(Article result){
+    public void notifyRetourRequete(Article resultat, String method, String error) {
 
     }
 

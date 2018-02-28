@@ -42,7 +42,7 @@ public class HTTPRequest<T extends Object> extends AsyncTask<String, Void, Strin
     protected DAO dao;
 
     protected String method;
-    protected String error;
+    protected boolean error;
     protected Object data;
     protected Class deserializationClass;
 
@@ -78,6 +78,7 @@ public class HTTPRequest<T extends Object> extends AsyncTask<String, Void, Strin
                 break;
         }
 
+        if(resultat == null) return null;
         return resultat.toString();
     }
 
@@ -88,8 +89,21 @@ public class HTTPRequest<T extends Object> extends AsyncTask<String, Void, Strin
                 case (HTTPRequestMethod.GET):
                     postExecuteGet(result);
                     break;
+                case (HTTPRequestMethod.POST):
+                    postExecutePost();
+                    break;
+                case (HTTPRequestMethod.PUT):
+                    postExecutePut();
+                    break;
+                case (HTTPRequestMethod.DELETE):
+                    postExecuteDelete();
+                    break;
             }
         }
+        else{
+            activite.notifyRetourRequete(null, null, this.error);
+        }
+
     }
 
     protected StringBuffer doInBackgroundGet(String url){
@@ -113,8 +127,8 @@ public class HTTPRequest<T extends Object> extends AsyncTask<String, Void, Strin
             in.close();
 
         } catch (Exception e){
-            this.error = "Error : " + e.getMessage();
-            return null;
+            this.error = true;
+            resultat = null;
         }
 
         return resultat;
@@ -159,7 +173,7 @@ public class HTTPRequest<T extends Object> extends AsyncTask<String, Void, Strin
             in.close();
 
         } catch (Exception e){
-            this.error = "Error : " + e.getMessage();
+            this.error = true;
             return null;
         }
 
@@ -205,7 +219,7 @@ public class HTTPRequest<T extends Object> extends AsyncTask<String, Void, Strin
             in.close();
 
         } catch (Exception e){
-            this.error = "Error : " + e.getMessage();
+            this.error = true;
             return null;
         }
 
@@ -233,7 +247,7 @@ public class HTTPRequest<T extends Object> extends AsyncTask<String, Void, Strin
             in.close();
 
         } catch (Exception e){
-            this.error = "Error : " + e.getMessage();
+            this.error = true;
             return null;
         }
 
@@ -252,6 +266,18 @@ public class HTTPRequest<T extends Object> extends AsyncTask<String, Void, Strin
         }
 
         activite.notifyRetourRequeteFindAll(liste);
+    }
+
+    protected void postExecutePost(){
+        activite.notifyRetourRequete(this.data, this.method, this.error);
+    }
+
+    protected void postExecutePut(){
+        activite.notifyRetourRequete(this.data, this.method, this.error);
+    }
+
+    protected void postExecuteDelete(){
+        activite.notifyRetourRequete(this.data, this.method, this.error);
     }
 
 }

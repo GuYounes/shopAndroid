@@ -20,4 +20,12 @@
     <string name="visuel">Visuel: </string>
     <string name="tarif">Tarif: </string>
     <string name="categorie">Catégorie: </string>
+    <string name="positif">Oui</string>
+    <string name="negatif">Non</string>
+    <string name="cancel">Annuler</string>
+    <string name="dialog_message">Êtes vous sur de vouloir supprimer cette catégorie ?</string>
+    <string name="dialog_titre">Suppression d\'une catégorie</string>
+    <string name="supp_ok">Suppression effectuée</string>
+    <string name="erreur_serveur">Erreur : Impossible de joindre le serveur</string>
+
 </resources>

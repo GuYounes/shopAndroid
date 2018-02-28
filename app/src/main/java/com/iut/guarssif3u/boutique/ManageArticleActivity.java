@@ -137,8 +137,8 @@ public class ManageArticleActivity extends AppCompatActivity implements Activite
     }
 
     @Override
-    public void notifyRetourRequete(Object resultat) {
-        Log.i("retour request", resultat.toString());
+    public void notifyRetourRequete(Object resultat, String method, boolean error) {
+
     }
 
     @Override
