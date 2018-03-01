@@ -15,6 +15,17 @@
     <string name="ajout_categorie">Ajout d\'une catégorie</string>
     <string name="ajout_article">Ajout d\'un article</string>
 
+    <string name="supp_categorie_message">Êtes vous sur de vouloir supprimer cette catégorie ?</string>
+    <string name="supp_categorie_titre">Suppression d\'une catégorie</string>
+    <string name="supp_article_message">Êtes vous sur de vouloir supprimer cet article ?</string>
+    <string name="supp_article_titre">Suppression d\'un article</string>
+    <string name="supp_ok">Suppression effectuée</string>
+
+    <string name="ajout_ok">Ajout effectué</string>
+    <string name="modif_ok">Modification effectué</string>
+    <string name="erreur_serveur">Erreur : Impossible de joindre le serveur</string>
+    <string name="champs_non_changé">Aucun changement détécté</string>
+
     <string name="reference">Référence: </string>
     <string name="nom">Nom: </string>
     <string name="visuel">Visuel: </string>
@@ -23,9 +34,8 @@
     <string name="positif">Oui</string>
     <string name="negatif">Non</string>
     <string name="cancel">Annuler</string>
-    <string name="dialog_message">Êtes vous sur de vouloir supprimer cette catégorie ?</string>
-    <string name="dialog_titre">Suppression d\'une catégorie</string>
-    <string name="supp_ok">Suppression effectuée</string>
-    <string name="erreur_serveur">Erreur : Impossible de joindre le serveur</string>
+    <string name="modifier">Modifier</string>
+    <string name="modif_article">Modifier article</string>
+    <string name="modif_categorie">Modifier catégorie</string>
 
 </resources>

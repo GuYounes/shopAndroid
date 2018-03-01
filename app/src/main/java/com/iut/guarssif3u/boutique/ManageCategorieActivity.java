@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +26,8 @@ public class ManageCategorieActivity extends AppCompatActivity implements Activi
     protected Button btnRetour;
     protected EditText editNom;
     protected EditText editVisuel;
+    protected ProgressBar loader;
+
     private String method;
     private Categorie newCategorie;
 
@@ -42,17 +46,19 @@ public class ManageCategorieActivity extends AppCompatActivity implements Activi
         btnRetour = this.findViewById(R.id.btnRetour);
         editNom = this.findViewById(R.id.editNomCategorie);
         editVisuel = this.findViewById(R.id.editNomVisuel);
+        loader = this.findViewById(R.id.loader);
 
         method = (String) this.getIntent().getExtras().get("method");
 
         btnOk.setOnClickListener(this);
+        btnRetour.setOnClickListener(this);
         if(method.equals(HTTPRequestMethod.PUT)) {
             Categorie categorie = (Categorie) this.getIntent().getExtras().get("categorie");
             if(categorie != null) {
-                lblCategorie.setText("Modification catégorie");
+                lblCategorie.setText(R.string.modif_categorie);
                 editNom.setText(categorie.getNom());
                 editVisuel.setText(categorie.getVisuel());
-                btnOk.setText("Modifier");
+                btnOk.setText(R.string.modifier);
                 newCategorie = categorie;
             }
         }
@@ -63,13 +69,13 @@ public class ManageCategorieActivity extends AppCompatActivity implements Activi
         String nom = editNom.getText().toString();
         String visuel = editVisuel.getText().toString();
 
-        if(nom.length() != 0 && visuel.length() != 0) {
+        try {
             // ajout catégorie
             Categorie newCategorie = new Categorie(nom, visuel);
             CategorieDAO.getInstance(this).insert(newCategorie);
-            Toast.makeText(this,"Ajout", Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(this,"Les champs saisis sont incorrect !", Toast.LENGTH_LONG).show();
+            this.afficheLoader();
+        } catch (IllegalArgumentException e) {
+            Toast.makeText(this,e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -77,49 +83,68 @@ public class ManageCategorieActivity extends AppCompatActivity implements Activi
         String nom = editNom.getText().toString();
         String visuel = editVisuel.getText().toString();
 
-        if(nom.length() != 0 && visuel.length() != 0) {
-            if(newCategorie.getNom() != nom || newCategorie.getVisuel() != visuel) {
+        if(!newCategorie.getNom().equals(nom) || !newCategorie.getVisuel().equals(visuel)) {
+            try{
                 // modification catégorie
-                Categorie newCategorie = new Categorie(nom, visuel);
+                Categorie newCategorie = new Categorie(this.newCategorie.getId(), nom, visuel);
                 CategorieDAO.getInstance(this).update(newCategorie);
-                Toast.makeText(this,"Modification", Toast.LENGTH_LONG).show();
+                this.afficheLoader();
+            } catch (IllegalArgumentException e){
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
             }
         } else {
-            Toast.makeText(this,"Les champs saisis sont incorrect !", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.champs_non_changé, Toast.LENGTH_LONG).show();
         }
-    }
 
-    public void retour(View view) {
-        this.finish();
     }
 
     @Override
     public void onClick(View view) {
-        if(method == HTTPRequestMethod.POST) {
-            ajouterCategorie();
-        } else if(method == HTTPRequestMethod.PUT) {
-            editCategorie();
+        switch (view.getId()){
+            case (R.id.btnOkCategorie):
+                if(method.equals(HTTPRequestMethod.POST)) ajouterCategorie();
+                if(method.equals(HTTPRequestMethod.PUT)) editCategorie();
+                break;
+            case (R.id.btnRetour):
+                this.finish();
+                break;
         }
+
     }
 
     @Override
     public void afficheLoader() {
-
+        this.btnOk.setVisibility(View.GONE);
+        this.loader.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void cacheLoaderAfficheContenu() {
-
+        this.loader.setVisibility(View.GONE);
+        this.btnOk.setVisibility(View.VISIBLE);
     }
 
     @Override
-    public void notifyRetourRequete(Object resultat, String method, String error) {
-
+    public void notifyRetourRequete(Object resultat, String method, boolean error) {
+        this.cacheLoaderAfficheContenu();
+        if(error){
+            Toast.makeText(this, R.string.erreur_serveur, Toast.LENGTH_LONG).show();
+            return;
+        }
+        switch (method){
+            case HTTPRequestMethod.POST:
+                Toast.makeText(this, R.string.ajout_ok, Toast.LENGTH_LONG).show();
+                this.editNom.setText("");
+                this.editVisuel.setText("");
+                break;
+            case HTTPRequestMethod.PUT:
+                Toast.makeText(this, R.string.modif_ok, Toast.LENGTH_LONG).show();
+                this.finish();
+                break;
+        }
     }
 
     @Override
-    public void notifyRetourRequeteFindAll(ArrayList list) {
-
-    }
+    public void notifyRetourRequeteFindAll(ArrayList list) {}
 
 }

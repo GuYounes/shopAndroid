@@ -75,9 +75,10 @@ public class CategorieAdapter extends ArrayAdapter<Categorie> implements View.On
         TextView tvNom = convertView.findViewById(R.id.nom);
         tvNom.setText(categorie.getNom());
 
-        ImageView iconeModifier = convertView.findViewById(R.id.modifier);
-        ImageView iconeSupprimer = convertView.findViewById(R.id.supprimer);
+        ImageView iconeModifier = btnEdit;
+        ImageView iconeSupprimer = btnDelete;
         ImageView iconeVisuel = convertView.findViewById(R.id.visuel);
+        iconeVisuel.setTag(position);
 
         if(iconeVisuel.getDrawable() == null){
             ImageFromURL<Categorie> ifu = new ImageFromURL<>(this, iconeVisuel, substitut, loader);
@@ -112,7 +113,6 @@ public class CategorieAdapter extends ArrayAdapter<Categorie> implements View.On
                 this.parent.modifier(categorie);
                 break;
         }
-
     }
 
 }

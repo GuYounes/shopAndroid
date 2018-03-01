@@ -18,19 +18,25 @@ import com.iut.guarssif3u.boutique.R;
 public class SuppressionDialog extends DialogFragment {
 
     int parentPosition;
+    String titre;
+    String message;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.parentPosition = getArguments().getInt("position");
+        this.titre = getArguments().getString("titre");
+        this.message = getArguments().getString("message");
     }
 
-    public static SuppressionDialog newInstance(int position) {
+    public static SuppressionDialog newInstance(int position, String titre, String message) {
         SuppressionDialog fragment = new SuppressionDialog();
 
         // Supply num input as an argument.
         Bundle args = new Bundle();
         args.putInt("position", position);
+        args.putString("titre", titre);
+        args.putString("message", message);
         fragment.setArguments(args);
 
         return fragment;
@@ -39,11 +45,11 @@ public class SuppressionDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
 
-        Fragment parent = ((BoutiqueActivity)getActivity()).adapter.getItem(this.parentPosition);
+        Fragment parent = ((BoutiqueActivity)getActivity()).getViewPagerAdapter().getItem(this.parentPosition);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        builder.setMessage(R.string.dialog_message)
-                .setTitle(R.string.dialog_titre);
+        builder.setMessage(this.message)
+                .setTitle(this.titre);
 
         DialogInterface.OnClickListener ecouteur = (DialogInterface.OnClickListener)parent;
         builder.setPositiveButton(R.string.positif, ecouteur);

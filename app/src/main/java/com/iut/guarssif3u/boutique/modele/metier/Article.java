@@ -148,6 +148,7 @@ public class Article implements Parcelable {
      * Référence à passer à l'article
      */
     public void setReference(String reference) {
+        if(reference.length() == 0) throw new IllegalArgumentException("La reference ne peut pas être vide");
         this.reference = reference;
     }
 
@@ -168,6 +169,7 @@ public class Article implements Parcelable {
      * Nom à passer à l'article
      */
     public void setNom(String nom) {
+        if(nom.length() == 0) throw new IllegalArgumentException("Le nom ne peut pas être vide");
         this.nom = nom;
     }
 
@@ -191,7 +193,7 @@ public class Article implements Parcelable {
      * si le tarif est négatif
      */
     public void setTarif(float tarif) {
-        if(tarif < 0) throw new IllegalArgumentException("Le tarif ne peut pas être négatif");
+        if(tarif <= 0) throw new IllegalArgumentException("Le tarif ne peut pas être négatif ou null");
         this.tarif = tarif;
     }
 
@@ -212,6 +214,7 @@ public class Article implements Parcelable {
      * Visuel à passer à l'article
      */
     public void setVisuel(String visuel) {
+        if(visuel.length() == 0) throw new IllegalArgumentException("Le visuel ne peut pas être vide");
         this.visuel = visuel;
     }
 

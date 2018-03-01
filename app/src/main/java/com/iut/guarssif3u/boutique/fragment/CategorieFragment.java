@@ -41,22 +41,21 @@ public class CategorieFragment extends Fragment implements ActiviteEnAttenteAvec
     protected ProgressBar loader;
     protected FloatingActionButton addCategorieBtn;
 
+    BoutiqueActivity activity;
+
     public CategorieFragment(){};
 
     @Override
     public void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
-        this.categories = new ArrayList<>();
-
-        setRetainInstance(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance){
         View view = inflater.inflate(R.layout.fragment_categorie, null);
 
-        addCategorieBtn = view.findViewById(R.id.add);
-        addCategorieBtn.setOnClickListener(this);
+        this.categories = new ArrayList<>();
+        this.activity = (BoutiqueActivity)this.getActivity();
 
         try {
             this.substitut = Drawable.createFromStream(getActivity().getAssets().open("cintre.png"), null);
@@ -69,11 +68,15 @@ public class CategorieFragment extends Fragment implements ActiviteEnAttenteAvec
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        addCategorieBtn = view.findViewById(R.id.add);
+        addCategorieBtn.setOnClickListener(this);
+
         this.listView = view.findViewById(R.id.liste);
         this.loader = view.findViewById(R.id.loader);
 
         CategorieAdapter categorieAdapter = new CategorieAdapter(getActivity(), this, categories, substitut);
         this.listView.setAdapter(categorieAdapter);
+
         CategorieDAO.getInstance(this).findAll();
         this.afficheLoader();
     }
@@ -98,7 +101,12 @@ public class CategorieFragment extends Fragment implements ActiviteEnAttenteAvec
         this.categories.addAll(liste);
 
         ((BaseAdapter) this.listView.getAdapter()).notifyDataSetChanged();
+
         this.cacheLoaderAfficheContenu();
+
+        if(this.activity.getCurrentFragment() == this.activity.getViewPagerAdapter().getItemPosition(this)){
+            this.listView.setSelectionFromTop(this.activity.getCurrentItemPosition(), this.activity.getCurrentTopPosition());
+        }
     }
 
     @Override
@@ -117,20 +125,34 @@ public class CategorieFragment extends Fragment implements ActiviteEnAttenteAvec
     public void supprimer(Categorie object) {
         this.targetCategorie = object;
         try{
-            SuppressionDialog dialog = SuppressionDialog.newInstance(((BoutiqueActivity)getActivity()).adapter.getItemPosition(this));
+            SuppressionDialog dialog = SuppressionDialog.newInstance(((BoutiqueActivity)getActivity()).getViewPagerAdapter().getItemPosition(this), getActivity().getString(R.string.supp_categorie_titre), getActivity().getString(R.string.supp_categorie_message));
             dialog.show(getActivity().getFragmentManager(), "suppression");
         } catch (IllegalArgumentException e) {
             Toast.makeText(getActivity().getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
+    /**
+     * Ouvre une nouvelle activité
+     */
     @Override
-    public void ajouter(Categorie object) {
-        CategorieDAO.getInstance(this).insert(this.targetCategorie);
+    public void ajouter() {
+        this.saveFragmentAndPosition();
+
+        Intent activityLauncher = new Intent(this.getActivity(), ManageCategorieActivity.class);
+        activityLauncher.putExtra("method", HTTPRequestMethod.POST);
+        startActivity(activityLauncher);
     }
 
+    /**
+     * Appelé dans CategorieAdapter
+     *
+     * @param object
+     */
     @Override
     public void modifier(Categorie object) {
+        this.saveFragmentAndPosition();
+
         Intent activityLauncher = new Intent(getContext(), ManageCategorieActivity.class);
         activityLauncher.putExtra("categorie", object);
         activityLauncher.putExtra("method", HTTPRequestMethod.PUT);
@@ -138,17 +160,24 @@ public class CategorieFragment extends Fragment implements ActiviteEnAttenteAvec
     }
 
     @Override
-    public void recuperer(int id) {
+    public void recuperer(int id) {}
 
-    }
-
+    /**
+     * Appelé sur le click du FloatingActionButton
+     *
+     * @param view
+     */
     @Override
     public void onClick(View view) {
-        Intent activityLauncher = new Intent(this.getActivity(), ManageCategorieActivity.class);
-        activityLauncher.putExtra("method", HTTPRequestMethod.PUT);
-        startActivity(activityLauncher);
+        this.ajouter();
     }
 
+    /**
+     * Appelé sur le click de la popup lors de la suppression d'une categorie
+     *
+     * @param dialog
+     * @param i
+     */
     @Override
     public void onClick(DialogInterface dialog, int i) {
         if(i == DialogInterface.BUTTON_POSITIVE){
@@ -156,6 +185,17 @@ public class CategorieFragment extends Fragment implements ActiviteEnAttenteAvec
         } else {
             return;
         }
+    }
+
+    /**
+     * Sauvegarde le fragment sur lequel nous sommes, et la position du scroll
+     */
+    protected void saveFragmentAndPosition(){
+        int index = this.listView.getFirstVisiblePosition();
+        View v = this.listView.getChildAt(0);
+        int top = (v == null) ? 0 : (v.getTop() - this.listView.getPaddingTop());
+
+        this.activity.saveFragmentAndPosition(this.activity.getViewPagerAdapter().getItemPosition(this), index, top);
     }
 
 }

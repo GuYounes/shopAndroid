@@ -7,7 +7,7 @@ package com.iut.guarssif3u.boutique.fragment;
 public interface ObjetMetier<T> {
 
     void supprimer(T object);
-    void ajouter(T object);
+    void ajouter();
     void modifier(T object);
     void recuperer(int id);
 }

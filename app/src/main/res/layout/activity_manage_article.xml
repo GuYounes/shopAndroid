@@ -144,13 +144,20 @@
         app:layout_constraintRight_toLeftOf="parent">
 
         <Button
-            android:id="@+id/btnOkCategorie"
+            android:id="@+id/btnOkArticle"
             android:tag="ajouter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/colorPrimary"
             android:textColor="@color/colorWhite"
             android:text="@string/ajouter" />
+
+        <ProgressBar
+            android:id="@+id/loader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="30dp"
+            android:visibility="gone"/>
 
         <Button
             android:id="@+id/btnRetour"

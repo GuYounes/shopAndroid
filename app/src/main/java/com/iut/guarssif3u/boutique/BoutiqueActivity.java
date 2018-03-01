@@ -16,13 +16,20 @@ import com.iut.guarssif3u.boutique.fragment.CategorieFragment;
 import com.iut.guarssif3u.boutique.fragment.PromotionFragment;
 import com.iut.guarssif3u.boutique.modele.metier.Categorie;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 public class BoutiqueActivity extends AppCompatActivity {
 
     protected ViewPager viewPager;
     protected TabLayout tabLayout;
     protected Bundle savedInstanceState;
-    public ViewPagerAdapter adapter;
 
+    protected ViewPagerAdapter adapter;
+
+    protected int currentFragmentPosition = -1;
+    protected int currentItemPosition;
+    protected int currentTopPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +64,10 @@ public class BoutiqueActivity extends AppCompatActivity {
 
         this.tabLayout = this.findViewById(R.id.tabLayout);
         this.tabLayout.setupWithViewPager(viewPager);
+
+        if(currentFragmentPosition != -1){
+            viewPager.setCurrentItem(currentFragmentPosition);
+        }
     }
 
     private Fragment getFragment(int position){
@@ -78,12 +89,49 @@ public class BoutiqueActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-
         if(id == android.R.id.home) {
             this.finish();
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public ViewPager getViewPager(){
+        return this.viewPager;
+    }
+
+    public ViewPagerAdapter getViewPagerAdapter(){
+        return this.adapter;
+    }
+
+    public int getCurrentFragment(){
+        return this.currentFragmentPosition;
+    }
+
+    public int getCurrentItemPosition(){
+        return this.currentItemPosition;
+    }
+
+    public int getCurrentTopPosition(){
+        return this.currentTopPosition;
+    }
+
+    public void setCurrentFragment(int fragmentPosition){
+        this.currentFragmentPosition = fragmentPosition;
+    }
+
+    public void setCurrentItemPosition(int index){
+        this.currentItemPosition = index;
+    }
+
+    public void setCurrentTopPosition(int top){
+        this.currentTopPosition = top;
+    }
+
+    public void saveFragmentAndPosition(int fragmentPosition, int index, int top){
+        this.setCurrentFragment(fragmentPosition);
+        this.setCurrentItemPosition(index);
+        this.setCurrentTopPosition(top);
     }
 
     private void setupViewPager() {

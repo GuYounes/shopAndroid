@@ -16,40 +16,51 @@
 
     <ProgressBar
         android:id="@+id/loader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
         android:indeterminate="true"
         android:layout_margin="10dp"
         android:layout_weight="20"
-        android:visibility="gone"
         />
 
-    <TextView
-        android:id="@+id/nom"
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:layout_weight="30"/>
+        android:layout_weight="40">
 
-    <TextView
-        android:id="@+id/reference"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:layout_weight="20"/>
+        <TextView
+            android:id="@+id/nom"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textStyle="bold"
+            />
+
+        <TextView
+            android:id="@+id/reference"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_marginTop="30dp"
+            />
+
+    </RelativeLayout>
+
 
     <TextView
         android:id="@+id/tarif"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:layout_weight="10"/>
+        android:layout_weight="20"/>
 
     <ImageView
         android:id="@+id/modifier"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="10"
+        android:paddingRight="10dp"
         android:src="@drawable/ic_item_list_edit"/>
 
     <ImageView

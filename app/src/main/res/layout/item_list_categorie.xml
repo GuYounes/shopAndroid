@@ -16,12 +16,11 @@
 
     <ProgressBar
         android:id="@+id/loader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
         android:indeterminate="true"
         android:layout_margin="10dp"
         android:layout_weight="30"
-        android:visibility="gone"
         />
 
     <TextView
@@ -37,7 +36,9 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="10"
-        android:src="@drawable/ic_item_list_edit"/>
+        android:paddingRight="15dp"
+        android:src="@drawable/ic_item_list_edit"
+        />
 
     <ImageView
         android:id="@+id/supprimer"

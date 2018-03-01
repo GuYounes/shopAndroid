@@ -49,6 +49,11 @@ public class ImageFromURL<T> extends AsyncTask<String, Integer, Bitmap> {
 
     @Override
     protected void onPostExecute(Bitmap result){
+        try{
+            int tag = (int)imageView.getTag();
+        } catch (Exception e){
+
+        }
         if(imageView.getDrawable() == null){
             if(result == null){
                 imageView.setImageDrawable(substitut);

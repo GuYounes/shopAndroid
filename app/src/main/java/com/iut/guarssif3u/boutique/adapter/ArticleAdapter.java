@@ -1,6 +1,5 @@
 package com.iut.guarssif3u.boutique.adapter;
 
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
@@ -10,14 +9,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.iut.guarssif3u.boutique.DAO.ArticleDAO;
-import com.iut.guarssif3u.boutique.HTTPRequest.HTTPRequestMethod;
-import com.iut.guarssif3u.boutique.ManageArticleActivity;
 import com.iut.guarssif3u.boutique.R;
 import com.iut.guarssif3u.boutique.async.ImageFromURL;
-import com.iut.guarssif3u.boutique.fragment.ActiviteEnAttenteAvecResultat;
+import com.iut.guarssif3u.boutique.fragment.ObjetMetier;
 import com.iut.guarssif3u.boutique.modele.metier.Article;
 
 import java.io.IOException;
@@ -27,17 +21,22 @@ import java.util.ArrayList;
  * Created by younes on 19/02/2018.
  */
 
-public class ArticleAdapter extends ArrayAdapter<Article> {
+public class ArticleAdapter extends ArrayAdapter<Article> implements View.OnClickListener {
 
     protected FragmentActivity activity;
+    protected ObjetMetier<Article> parent;
+
     protected Drawable substitut;
     protected ProgressBar loader;
     protected ImageView btnEdit;
     protected ImageView btnDelete;
-    protected Article article;
 
-    public ArticleAdapter(FragmentActivity activity, ArrayList<Article> liste, Drawable subsitut){
+    protected ArrayList<Article> articles;
+
+    public ArticleAdapter(FragmentActivity activity, ObjetMetier<Article> parent, ArrayList<Article> liste, Drawable subsitut){
         super(activity, 0, liste);
+        this.parent = parent;
+        this.articles = liste;
         this.activity = activity;
         this.substitut = subsitut;
     }
@@ -45,30 +44,20 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent){
 
-        this.article = getItem(position);
+        Article article = getItem(position);
 
         if(convertView == null){
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_list_article, parent, false);
-
-            btnEdit = convertView.findViewById(R.id.modifier);
-            btnDelete = convertView.findViewById(R.id.supprimer);
-
-            btnEdit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent activityLauncher = new Intent(getContext(), ManageArticleActivity.class);
-                    activityLauncher.putExtra("article", getItem(position));
-                    activityLauncher.putExtra("method", HTTPRequestMethod.PUT);
-                    activity.startActivity(activityLauncher);
-                }
-            });
-            btnDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Toast.makeText(getContext(), "Suppression " + position, Toast.LENGTH_LONG).show();
-                }
-            });
         }
+
+        btnEdit = convertView.findViewById(R.id.modifier);
+        btnDelete = convertView.findViewById(R.id.supprimer);
+
+        btnEdit.setOnClickListener(this);
+        btnDelete.setOnClickListener(this);
+
+        btnEdit.setTag(position);
+        btnDelete.setTag(position);
 
         this.loader = convertView.findViewById(R.id.loader);
 
@@ -79,7 +68,7 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
         tvReference.setText(article.getReference());
 
         TextView tvTarif = convertView.findViewById(R.id.tarif);
-        tvTarif.setText(Float.toString(article.getTarif()) + "€");
+        tvTarif.setText(String.format("%s %s", Float.toString(article.getTarif()), activity.getResources().getString(R.string.euro)));
 
         ImageView iconeVisuel = convertView.findViewById(R.id.visuel);
         if(iconeVisuel.getDrawable() == null){
@@ -87,14 +76,14 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
             ifu.execute("https://infodb.iutmetz.univ-lorraine.fr/~guarssif3u/ppo/ecommerce/images/article/" + article.getVisuel());
         }
 
-        ImageView iconeModifier = convertView.findViewById(R.id.modifier);
+        ImageView iconeModifier = btnEdit;
         if(iconeVisuel.getDrawable() == null){
             try {
                 iconeModifier.setImageDrawable(Drawable.createFromStream(activity.getAssets().open("crayon.png"), null));
             } catch (IOException e){}
         }
 
-        ImageView iconeSupprimer = convertView.findViewById(R.id.supprimer);
+        ImageView iconeSupprimer = btnDelete;
         if(iconeVisuel.getDrawable() == null){
             try {
                 iconeSupprimer.setImageDrawable(Drawable.createFromStream(activity.getAssets().open("corbeille.png"), null));
@@ -102,5 +91,20 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
         }
 
         return convertView;
+    }
+
+    @Override
+    public void onClick(View v) {
+        Article article = this.articles.get((int)v.getTag());
+
+        switch (v.getId()){
+            case (R.id.supprimer):
+                this.parent.supprimer(article);
+                break;
+
+            case (R.id.modifier):
+                this.parent.modifier(article);
+                break;
+        }
     }
 }
