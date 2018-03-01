@@ -3,6 +3,7 @@ package com.iut.guarssif3u.boutique;
 import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -52,6 +53,7 @@ public class ManageCategorieActivity extends AppCompatActivity implements Activi
 
         btnOk.setOnClickListener(this);
         btnRetour.setOnClickListener(this);
+
         if(method.equals(HTTPRequestMethod.PUT)) {
             Categorie categorie = (Categorie) this.getIntent().getExtras().get("categorie");
             if(categorie != null) {

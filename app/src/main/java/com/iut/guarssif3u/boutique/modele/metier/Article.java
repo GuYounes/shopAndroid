@@ -256,6 +256,11 @@ public class Article implements Parcelable {
     }
 
     @Override
+    public String toString() {
+        return nom;
+    }
+
+    @Override
     public int describeContents() {
         return 0;
     }

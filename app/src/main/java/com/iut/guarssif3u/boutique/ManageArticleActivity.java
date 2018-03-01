@@ -88,9 +88,13 @@ public class ManageArticleActivity extends AppCompatActivity implements Activite
     public void ajouterArticle() {
         String nom = editNom.getText().toString();
         String visuel = editVisuel.getText().toString();
-        Float tarif = Float.valueOf(editTarif.getText().toString());
+        Float tarif = null;
         String reference = editReference.getText().toString();
         Categorie categorie = (Categorie) spinnerCategorie.getSelectedItem();
+
+        if(!editTarif.getText().toString().equals("")) {
+            tarif = Float.valueOf(editTarif.getText().toString());
+        }
 
         try{
             // ajout article
@@ -105,10 +109,13 @@ public class ManageArticleActivity extends AppCompatActivity implements Activite
     public void editArticle() {
         String nom = editNom.getText().toString();
         String visuel = editVisuel.getText().toString();
-        Float tarif = Float.valueOf(editTarif.getText().toString());
+        Float tarif = null;
         String reference = editReference.getText().toString();
         Categorie categorie = (Categorie) spinnerCategorie.getSelectedItem();
 
+        if(!editTarif.getText().toString().equals("")) {
+            tarif = Float.valueOf(editTarif.getText().toString());
+        }
 
         if(newArticle.getNom() != nom || newArticle.getVisuel() != visuel || newArticle.getTarif() != tarif || newArticle.getReference() != reference || newArticle.getCategorie() != categorie) {
             try{
@@ -178,11 +185,7 @@ public class ManageArticleActivity extends AppCompatActivity implements Activite
         if(this.method.equals(HTTPRequestMethod.PUT)){
             int spinnerPosition = list.indexOf(newArticle.getCategorie());
             spinnerCategorie.setSelection(spinnerPosition, false);
-        } else {
-            spinnerCategorie.setSelection(0, false);
         }
-
-
     }
 
 }
