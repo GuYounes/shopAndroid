@@ -32,7 +32,7 @@ public class ManageArticleActivity extends AppCompatActivity implements Activite
     protected EditText editNom;
     protected EditText editVisuel;
     protected Spinner spinnerCategorie;
-    private String method;
+    public String method;
     private Article newArticle;
 
     @Override
@@ -56,12 +56,11 @@ public class ManageArticleActivity extends AppCompatActivity implements Activite
 
         method = (String) this.getIntent().getExtras().get("method");
 
-        if(method.equals(HTTPRequestMethod.PUT)) {
-            CategorieDAO categorieDAO = CategorieDAO.getInstance(this);
-            categorieDAO.findAll();
-        }
-
         btnOk.setOnClickListener(this);
+
+        CategorieDAO categorieDAO = CategorieDAO.getInstance(this);
+        categorieDAO.findAll();
+
         if(method.equals(HTTPRequestMethod.PUT)) {
             Article article = (Article) this.getIntent().getExtras().get("article");
             if(article != null) {
@@ -80,9 +79,13 @@ public class ManageArticleActivity extends AppCompatActivity implements Activite
     public void ajouterArticle() {
         String nom = editNom.getText().toString();
         String visuel = editVisuel.getText().toString();
-        Float tarif = Float.valueOf(editTarif.getText().toString());
+        Float tarif = null;
         String reference = editReference.getText().toString();
         Categorie categorie = (Categorie) spinnerCategorie.getSelectedItem();
+
+        if(!editTarif.getText().toString().equals("")) {
+            tarif = Float.valueOf(editTarif.getText().toString());
+        }
 
         if(nom.length() != 0 && visuel.length() != 0 && tarif > 0 && reference.length() != 0) {
             // ajout article
@@ -90,16 +93,20 @@ public class ManageArticleActivity extends AppCompatActivity implements Activite
             ArticleDAO.getInstance(this).insert(newArticle);
             Toast.makeText(this,"Ajout", Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(this,"Les champs saisis sont incorrect !", Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"Les champs saisis sont incorrects !", Toast.LENGTH_LONG).show();
         }
     }
 
     public void editArticle() {
         String nom = editNom.getText().toString();
         String visuel = editVisuel.getText().toString();
-        Float tarif = Float.valueOf(editTarif.getText().toString());
+        Float tarif = null;
         String reference = editReference.getText().toString();
         Categorie categorie = (Categorie) spinnerCategorie.getSelectedItem();
+
+        if(!editTarif.getText().toString().equals("")) {
+            tarif = Float.valueOf(editTarif.getText().toString());
+        }
 
         if(nom.length() != 0 && visuel.length() != 0 && tarif > 0 && reference.length() != 0) {
             if(newArticle.getNom() != nom || newArticle.getVisuel() != visuel || newArticle.getTarif() != tarif || newArticle.getReference() != reference || newArticle.getCategorie() != categorie) {
@@ -109,7 +116,7 @@ public class ManageArticleActivity extends AppCompatActivity implements Activite
                 Toast.makeText(this,"Modification", Toast.LENGTH_LONG).show();
             }
         } else {
-            Toast.makeText(this,"Les champs saisis sont incorrect !", Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"Les champs saisis sont incorrects !", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -146,8 +153,10 @@ public class ManageArticleActivity extends AppCompatActivity implements Activite
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCategorie.setAdapter(adapter);
-        int spinnerPosition = list.indexOf(newArticle.getCategorie());
-        spinnerCategorie.setSelection(spinnerPosition, false);
+        if(method.equals(HTTPRequestMethod.PUT)) {
+            int spinnerPosition = list.indexOf(newArticle.getCategorie());
+            spinnerCategorie.setSelection(spinnerPosition, false);
+        }
     }
 
 }

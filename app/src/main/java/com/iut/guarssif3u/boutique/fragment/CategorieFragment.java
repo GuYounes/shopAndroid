@@ -145,7 +145,7 @@ public class CategorieFragment extends Fragment implements ActiviteEnAttenteAvec
     @Override
     public void onClick(View view) {
         Intent activityLauncher = new Intent(this.getActivity(), ManageCategorieActivity.class);
-        activityLauncher.putExtra("method", HTTPRequestMethod.PUT);
+        activityLauncher.putExtra("method", HTTPRequestMethod.POST);
         startActivity(activityLauncher);
     }
 

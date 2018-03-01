@@ -1,12 +1,15 @@
 package com.iut.guarssif3u.boutique.modele.metier;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Date;
 
 /**
  * Created by Vicek on 09/01/2018.
  */
 
-public class Promotion {
+public class Promotion implements Parcelable {
 
     /**
      * Article ciblé par la promotion
@@ -49,11 +52,30 @@ public class Promotion {
      * pourcentage de reduction
      */
     public Promotion(Article article, Date date_debut, Date date_fin, float pourcentage) {
-        this.setArticle(article);
+
         this.setDate_debut(date_debut);
         this.setDate_fin(date_fin);
         this.setPourcentage(pourcentage);
     }
+
+    protected Promotion(Parcel in) {
+        date_debut = new Date(in.readLong());
+        date_fin = new Date(in.readLong());
+        pourcentage = in.readFloat();
+        article = in.readParcelable(Article.class.getClassLoader());
+    }
+
+    public static final Creator<Promotion> CREATOR = new Creator<Promotion>() {
+        @Override
+        public Promotion createFromParcel(Parcel in) {
+            return new Promotion(in);
+        }
+
+        @Override
+        public Promotion[] newArray(int size) {
+            return new Promotion[size];
+        }
+    };
 
     /**
      * Retourne l'article ciblé par la promotion
@@ -171,5 +193,28 @@ public class Promotion {
         result = 31 * result + date_fin.hashCode();
         result = 31 * result + (pourcentage != +0.0f ? Float.floatToIntBits(pourcentage) : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Promotion{" +
+                "article=" + article +
+                ", date_debut=" + date_debut +
+                ", date_fin=" + date_fin +
+                ", pourcentage=" + pourcentage +
+                '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeLong(this.date_debut.getTime());
+        parcel.writeLong(this.date_fin.getTime());
+        parcel.writeFloat(this.pourcentage);
+        parcel.writeParcelable(this.article, i);
     }
 }

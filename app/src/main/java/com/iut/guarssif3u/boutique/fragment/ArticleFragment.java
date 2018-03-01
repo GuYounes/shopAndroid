@@ -74,7 +74,7 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
     }
 
     @Override
-    public void notifyRetourRequete(Article resultat, String method, String error) {
+    public void notifyRetourRequete(Article resultat, String method, boolean error) {
 
     }
 
@@ -102,7 +102,7 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
     @Override
     public void onClick(View v) {
         Intent activityLauncher = new Intent(this.getActivity(), ManageArticleActivity.class);
-        activityLauncher.putExtra("method", HTTPRequestMethod.PUT);
+        activityLauncher.putExtra("method", HTTPRequestMethod.POST);
         startActivity(activityLauncher);
     }
 

@@ -3,6 +3,7 @@ package com.iut.guarssif3u.boutique;
 import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -46,6 +47,7 @@ public class ManageCategorieActivity extends AppCompatActivity implements Activi
         method = (String) this.getIntent().getExtras().get("method");
 
         btnOk.setOnClickListener(this);
+
         if(method.equals(HTTPRequestMethod.PUT)) {
             Categorie categorie = (Categorie) this.getIntent().getExtras().get("categorie");
             if(categorie != null) {
@@ -69,7 +71,7 @@ public class ManageCategorieActivity extends AppCompatActivity implements Activi
             CategorieDAO.getInstance(this).insert(newCategorie);
             Toast.makeText(this,"Ajout", Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(this,"Les champs saisis sont incorrect !", Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"Les champs saisis sont incorrects !", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -85,7 +87,7 @@ public class ManageCategorieActivity extends AppCompatActivity implements Activi
                 Toast.makeText(this,"Modification", Toast.LENGTH_LONG).show();
             }
         } else {
-            Toast.makeText(this,"Les champs saisis sont incorrect !", Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"Les champs saisis sont incorrects !", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -95,9 +97,9 @@ public class ManageCategorieActivity extends AppCompatActivity implements Activi
 
     @Override
     public void onClick(View view) {
-        if(method == HTTPRequestMethod.POST) {
+        if(method.equals(HTTPRequestMethod.POST)) {
             ajouterCategorie();
-        } else if(method == HTTPRequestMethod.PUT) {
+        } else if(method.equals(HTTPRequestMethod.PUT)) {
             editCategorie();
         }
     }
@@ -113,7 +115,7 @@ public class ManageCategorieActivity extends AppCompatActivity implements Activi
     }
 
     @Override
-    public void notifyRetourRequete(Object resultat, String method, String error) {
+    public void notifyRetourRequete(Object resultat, String method, boolean error) {
 
     }
 
