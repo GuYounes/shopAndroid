@@ -203,7 +203,7 @@ public class Article implements Parcelable {
      * si le tarif est négatif
      */
     public void setTarif(float tarif) {
-        if(tarif <= 0) throw new IllegalArgumentException("Le tarif ne peut pas être négatif ou null");
+        if(tarif <= 0.0f) throw new IllegalArgumentException("Le tarif ne peut pas être négatif ou null");
         this.tarif = tarif;
     }
 

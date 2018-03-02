@@ -44,6 +44,10 @@ public class ManageCategorieActivity extends AppCompatActivity implements Activi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_categorie);
 
+        if(savedInstanceState != null) {
+            this.newCategorie = (Categorie)savedInstanceState.getSerializable("categorie");
+        }
+
         this.categories = new ArrayList<>();
     }
 
@@ -122,14 +126,12 @@ public class ManageCategorieActivity extends AppCompatActivity implements Activi
         super.onRestoreInstanceState(savedInstanceState);
 
         this.categories = (ArrayList<Categorie>) savedInstanceState.getSerializable("categories");
-        this.newCategorie = (Categorie)savedInstanceState.getSerializable("categorie");
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
             case (R.id.btnOkCategorie):
-                this.btnRetour.setEnabled(false);
                 if(method.equals(HTTPRequestMethod.POST)) ajouterCategorie();
                 if(method.equals(HTTPRequestMethod.PUT)) editCategorie();
                 break;
@@ -182,7 +184,6 @@ public class ManageCategorieActivity extends AppCompatActivity implements Activi
 
     @Override
     public void notifyRetourRequete(Object resultat, String method, boolean error) {
-        this.btnRetour.setEnabled(true);
         if(error){
             this.cacheLoaderAfficheContenu();
             Toast.makeText(this, R.string.erreur_serveur, Toast.LENGTH_LONG).show();
