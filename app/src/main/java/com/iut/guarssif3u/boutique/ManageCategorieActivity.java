@@ -1,6 +1,7 @@
 package com.iut.guarssif3u.boutique;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +23,10 @@ import java.util.ArrayList;
 
 public class ManageCategorieActivity extends AppCompatActivity implements ActiviteEnAttenteAvecResultat, View.OnClickListener {
 
+    public static final int OK = 0;
+    public static final int MODIFIE = 1;
+    public static final int NON_MODIFIE = 2;
+
     protected TextView lblCategorie;
     protected Button btnOk;
     protected Button btnRetour;
@@ -30,12 +35,16 @@ public class ManageCategorieActivity extends AppCompatActivity implements Activi
     protected ProgressBar loader;
 
     private String method;
+    private Categorie currentCategorie;
     private Categorie newCategorie;
+    private ArrayList<Categorie> categories;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_categorie);
+
+        this.categories = new ArrayList<>();
     }
 
     @Override
@@ -55,13 +64,13 @@ public class ManageCategorieActivity extends AppCompatActivity implements Activi
         btnRetour.setOnClickListener(this);
 
         if(method.equals(HTTPRequestMethod.PUT)) {
-            Categorie categorie = (Categorie) this.getIntent().getExtras().get("categorie");
-            if(categorie != null) {
+            this.currentCategorie= (Categorie) this.getIntent().getExtras().get("categorie");
+            if(currentCategorie != null) {
                 lblCategorie.setText(R.string.modif_categorie);
-                editNom.setText(categorie.getNom());
-                editVisuel.setText(categorie.getVisuel());
+                editNom.setText(currentCategorie.getNom());
+                editVisuel.setText(currentCategorie.getVisuel());
                 btnOk.setText(R.string.modifier);
-                newCategorie = categorie;
+                newCategorie = currentCategorie;
             }
         }
 
@@ -73,7 +82,7 @@ public class ManageCategorieActivity extends AppCompatActivity implements Activi
 
         try {
             // ajout catégorie
-            Categorie newCategorie = new Categorie(nom, visuel);
+            this.newCategorie = new Categorie(nom, visuel);
             CategorieDAO.getInstance(this).insert(newCategorie);
             this.afficheLoader();
         } catch (IllegalArgumentException e) {
@@ -85,10 +94,10 @@ public class ManageCategorieActivity extends AppCompatActivity implements Activi
         String nom = editNom.getText().toString();
         String visuel = editVisuel.getText().toString();
 
-        if(!newCategorie.getNom().equals(nom) || !newCategorie.getVisuel().equals(visuel)) {
+        if(!this.currentCategorie.getNom().equals(nom) || !currentCategorie.getVisuel().equals(visuel)) {
             try{
                 // modification catégorie
-                Categorie newCategorie = new Categorie(this.newCategorie.getId(), nom, visuel);
+                this.newCategorie = new Categorie(this.newCategorie.getId(), nom, visuel);
                 CategorieDAO.getInstance(this).update(newCategorie);
                 this.afficheLoader();
             } catch (IllegalArgumentException e){
@@ -101,17 +110,52 @@ public class ManageCategorieActivity extends AppCompatActivity implements Activi
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+
+        savedInstanceState.putParcelableArrayList("categories", this.categories);
+        savedInstanceState.putParcelable("categorie", this.newCategorie);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        this.categories = (ArrayList<Categorie>) savedInstanceState.getSerializable("categories");
+        this.newCategorie = (Categorie)savedInstanceState.getSerializable("categorie");
+    }
+
+    @Override
     public void onClick(View view) {
         switch (view.getId()){
             case (R.id.btnOkCategorie):
+                this.btnRetour.setEnabled(false);
                 if(method.equals(HTTPRequestMethod.POST)) ajouterCategorie();
                 if(method.equals(HTTPRequestMethod.PUT)) editCategorie();
                 break;
             case (R.id.btnRetour):
+                if(this.method.equals(HTTPRequestMethod.POST)){
+                    Intent donnees = new Intent();
+                    donnees.putParcelableArrayListExtra("categories", this.categories);
+                    this.setResult(OK, donnees);
+                } else {
+                    this.setResult(NON_MODIFIE);
+                }
                 this.finish();
                 break;
         }
+    }
 
+    @Override
+    public void onBackPressed() {
+        if(this.method.equals(HTTPRequestMethod.POST)){
+            Intent donnees = new Intent();
+            donnees.putParcelableArrayListExtra("categories", this.categories);
+            this.setResult(OK, donnees);
+        } else {
+            this.setResult(NON_MODIFIE);
+        }
+        this.finish();
     }
 
     @Override
@@ -128,19 +172,24 @@ public class ManageCategorieActivity extends AppCompatActivity implements Activi
 
     @Override
     public void notifyRetourRequete(Object resultat, String method, boolean error) {
-        this.cacheLoaderAfficheContenu();
+        this.btnRetour.setEnabled(true);
         if(error){
+            this.cacheLoaderAfficheContenu();
             Toast.makeText(this, R.string.erreur_serveur, Toast.LENGTH_LONG).show();
             return;
         }
         switch (method){
             case HTTPRequestMethod.POST:
+                this.cacheLoaderAfficheContenu();
                 Toast.makeText(this, R.string.ajout_ok, Toast.LENGTH_LONG).show();
+                this.categories.add((Categorie)resultat);
                 this.editNom.setText("");
                 this.editVisuel.setText("");
                 break;
             case HTTPRequestMethod.PUT:
-                Toast.makeText(this, R.string.modif_ok, Toast.LENGTH_LONG).show();
+                Intent donnees = new Intent();
+                donnees.putExtra("categorie", this.newCategorie);
+                this.setResult(MODIFIE, donnees);
                 this.finish();
                 break;
         }

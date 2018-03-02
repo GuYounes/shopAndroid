@@ -42,7 +42,7 @@ public class ArticleDAO extends DAO<Article> {
 
     @Override
     public void delete(Article object) {
-        HTTPRequest<Article> req = new HTTPRequest<>(activite, this, HTTPRequestMethod.DELETE, null, Article.class);
+        HTTPRequest<Article> req = new HTTPRequest<>(activite, this, HTTPRequestMethod.DELETE, object, Article.class);
         req.execute(URL_SERVEUR + "articles/" + object.getId());
     }
 

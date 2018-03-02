@@ -32,6 +32,9 @@ import java.util.ArrayList;
 
 public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecResultat<Article>, View.OnClickListener, ObjetMetier<Article>, DialogInterface.OnClickListener {
 
+    private static final int MODIFICATION = 0;
+    private static final int CREATION = 1;
+
     protected ArrayList<Article> articles;
     protected Article targetArticle;
 
@@ -46,14 +49,13 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
     public void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
 
+        this.articles = new ArrayList<>();
         setRetainInstance(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance){
         View view = inflater.inflate(R.layout.fragment_article, null);
-
-        this.articles = new ArrayList<>();
         this.activity = (BoutiqueActivity)this.getActivity();
 
         try {
@@ -76,22 +78,26 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
         ArticleAdapter articleAdapter = new ArticleAdapter(getActivity(), this, articles, substitut);
         this.listView.setAdapter(articleAdapter);
 
-        ArticleDAO.getInstance(this).findAll();
-        this.afficheLoader();
+        if(this.articles.size() == 0){
+            ArticleDAO.getInstance(this).findAll();
+            this.afficheLoader();
+        }
     }
 
     @Override
     public void notifyRetourRequete(Article resultat, String method, boolean error) {
-        if(error){
-            Toast.makeText(getContext(), R.string.erreur_serveur, Toast.LENGTH_LONG).show();
-            return;
-        }
-        switch (method){
-            case HTTPRequestMethod.DELETE:
-                this.articles.remove(this.targetArticle);
-                ((BaseAdapter) this.listView.getAdapter()).notifyDataSetChanged();
-                Toast.makeText(getContext(), R.string.supp_ok, Toast.LENGTH_LONG).show();
-        }
+        try{
+            if(error){
+                Toast.makeText(getContext(), R.string.erreur_serveur, Toast.LENGTH_LONG).show();
+                return;
+            }
+            switch (method){
+                case HTTPRequestMethod.DELETE:
+                    this.articles.remove(resultat);
+                    ((BaseAdapter) this.listView.getAdapter()).notifyDataSetChanged();
+                    Toast.makeText(getContext(), R.string.supp_ok, Toast.LENGTH_LONG).show();
+            }
+        } catch (NullPointerException e){}
     }
 
     @Override
@@ -146,7 +152,7 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
 
         Intent activityLauncher = new Intent(this.getActivity(), ManageArticleActivity.class);
         activityLauncher.putExtra("method", HTTPRequestMethod.POST);
-        startActivity(activityLauncher);
+        startActivityForResult(activityLauncher, CREATION);
     }
 
     /**
@@ -162,7 +168,26 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
         Intent activityLauncher = new Intent(getContext(), ManageArticleActivity.class);
         activityLauncher.putExtra("article", object);
         activityLauncher.putExtra("method", HTTPRequestMethod.PUT);
-        this.getActivity().startActivity(activityLauncher);
+        startActivityForResult(activityLauncher, MODIFICATION);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        if(resultCode == ManageArticleActivity.OK ){
+            ArrayList<Article> articles = data.getParcelableArrayListExtra("articles");
+            for(Article article : articles) {
+                this.articles.add(article);
+            }
+        }
+        if(resultCode == ManageArticleActivity.MODIFIE){
+            Toast.makeText(getActivity().getApplicationContext(), R.string.modif_ok, Toast.LENGTH_LONG).show();
+            Article article = data.getParcelableExtra("article");
+            int index = this.articles.indexOf(article);
+            this.articles.remove(index);
+            this.articles.add(index, article);
+        }
+
+        ((BaseAdapter) this.listView.getAdapter()).notifyDataSetChanged();
     }
 
     @Override
@@ -177,6 +202,7 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
     public void onClick(DialogInterface dialog, int i) {
         if(i == DialogInterface.BUTTON_POSITIVE){
             ArticleDAO.getInstance(this).delete(this.targetArticle);
+            Toast.makeText(getActivity().getApplicationContext(), R.string.supp_en_cours, Toast.LENGTH_SHORT).show();
         } else {
             return;
         }

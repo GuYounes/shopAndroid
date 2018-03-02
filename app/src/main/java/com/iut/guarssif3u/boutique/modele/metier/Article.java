@@ -44,6 +44,15 @@ public class Article implements Parcelable {
      */
     public Article(){};
 
+    public Article(int id, String reference, String nom, float tarif, String visuel, Categorie categorie) {
+        this.setId(id);
+        this.setReference(reference);
+        this.setNom(nom);
+        this.setTarif(tarif);
+        this.setVisuel(visuel);
+        this.setCategorie(categorie);
+    }
+
     public Article(String reference, String nom, float tarif, String visuel, Categorie categorie) {
         this.setReference(reference);
         this.setNom(nom);
@@ -149,7 +158,7 @@ public class Article implements Parcelable {
      * Référence à passer à l'article
      */
     public void setReference(String reference) {
-        if(reference.length() == 0) throw new IllegalArgumentException("La reference ne peut pas être vide");
+        if(reference.trim().length() == 0) throw new IllegalArgumentException("La reference ne peut pas être vide");
         this.reference = reference;
     }
 
@@ -170,7 +179,7 @@ public class Article implements Parcelable {
      * Nom à passer à l'article
      */
     public void setNom(String nom) {
-        if(nom.length() == 0) throw new IllegalArgumentException("Le nom ne peut pas être vide");
+        if(nom.trim().length() == 0) throw new IllegalArgumentException("Le nom ne peut pas être vide");
         this.nom = nom;
     }
 
@@ -215,7 +224,7 @@ public class Article implements Parcelable {
      * Visuel à passer à l'article
      */
     public void setVisuel(String visuel) {
-        if(visuel.length() == 0) throw new IllegalArgumentException("Le visuel ne peut pas être vide");
+        if(visuel.trim().length() == 0) throw new IllegalArgumentException("Le visuel ne peut pas être vide");
         this.visuel = visuel;
     }
 
@@ -235,14 +244,7 @@ public class Article implements Parcelable {
 
         Article article = (Article) o;
 
-        if (id != article.id) return false;
-        if (Float.compare(article.tarif, tarif) != 0) return false;
-        if (categorie != null ? !categorie.equals(article.categorie) : article.categorie != null)
-            return false;
-        if (reference != null ? !reference.equals(article.reference) : article.reference != null)
-            return false;
-        if (nom != null ? !nom.equals(article.nom) : article.nom != null) return false;
-        return visuel != null ? visuel.equals(article.visuel) : article.visuel == null;
+        return (id == article.id);
     }
 
     @Override

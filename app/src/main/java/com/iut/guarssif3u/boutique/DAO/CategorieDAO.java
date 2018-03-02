@@ -42,7 +42,7 @@ public class CategorieDAO extends DAO<Categorie>{
 
     @Override
     public void delete(Categorie object) {
-        HTTPRequest<Categorie> req = new HTTPRequest<>(activite, this, HTTPRequestMethod.DELETE, null, Categorie.class);
+        HTTPRequest<Categorie> req = new HTTPRequest<>(activite, this, HTTPRequestMethod.DELETE, object, Categorie.class);
         req.execute(URL_SERVEUR + "categories/" + object.getId());
     }
 
