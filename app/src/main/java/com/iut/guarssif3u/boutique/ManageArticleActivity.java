@@ -1,5 +1,6 @@
 package com.iut.guarssif3u.boutique;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +26,10 @@ import java.util.List;
 
 public class ManageArticleActivity extends AppCompatActivity implements ActiviteEnAttenteAvecResultat, View.OnClickListener {
 
+    public static final int OK = 0;
+    public static final int MODIFIE = 1;
+    public static final int NON_MODIFIE = 2;
+
     protected TextView lblArticle;
 
     protected Button btnOk;
@@ -40,10 +45,14 @@ public class ManageArticleActivity extends AppCompatActivity implements Activite
 
     private String method;
     private Article newArticle;
+    private Article currentArticle;
+    private ArrayList<Article> articles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        this.articles = new ArrayList<>();
         setContentView(R.layout.activity_manage_article);
     }
 
@@ -72,15 +81,15 @@ public class ManageArticleActivity extends AppCompatActivity implements Activite
         btnRetour.setOnClickListener(this);
 
         if(method.equals(HTTPRequestMethod.PUT)) {
-            Article article = (Article) this.getIntent().getExtras().get("article");
-            if(article != null) {
+            this.currentArticle = (Article) this.getIntent().getExtras().get("article");
+            if(currentArticle != null) {
                 lblArticle.setText(R.string.modif_article);
-                editNom.setText(article.getNom());
-                editTarif.setText(String.valueOf(article.getTarif()));
-                editReference.setText(article.getReference());
-                editVisuel.setText(article.getVisuel());
+                editNom.setText(currentArticle.getNom());
+                editTarif.setText(String.valueOf(currentArticle.getTarif()));
+                editReference.setText(currentArticle.getReference());
+                editVisuel.setText(currentArticle.getVisuel());
                 btnOk.setText(R.string.modifier);
-                newArticle = article;
+                newArticle = currentArticle;
             }
         }
 
@@ -121,8 +130,9 @@ public class ManageArticleActivity extends AppCompatActivity implements Activite
         if(newArticle.getNom() != nom || newArticle.getVisuel() != visuel || newArticle.getTarif() != tarif || newArticle.getReference() != reference || newArticle.getCategorie() != categorie) {
             try{
                 // modification article
-                Article newArticle = new Article(reference, nom, tarif, visuel, categorie);
+                this.newArticle = new Article(this.newArticle.getId(), reference, nom, tarif, visuel, categorie);
                 ArticleDAO.getInstance(this).update(newArticle);
+                this.afficheLoader();
             } catch (IllegalArgumentException e) {
                 Toast.makeText(this,e.getMessage(), Toast.LENGTH_LONG).show();
             }
@@ -131,18 +141,53 @@ public class ManageArticleActivity extends AppCompatActivity implements Activite
         }
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+
+        savedInstanceState.putParcelableArrayList("articles", this.articles);
+        savedInstanceState.putParcelable("article", this.newArticle);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        this.articles = (ArrayList<Article>) savedInstanceState.getSerializable("artiles");
+        this.newArticle = (Article)savedInstanceState.getSerializable("article");
+    }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
             case (R.id.btnOkArticle):
+                this.btnRetour.setEnabled(false);
                 if(method.equals(HTTPRequestMethod.POST)) ajouterArticle();
                 if(method.equals(HTTPRequestMethod.PUT)) editArticle();
                 break;
             case (R.id.btnRetour):
+                if(this.method.equals(HTTPRequestMethod.POST)){
+                    Intent donnees = new Intent();
+                    donnees.putParcelableArrayListExtra("articles", this.articles);
+                    this.setResult(OK, donnees);
+                } else {
+                    this.setResult(NON_MODIFIE);
+                }
                 this.finish();
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(this.method.equals(HTTPRequestMethod.POST)){
+            Intent donnees = new Intent();
+            donnees.putParcelableArrayListExtra("articles", this.articles);
+            this.setResult(OK, donnees);
+        } else {
+            this.setResult(NON_MODIFIE);
+        }
+        this.finish();
     }
 
     @Override
@@ -173,19 +218,27 @@ public class ManageArticleActivity extends AppCompatActivity implements Activite
 
     @Override
     public void notifyRetourRequete(Object resultat, String method, boolean error) {
-        this.cacheLoaderAfficheContenu();
+        this.btnRetour.setEnabled(true);
         if(error){
+            this.cacheLoaderAfficheContenu();
             Toast.makeText(this, R.string.erreur_serveur, Toast.LENGTH_LONG).show();
             return;
         }
         switch (method){
             case HTTPRequestMethod.POST:
+                this.cacheLoaderAfficheContenu();
                 Toast.makeText(this, R.string.ajout_ok, Toast.LENGTH_LONG).show();
+                this.articles.add((Article)resultat);
                 this.editNom.setText("");
                 this.editVisuel.setText("");
+                this.editReference.setText("");
+                this.editTarif.setText("");
+                this.spinnerCategorie.setSelection(0, false);
                 break;
             case HTTPRequestMethod.PUT:
-                Toast.makeText(this, R.string.modif_ok, Toast.LENGTH_LONG).show();
+                Intent donnees = new Intent();
+                donnees.putExtra("article", this.newArticle);
+                this.setResult(MODIFIE, donnees);
                 this.finish();
                 break;
         }

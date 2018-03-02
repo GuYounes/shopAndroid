@@ -114,7 +114,7 @@ public class Categorie implements Parcelable {
      * nouveau nom
      */
     public void setNom(String nom) {
-        if(nom.length() == 0) throw new IllegalArgumentException("Le nom ne peut pas être vide");
+        if(nom.trim().length() == 0) throw new IllegalArgumentException("Le nom ne peut pas être vide");
         this.nom = nom;
     }
 
@@ -134,7 +134,7 @@ public class Categorie implements Parcelable {
      * @param visuel
      */
     public void setVisuel(String visuel) {
-        if(visuel.length() == 0) throw new IllegalArgumentException("Le visuel ne peut pas être vide");
+        if(visuel.trim().length() == 0) throw new IllegalArgumentException("Le visuel ne peut pas être vide");
         this.visuel = visuel;
     }
 

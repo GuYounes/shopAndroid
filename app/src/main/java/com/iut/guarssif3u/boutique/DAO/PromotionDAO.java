@@ -42,7 +42,7 @@ public class PromotionDAO extends DAO<Promotion> {
 
     @Override
     public void delete(Promotion object) {
-        HTTPRequest<Promotion> req = new HTTPRequest<>(activite, this, HTTPRequestMethod.DELETE, null, Promotion.class);
+        HTTPRequest<Promotion> req = new HTTPRequest<>(activite, this, HTTPRequestMethod.DELETE, object, Promotion.class);
         req.execute(URL_SERVEUR + "promotions");
     }
 

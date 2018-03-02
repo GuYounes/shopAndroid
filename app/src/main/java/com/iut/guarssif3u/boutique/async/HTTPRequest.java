@@ -93,7 +93,7 @@ public class HTTPRequest<T extends Object> extends AsyncTask<String, Void, Strin
                     postExecuteGet(result);
                     break;
                 case (HTTPRequestMethod.POST):
-                    postExecutePost();
+                    postExecutePost(result);
                     break;
                 case (HTTPRequestMethod.PUT):
                     postExecutePut();
@@ -279,8 +279,11 @@ public class HTTPRequest<T extends Object> extends AsyncTask<String, Void, Strin
         activite.notifyRetourRequeteFindAll(liste);
     }
 
-    protected void postExecutePost(){
-        activite.notifyRetourRequete(this.data, this.method, this.error);
+    protected void postExecutePost(String result){
+        Gson gson = new Gson();
+        Object object = gson.fromJson(result, this.deserializationClass);
+
+        activite.notifyRetourRequete((T) object, this.method, this.error);
     }
 
     protected void postExecutePut(){

@@ -27,6 +27,7 @@
     <string name="supp_promotion_message">Êtes vous sur de vouloir supprimer cette promotion ?</string>
     <string name="supp_promotion_titre">Suppression d\'une promotion</string>
     <string name="supp_ok">Suppression effectuée</string>
+    <string name="supp_en_cours">Suppression en cours</string>
 
     <string name="ajout_ok">Ajout effectué</string>
     <string name="modif_ok">Modification effectuée</string>

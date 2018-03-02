@@ -33,6 +33,9 @@ import java.util.ArrayList;
 
 public class CategorieFragment extends Fragment implements ActiviteEnAttenteAvecResultat<Categorie>, ObjetMetier<Categorie>, View.OnClickListener, DialogInterface.OnClickListener {
 
+    private static final int MODIFICATION = 0;
+    private static final int CREATION = 1;
+
     protected ArrayList<Categorie> categories;
     protected Categorie targetCategorie;
 
@@ -48,6 +51,8 @@ public class CategorieFragment extends Fragment implements ActiviteEnAttenteAvec
     @Override
     public void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
+
+        this.categories = new ArrayList<>();
         setRetainInstance(true);
     }
 
@@ -55,7 +60,6 @@ public class CategorieFragment extends Fragment implements ActiviteEnAttenteAvec
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance){
         View view = inflater.inflate(R.layout.fragment_categorie, null);
 
-        this.categories = new ArrayList<>();
         this.activity = (BoutiqueActivity)this.getActivity();
 
         try {
@@ -81,22 +85,27 @@ public class CategorieFragment extends Fragment implements ActiviteEnAttenteAvec
         CategorieAdapter categorieAdapter = new CategorieAdapter(getActivity(), this, categories, substitut);
         this.listView.setAdapter(categorieAdapter);
 
-        CategorieDAO.getInstance(this).findAll();
-        this.afficheLoader();
+        if(this.categories.size() == 0){
+            CategorieDAO.getInstance(this).findAll();
+            this.afficheLoader();
+        }
     }
 
     @Override
     public void notifyRetourRequete(Categorie result, String method, boolean error){
-        if(error){
-            Toast.makeText(getContext(), R.string.erreur_serveur, Toast.LENGTH_LONG).show();
-            return;
-        }
-        switch (method){
-            case HTTPRequestMethod.DELETE:
-                this.categories.remove(this.targetCategorie);
-                ((BaseAdapter) this.listView.getAdapter()).notifyDataSetChanged();
-                Toast.makeText(getContext(), R.string.supp_ok, Toast.LENGTH_LONG).show();
-        }
+        try{
+            if(error){
+                Toast.makeText(getContext(), R.string.erreur_serveur, Toast.LENGTH_LONG).show();
+                return;
+            }
+            switch (method){
+                case HTTPRequestMethod.DELETE:
+                    this.categories.remove(result);
+                    ((BaseAdapter) this.listView.getAdapter()).notifyDataSetChanged();
+                    Toast.makeText(getContext(), R.string.supp_ok, Toast.LENGTH_LONG).show();
+            }
+        } catch (NullPointerException e){}
+
     }
 
     @Override
@@ -156,7 +165,7 @@ public class CategorieFragment extends Fragment implements ActiviteEnAttenteAvec
 
         Intent activityLauncher = new Intent(this.getActivity(), ManageCategorieActivity.class);
         activityLauncher.putExtra("method", HTTPRequestMethod.POST);
-        startActivity(activityLauncher);
+        startActivityForResult(activityLauncher, CREATION);
     }
 
     /**
@@ -171,7 +180,26 @@ public class CategorieFragment extends Fragment implements ActiviteEnAttenteAvec
         Intent activityLauncher = new Intent(getContext(), ManageCategorieActivity.class);
         activityLauncher.putExtra("categorie", object);
         activityLauncher.putExtra("method", HTTPRequestMethod.PUT);
-        this.getActivity().startActivity(activityLauncher);
+        startActivityForResult(activityLauncher, MODIFICATION);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        if(resultCode == ManageCategorieActivity.OK ){
+            ArrayList<Categorie> categories = data.getParcelableArrayListExtra("categories");
+            for(Categorie categorie : categories) {
+                this.categories.add(categorie);
+            }
+        }
+        if(resultCode == ManageCategorieActivity.MODIFIE){
+            Toast.makeText(getActivity().getApplicationContext(), R.string.modif_ok, Toast.LENGTH_LONG).show();
+            Categorie categorie = data.getParcelableExtra("categorie");
+            int index = this.categories.indexOf(categorie);
+            this.categories.remove(index);
+            this.categories.add(index, categorie);
+        }
+
+        ((BaseAdapter) this.listView.getAdapter()).notifyDataSetChanged();
     }
 
     @Override
@@ -202,6 +230,7 @@ public class CategorieFragment extends Fragment implements ActiviteEnAttenteAvec
     public void onClick(DialogInterface dialog, int i) {
         if(i == DialogInterface.BUTTON_POSITIVE){
             CategorieDAO.getInstance(this).delete(this.targetCategorie);
+            Toast.makeText(getActivity().getApplicationContext(), R.string.supp_en_cours, Toast.LENGTH_SHORT).show();
         } else {
             return;
         }
@@ -216,6 +245,12 @@ public class CategorieFragment extends Fragment implements ActiviteEnAttenteAvec
         int top = (v == null) ? 0 : (v.getTop() - this.listView.getPaddingTop());
 
         this.activity.saveFragmentAndPosition(this.activity.getViewPagerAdapter().getItemPosition(this), index, top);
+    }
+
+    public void filtrerArticleParCategorie(Categorie categorie){
+        ArticleFragment fragment = (ArticleFragment)this.activity.getViewPagerAdapter().getItem(1);
+        fragment.filtrerParCategorie(categorie);
+        this.activity.getViewPager().setCurrentItem(1, true);
     }
 
 }

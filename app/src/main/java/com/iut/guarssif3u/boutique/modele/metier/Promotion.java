@@ -115,6 +115,7 @@ public class Promotion implements Parcelable {
      * nouvelle date
      */
     public void setDate_debut(Date date_debut) {
+        if(date_debut.compareTo(this.date_fin) > 0 ) throw new IllegalArgumentException("La date de début ne peut pas être plus tard que la date de fin");
         if(date_debut == null) throw new IllegalArgumentException("La date de début ne peut pas être null");
         this.date_debut = date_debut;
     }

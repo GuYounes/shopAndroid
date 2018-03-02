@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.iut.guarssif3u.boutique.BoutiqueActivity;
 import com.iut.guarssif3u.boutique.DAO.CategorieDAO;
 import com.iut.guarssif3u.boutique.HTTPRequest.HTTPRequestMethod;
 import com.iut.guarssif3u.boutique.ManageCategorieActivity;
@@ -22,6 +23,7 @@ import com.iut.guarssif3u.boutique.R;
 import com.iut.guarssif3u.boutique.async.ImageFromURL;
 import com.iut.guarssif3u.boutique.fragment.ActiviteEnAttente;
 import com.iut.guarssif3u.boutique.fragment.ActiviteEnAttenteAvecResultat;
+import com.iut.guarssif3u.boutique.fragment.CategorieFragment;
 import com.iut.guarssif3u.boutique.fragment.ObjetMetier;
 import com.iut.guarssif3u.boutique.modele.metier.Categorie;
 
@@ -35,7 +37,7 @@ import java.util.ArrayList;
 public class CategorieAdapter extends ArrayAdapter<Categorie> implements View.OnClickListener{
 
     protected FragmentActivity activity;
-    protected ObjetMetier<Categorie> parent;
+    protected CategorieFragment parent;
 
     protected Drawable substitut;
     protected ProgressBar loader;
@@ -43,8 +45,9 @@ public class CategorieAdapter extends ArrayAdapter<Categorie> implements View.On
     protected ImageView btnDelete;
 
     protected ArrayList<Categorie> categories;
+    protected int rowId;
 
-    public CategorieAdapter(FragmentActivity activity, ObjetMetier<Categorie> parent, ArrayList<Categorie> liste, Drawable subsitut){
+    public CategorieAdapter(FragmentActivity activity, CategorieFragment parent, ArrayList<Categorie> liste, Drawable subsitut){
         super(activity, 0, liste);
         this.categories = liste;
         this.activity = activity;
@@ -54,11 +57,18 @@ public class CategorieAdapter extends ArrayAdapter<Categorie> implements View.On
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Categorie categorie = getItem(position);
+        final Categorie categorie = getItem(position);
 
         if(convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_list_categorie, parent, false);
         }
+
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onViewClicked(categorie);
+            }
+        });
 
         btnEdit = convertView.findViewById(R.id.modifier);
         btnDelete = convertView.findViewById(R.id.supprimer);
@@ -83,6 +93,10 @@ public class CategorieAdapter extends ArrayAdapter<Categorie> implements View.On
         }
 
         return convertView;
+    }
+
+    public void onViewClicked(Categorie categorie){
+        this.parent.filtrerArticleParCategorie(categorie);
     }
 
     @Override
