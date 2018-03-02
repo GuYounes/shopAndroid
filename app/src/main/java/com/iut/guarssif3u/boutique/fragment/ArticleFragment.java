@@ -22,6 +22,7 @@ import com.iut.guarssif3u.boutique.R;
 import com.iut.guarssif3u.boutique.adapter.ArticleAdapter;
 import com.iut.guarssif3u.boutique.dialog.SuppressionDialog;
 import com.iut.guarssif3u.boutique.modele.metier.Article;
+import com.iut.guarssif3u.boutique.modele.metier.Categorie;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
     private static final int CREATION = 1;
 
     protected ArrayList<Article> articles;
+    protected ArrayList<Article> filteredArticles;
     protected Article targetArticle;
 
     protected ListView listView;
@@ -50,6 +52,7 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
         super.onCreate(savedInstance);
 
         this.articles = new ArrayList<>();
+        this.filteredArticles = new ArrayList<>();
         setRetainInstance(true);
     }
 
@@ -75,7 +78,7 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
         this.listView = view.findViewById(R.id.liste);
         this.loader = view.findViewById(R.id.loader);
 
-        ArticleAdapter articleAdapter = new ArticleAdapter(getActivity(), this, articles, substitut);
+        ArticleAdapter articleAdapter = new ArticleAdapter(getActivity(), this, this.filteredArticles, substitut);
         this.listView.setAdapter(articleAdapter);
 
         if(this.articles.size() == 0){
@@ -104,6 +107,8 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
     public void notifyRetourRequeteFindAll(ArrayList<Article> liste){
         this.articles.clear();
         this.articles.addAll(liste);
+        this.filteredArticles.clear();
+        this.filteredArticles.addAll(this.articles);
 
         ((BaseAdapter) this.listView.getAdapter()).notifyDataSetChanged();
         this.cacheLoaderAfficheContenu();
@@ -175,9 +180,7 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         if(resultCode == ManageArticleActivity.OK ){
             ArrayList<Article> articles = data.getParcelableArrayListExtra("articles");
-            for(Article article : articles) {
-                this.articles.add(article);
-            }
+            this.articles.addAll(articles);
         }
         if(resultCode == ManageArticleActivity.MODIFIE){
             Toast.makeText(getActivity().getApplicationContext(), R.string.modif_ok, Toast.LENGTH_LONG).show();
@@ -217,5 +220,14 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
         int top = (v == null) ? 0 : (v.getTop() - this.listView.getPaddingTop());
 
         this.activity.saveFragmentAndPosition(this.activity.getViewPagerAdapter().getItemPosition(this), index, top);
+    }
+
+    public void filtrerParCategorie(Categorie categorie){
+        this.filteredArticles.clear();
+        for(Article article : this.articles){
+            if(article.getCategorie().equals(categorie)) this.filteredArticles.add(article);
+        }
+
+        ((BaseAdapter) this.listView.getAdapter()).notifyDataSetChanged();
     }
 }

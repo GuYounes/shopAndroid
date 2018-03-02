@@ -227,4 +227,10 @@ public class CategorieFragment extends Fragment implements ActiviteEnAttenteAvec
         this.activity.saveFragmentAndPosition(this.activity.getViewPagerAdapter().getItemPosition(this), index, top);
     }
 
+    public void filtrerArticleParCategorie(Categorie categorie){
+        ArticleFragment fragment = (ArticleFragment)this.activity.getViewPagerAdapter().getItem(1);
+        fragment.filtrerParCategorie(categorie);
+        this.activity.getViewPager().setCurrentItem(1, true);
+    }
+
 }

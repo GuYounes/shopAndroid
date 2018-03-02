@@ -160,6 +160,7 @@ public class ManageArticleActivity extends AppCompatActivity implements Activite
     public void onClick(View view) {
         switch (view.getId()){
             case (R.id.btnOkArticle):
+                this.btnRetour.setEnabled(false);
                 if(method.equals(HTTPRequestMethod.POST)) ajouterArticle();
                 if(method.equals(HTTPRequestMethod.PUT)) editArticle();
                 break;

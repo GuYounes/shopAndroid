@@ -14,7 +14,6 @@ import com.iut.guarssif3u.boutique.async.ImageFromURL;
 import com.iut.guarssif3u.boutique.fragment.ObjetMetier;
 import com.iut.guarssif3u.boutique.modele.metier.Article;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
