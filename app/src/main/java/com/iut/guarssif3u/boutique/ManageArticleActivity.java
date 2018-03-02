@@ -43,6 +43,8 @@ public class ManageArticleActivity extends AppCompatActivity implements Activite
     protected ProgressBar loaderList;
     protected Spinner spinnerCategorie;
 
+    protected ArrayList categories;
+
     private String method;
     private Article newArticle;
     private Article currentArticle;
@@ -51,6 +53,13 @@ public class ManageArticleActivity extends AppCompatActivity implements Activite
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            categories = savedInstanceState.getStringArrayList("categoriesArray");
+            this.newArticle = (Article)savedInstanceState.getSerializable("article");
+        } else {
+            categories = new ArrayList();
+        }
 
         this.articles = new ArrayList<>();
         setContentView(R.layout.activity_manage_article);
@@ -73,9 +82,18 @@ public class ManageArticleActivity extends AppCompatActivity implements Activite
 
         method = (String) this.getIntent().getExtras().get("method");
 
-        CategorieDAO categorieDAO = CategorieDAO.getInstance(this);
-        categorieDAO.findAll();
-        this.afficheLoaderListe();
+
+        // request to get spinner items
+        if(categories.isEmpty()) {
+            this.afficheLoaderListe();
+            CategorieDAO categorieDAO = CategorieDAO.getInstance(this);
+            categorieDAO.findAll();
+        } else {
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, this.categories);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinnerCategorie.setAdapter(adapter);
+            this.cacheLoaderAfficheListe();
+        }
 
         btnOk.setOnClickListener(this);
         btnRetour.setOnClickListener(this);
@@ -147,14 +165,14 @@ public class ManageArticleActivity extends AppCompatActivity implements Activite
 
         savedInstanceState.putParcelableArrayList("articles", this.articles);
         savedInstanceState.putParcelable("article", this.newArticle);
+        savedInstanceState.putStringArrayList("categoriesArray", categories);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
-        this.articles = (ArrayList<Article>) savedInstanceState.getSerializable("artiles");
-        this.newArticle = (Article)savedInstanceState.getSerializable("article");
+        this.articles = (ArrayList<Article>) savedInstanceState.getSerializable("articles");
     }
 
     @Override
@@ -247,7 +265,10 @@ public class ManageArticleActivity extends AppCompatActivity implements Activite
     @Override
     public void notifyRetourRequeteFindAll(ArrayList list) {
         this.cacheLoaderAfficheListe();
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
+        this.categories.clear();
+        this.categories.addAll(list);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, this.categories);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCategorie.setAdapter(adapter);
 

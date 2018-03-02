@@ -113,6 +113,14 @@
                 app:layout_constraintTop_toBottomOf="@id/dateFin"
                 app:layout_constraintLeft_toRightOf="@id/labelDateDebut"/>
 
+            <TextView
+                android:id="@+id/labelPourcent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toRightOf="@id/editPourcentage"
+                app:layout_constraintBaseline_toBaselineOf="@id/editPourcentage"
+                android:text="@string/pourcent" />
+
             <Button
                 android:id="@+id/btnOkPromotion"
                 android:text="@string/ajouter"
