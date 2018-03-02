@@ -182,8 +182,8 @@ public class PromotionFragment extends Fragment implements ActiviteEnAttenteAvec
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.refresh) {
-            saveFragmentAndPosition();
-            activity.recreate();
+            PromotionDAO.getInstance(this).findAll();
+            this.afficheLoader();
         } else {
             this.ajouter();
         }

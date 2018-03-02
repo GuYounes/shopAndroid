@@ -3,6 +3,7 @@ package com.iut.guarssif3u.boutique.fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -11,8 +12,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.iut.guarssif3u.boutique.BoutiqueActivity;
@@ -36,17 +39,22 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
 
     private static final int MODIFICATION = 0;
     private static final int CREATION = 1;
+    private static final int HAUTEUR_BANDEAU = 225;
+
 
     protected ArrayList<Article> articles;
     protected ArrayList<Article> filteredArticles;
     protected Article targetArticle;
+    protected Categorie categorie;
 
     protected ListView listView;
     protected Drawable substitut;
     protected ProgressBar loader;
     protected FloatingActionButton addArticleBtn;
-
     protected FloatingActionButton btnRefresh;
+    protected ConstraintLayout bandeau;
+    protected TextView filtre;
+    protected ImageView croix;
 
     BoutiqueActivity activity;
 
@@ -55,6 +63,7 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
         super.onCreate(savedInstance);
 
         this.filteredArticles = new ArrayList<>();
+        this.categorie = null;
         setRetainInstance(true);
     }
 
@@ -86,12 +95,21 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
         this.btnRefresh = view.findViewById(R.id.refresh);
         btnRefresh.setOnClickListener(this);
 
+        this.bandeau = view.findViewById(R.id.bandeau);
+        this.filtre = view.findViewById(R.id.filtre);
+        this.croix = view.findViewById(R.id.croix);
+        this.croix.setOnClickListener(this);
+
         ArticleAdapter articleAdapter = new ArticleAdapter(getActivity(), this, this.filteredArticles, substitut);
         this.listView.setAdapter(articleAdapter);
 
         if(this.articles.isEmpty()){
             ArticleDAO.getInstance(this).findAll();
             this.afficheLoader();
+        }
+
+        if(this.categorie != null){
+            this.afficherBandeau();
         }
     }
 
@@ -105,6 +123,7 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
             switch (method){
                 case HTTPRequestMethod.DELETE:
                     this.articles.remove(resultat);
+                    this.filteredArticles.remove(resultat);
                     ((BaseAdapter) this.listView.getAdapter()).notifyDataSetChanged();
                     Toast.makeText(getContext(), R.string.supp_ok, Toast.LENGTH_LONG).show();
             }
@@ -115,8 +134,13 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
     public void notifyRetourRequeteFindAll(ArrayList<Article> liste){
         this.articles.clear();
         this.articles.addAll(liste);
-        this.filteredArticles.clear();
-        this.filteredArticles.addAll(this.articles);
+
+        if(this.categorie != null){
+            this.filtrerParCategorie(this.categorie);
+        } else {
+            this.filteredArticles.clear();
+            this.filteredArticles.addAll(this.articles);
+        }
 
         ((BaseAdapter) this.listView.getAdapter()).notifyDataSetChanged();
         this.cacheLoaderAfficheContenu();
@@ -199,7 +223,14 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         if(resultCode == ManageArticleActivity.OK ){
             ArrayList<Article> articles = data.getParcelableArrayListExtra("articles");
+            for(Article article : articles){
+                this.articles.add(article);
+                if(article.getCategorie() == this.categorie){
+                    this.filteredArticles.add(article);
+                }
+            }
             this.articles.addAll(articles);
+            this.filteredArticles.addAll(articles);
         }
         if(resultCode == ManageArticleActivity.MODIFIE){
             Toast.makeText(getActivity().getApplicationContext(), R.string.modif_ok, Toast.LENGTH_LONG).show();
@@ -207,6 +238,8 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
             int index = this.articles.indexOf(article);
             this.articles.remove(index);
             this.articles.add(index, article);
+
+            if(this.categorie != null) this.filtrerParCategorie(this.categorie);
         }
 
         ((BaseAdapter) this.listView.getAdapter()).notifyDataSetChanged();
@@ -218,10 +251,16 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.refresh) {
-            saveFragmentAndPosition();
-            activity.recreate();
-        } else {
+            ArticleDAO.getInstance(this).findAll();
+            this.afficheLoader();
+        }
+        if(v.getId() == R.id.add){
             this.ajouter();
+        }
+        if(v.getId() == R.id.croix){
+            this.cacherBandeau();
+            this.filteredArticles.clear();
+            this.filteredArticles.addAll(this.articles);
         }
     }
 
@@ -248,10 +287,28 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
 
     public void filtrerParCategorie(Categorie categorie){
         this.filteredArticles.clear();
+        this.categorie = categorie;
+        this.afficherBandeau();
         for(Article article : this.articles){
             if(article.getCategorie().equals(categorie)) this.filteredArticles.add(article);
         }
 
         ((BaseAdapter) this.listView.getAdapter()).notifyDataSetChanged();
+    }
+
+    protected void afficherBandeau(){
+        this.bandeau.setVisibility(View.VISIBLE);
+        this.filtre.setText(categorie.getNom());
+        ConstraintLayout.LayoutParams lp = (ConstraintLayout.LayoutParams) this.listView.getLayoutParams();
+        lp.setMargins(0, HAUTEUR_BANDEAU, 0, 0);
+        this.listView.setLayoutParams(lp);
+    }
+
+    protected void cacherBandeau(){
+        this.categorie = null;
+        this.bandeau.setVisibility(View.INVISIBLE);
+        ConstraintLayout.LayoutParams lp = (ConstraintLayout.LayoutParams) this.listView.getLayoutParams();
+        lp.setMargins(0, 0, 0, 0);
+        this.listView.setLayoutParams(lp);
     }
 }

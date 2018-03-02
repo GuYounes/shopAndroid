@@ -71,6 +71,7 @@
                 android:layout_marginTop="10dp"
                 android:ems="8"
                 android:inputType="text"
+                android:focusableInTouchMode="false"
                 app:layout_constraintTop_toBottomOf="@+id/articleSpinner"
                 app:layout_constraintLeft_toRightOf="@id/labelDateDebut"/>
 
@@ -90,6 +91,7 @@
                 android:layout_marginTop="20dp"
                 android:ems="8"
                 android:inputType="text"
+                android:focusableInTouchMode="false"
                 app:layout_constraintBaseline_toBaselineOf="@id/dateDebut"
                 app:layout_constraintLeft_toRightOf="@id/labelDateFin"/>
 
@@ -109,7 +111,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:ems="3"
-                android:inputType="numberDecimal"
+                android:inputType="number"
                 app:layout_constraintTop_toBottomOf="@id/dateFin"
                 app:layout_constraintLeft_toRightOf="@id/labelDateDebut"/>
 
