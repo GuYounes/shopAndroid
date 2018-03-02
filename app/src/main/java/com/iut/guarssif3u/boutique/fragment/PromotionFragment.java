@@ -33,6 +33,9 @@ import java.util.ArrayList;
 
 public class PromotionFragment extends Fragment implements ActiviteEnAttenteAvecResultat<Promotion>, View.OnClickListener, ObjetMetier<Promotion>, DialogInterface.OnClickListener {
 
+    private static final int MODIFICATION = 0;
+    private static final int CREATION = 1;
+
     protected ArrayList<Promotion> promotions;
     protected Promotion targetPromotion;
 
@@ -57,6 +60,7 @@ public class PromotionFragment extends Fragment implements ActiviteEnAttenteAvec
         View view = inflater.inflate(R.layout.fragment_promotion, null);
 
         this.promotions = new ArrayList<>();
+
         this.activity = (BoutiqueActivity)this.getActivity();
 
         try {
@@ -82,8 +86,42 @@ public class PromotionFragment extends Fragment implements ActiviteEnAttenteAvec
         PromotionAdapter promotionAdapter = new PromotionAdapter(getActivity(), this, promotions, substitut);
         this.listView.setAdapter(promotionAdapter);
 
-        PromotionDAO.getInstance(this).findAll();
-        this.afficheLoader();
+        if(this.promotions.isEmpty()) {
+            PromotionDAO.getInstance(this).findAll();
+            this.afficheLoader();
+        }
+    }
+
+    @Override
+    public void notifyRetourRequete(Promotion resultat, String method, boolean error) {
+        try {
+            if(error){
+                Toast.makeText(getContext(), R.string.erreur_serveur, Toast.LENGTH_LONG).show();
+                return;
+            }
+            switch (method){
+                case HTTPRequestMethod.DELETE:
+                    this.promotions.remove(this.targetPromotion);
+                    ((BaseAdapter) this.listView.getAdapter()).notifyDataSetChanged();
+                    Toast.makeText(getContext(), R.string.supp_ok, Toast.LENGTH_LONG).show();
+            }
+        } catch (NullPointerException e) {}
+
+    }
+
+    @Override
+    public void notifyRetourRequeteFindAll(ArrayList list) {
+        this.promotions.clear();
+        this.promotions.addAll(list);
+
+        ((BaseAdapter) this.listView.getAdapter()).notifyDataSetChanged();
+
+        this.cacheLoaderAfficheContenu();
+
+        // Si nous étions sur ce fragment avant de lancer une autre activité, nous reviendrons sur ce fragment, au bon niveau de scroll
+        if(this.activity.getCurrentFragment() == this.activity.getViewPagerAdapter().getItemPosition(this)){
+            this.listView.setSelectionFromTop(this.activity.getCurrentItemPosition(), this.activity.getCurrentTopPosition());
+        }
     }
 
     @Override
@@ -106,34 +144,6 @@ public class PromotionFragment extends Fragment implements ActiviteEnAttenteAvec
     @Override
     public void cacheLoaderAfficheListe() {
 
-    }
-
-    @Override
-    public void notifyRetourRequete(Promotion resultat, String method, boolean error) {
-        if(error){
-            Toast.makeText(getContext(), R.string.erreur_serveur, Toast.LENGTH_LONG).show();
-            return;
-        }
-        switch (method){
-            case HTTPRequestMethod.DELETE:
-                this.promotions.remove(this.targetPromotion);
-                ((BaseAdapter) this.listView.getAdapter()).notifyDataSetChanged();
-                Toast.makeText(getContext(), R.string.supp_ok, Toast.LENGTH_LONG).show();
-        }
-    }
-
-    @Override
-    public void notifyRetourRequeteFindAll(ArrayList list) {
-        this.promotions.clear();
-        this.promotions.addAll(list);
-
-        ((BaseAdapter) this.listView.getAdapter()).notifyDataSetChanged();
-        this.cacheLoaderAfficheContenu();
-
-        // Si nous étions sur ce fragment avant de lancer une autre activité, nous reviendrons sur ce fragment, au bon niveau de scroll
-        if(this.activity.getCurrentFragment() == this.activity.getViewPagerAdapter().getItemPosition(this)){
-            this.listView.setSelectionFromTop(this.activity.getCurrentItemPosition(), this.activity.getCurrentTopPosition());
-        }
     }
 
     @Override
@@ -183,6 +193,7 @@ public class PromotionFragment extends Fragment implements ActiviteEnAttenteAvec
     public void onClick(DialogInterface dialogInterface, int i) {
         if(i == DialogInterface.BUTTON_POSITIVE){
             PromotionDAO.getInstance(this).delete(this.targetPromotion);
+            Toast.makeText(getActivity().getApplicationContext(), R.string.supp_en_cours, Toast.LENGTH_SHORT).show();
         } else {
             return;
         }
@@ -196,6 +207,25 @@ public class PromotionFragment extends Fragment implements ActiviteEnAttenteAvec
         int top = (v == null) ? 0 : (v.getTop() - this.listView.getPaddingTop());
 
         this.activity.saveFragmentAndPosition(this.activity.getViewPagerAdapter().getItemPosition(this), index, top);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        if(resultCode == ManagePromotionActivity.OK ){
+            ArrayList<Promotion> promotions = data.getParcelableArrayListExtra("promotions");
+            for(Promotion promotion : promotions) {
+                this.promotions.add(promotion);
+            }
+        }
+        if(resultCode == ManagePromotionActivity.MODIFIE){
+            Toast.makeText(getActivity().getApplicationContext(), R.string.modif_ok, Toast.LENGTH_LONG).show();
+            Promotion promotion = data.getParcelableExtra("promotion");
+            int index = this.promotions.indexOf(promotion);
+            this.promotions.remove(index);
+            this.promotions.add(index, promotion);
+        }
+
+        ((BaseAdapter) this.listView.getAdapter()).notifyDataSetChanged();
     }
 
 }

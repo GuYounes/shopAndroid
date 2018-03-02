@@ -31,6 +31,10 @@ import java.util.Date;
 
 public class ManagePromotionActivity extends AppCompatActivity implements ActiviteEnAttenteAvecResultat, View.OnClickListener, DatePickerDialog.OnDateSetListener {
 
+    public static final int OK = 0;
+    public static final int MODIFIE = 1;
+    public static final int NON_MODIFIE = 2;
+
     protected TextView lblPromotion;
 
     protected Button btnOk;

@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,7 +54,6 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
     public void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
 
-        this.articles = new ArrayList<>();
         this.filteredArticles = new ArrayList<>();
         setRetainInstance(true);
     }
@@ -61,6 +61,9 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance){
         View view = inflater.inflate(R.layout.fragment_article, null);
+
+        this.articles = new ArrayList<>();
+
         this.activity = (BoutiqueActivity)this.getActivity();
 
         try {
@@ -86,7 +89,7 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
         ArticleAdapter articleAdapter = new ArticleAdapter(getActivity(), this, this.filteredArticles, substitut);
         this.listView.setAdapter(articleAdapter);
 
-        if(this.articles.size() == 0){
+        if(this.articles.isEmpty()){
             ArticleDAO.getInstance(this).findAll();
             this.afficheLoader();
         }
@@ -155,6 +158,7 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
     @Override
     public void supprimer(Article object) {
         this.targetArticle = object;
+
         try{
             SuppressionDialog dialog = SuppressionDialog.newInstance(((BoutiqueActivity)getActivity()).getViewPagerAdapter().getItemPosition(this), getActivity().getString(R.string.supp_article_titre), getActivity().getString(R.string.supp_article_message));
             dialog.show(getActivity().getFragmentManager(), "suppression");

@@ -95,7 +95,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:ems="3"
-                android:inputType="text"
+                android:inputType="numberDecimal"
                 app:layout_constraintBaseline_toBaselineOf="@id/editReferenceArticle"
                 app:layout_constraintLeft_toRightOf="@id/labelTarif"/>
 

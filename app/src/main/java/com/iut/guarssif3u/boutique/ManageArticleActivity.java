@@ -122,8 +122,9 @@ public class ManageArticleActivity extends AppCompatActivity implements Activite
 
         if(!editTarif.getText().toString().equals("")) {
             tarif = Float.valueOf(editTarif.getText().toString());
+        } else {
+            tarif = 0.0f;
         }
-
         try{
             // ajout article
             Article newArticle = new Article(reference, nom, tarif, visuel, categorie);
@@ -132,6 +133,8 @@ public class ManageArticleActivity extends AppCompatActivity implements Activite
         } catch (IllegalArgumentException e){
             Toast.makeText(this,e.getMessage(), Toast.LENGTH_LONG).show();
         }
+
+
     }
 
     public void editArticle() {
@@ -143,6 +146,8 @@ public class ManageArticleActivity extends AppCompatActivity implements Activite
 
         if(!editTarif.getText().toString().equals("")) {
             tarif = Float.valueOf(editTarif.getText().toString());
+        } else {
+            tarif = 0.0f;
         }
 
         if(newArticle.getNom() != nom || newArticle.getVisuel() != visuel || newArticle.getTarif() != tarif || newArticle.getReference() != reference || newArticle.getCategorie() != categorie) {
@@ -179,7 +184,6 @@ public class ManageArticleActivity extends AppCompatActivity implements Activite
     public void onClick(View view) {
         switch (view.getId()){
             case (R.id.btnOkArticle):
-                this.btnRetour.setEnabled(false);
                 if(method.equals(HTTPRequestMethod.POST)) ajouterArticle();
                 if(method.equals(HTTPRequestMethod.PUT)) editArticle();
                 break;

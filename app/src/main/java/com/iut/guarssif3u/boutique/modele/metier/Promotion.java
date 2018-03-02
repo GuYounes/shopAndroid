@@ -2,6 +2,7 @@ package com.iut.guarssif3u.boutique.modele.metier;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import java.util.Date;
 
@@ -115,7 +116,6 @@ public class Promotion implements Parcelable {
      * nouvelle date
      */
     public void setDate_debut(Date date_debut) {
-        if(date_debut.compareTo(this.date_fin) > 0 ) throw new IllegalArgumentException("La date de début ne peut pas être plus tard que la date de fin");
         if(date_debut == null) throw new IllegalArgumentException("La date de début ne peut pas être null");
         this.date_debut = date_debut;
     }
@@ -137,8 +137,8 @@ public class Promotion implements Parcelable {
      * nouvelle date
      */
     public void setDate_fin(Date date_fin) {
-        if(date_fin.compareTo(this.date_debut) < 0 ) throw new IllegalArgumentException("La date de fin ne peut pas être plus tôt que la date de début");
         if(date_fin == null) throw new IllegalArgumentException("La date de fin ne peut pas être null");
+        if(this.date_debut.getTime() > date_fin.getTime()) throw new IllegalArgumentException("La date de début ne peut pas être plus tard que la date de fin");
         this.date_fin = date_fin;
     }
 

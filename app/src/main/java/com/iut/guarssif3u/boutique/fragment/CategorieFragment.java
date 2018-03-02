@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,7 +86,7 @@ public class CategorieFragment extends Fragment implements ActiviteEnAttenteAvec
         CategorieAdapter categorieAdapter = new CategorieAdapter(getActivity(), this, categories, substitut);
         this.listView.setAdapter(categorieAdapter);
 
-        if(this.categories.size() == 0){
+        if(this.categories.isEmpty()){
             CategorieDAO.getInstance(this).findAll();
             this.afficheLoader();
         }
