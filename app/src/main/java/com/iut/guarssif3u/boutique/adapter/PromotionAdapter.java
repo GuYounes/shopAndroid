@@ -57,12 +57,8 @@ public class PromotionAdapter extends ArrayAdapter<Promotion> implements View.On
         btnEdit.setOnClickListener(this);
         btnDelete.setOnClickListener(this);
 
-        this.loader = convertView.findViewById(R.id.loader);
-
         TextView tvNom = convertView.findViewById(R.id.nom);
         tvNom.setText(promotion.getArticle().getNom());
-
-        this.loader = convertView.findViewById(R.id.loader);
 
         return convertView;
     }

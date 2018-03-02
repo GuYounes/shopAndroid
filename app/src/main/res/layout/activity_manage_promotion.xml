@@ -132,7 +132,6 @@
         <Button
             android:id="@+id/btnRetour"
             android:tag="ajouter"
-            android:onClick="retour"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/retour" />

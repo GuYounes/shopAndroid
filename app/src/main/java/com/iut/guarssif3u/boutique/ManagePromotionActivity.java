@@ -20,6 +20,7 @@ import com.iut.guarssif3u.boutique.fragment.ActiviteEnAttenteAvecResultat;
 import com.iut.guarssif3u.boutique.modele.metier.Article;
 import com.iut.guarssif3u.boutique.modele.metier.Promotion;
 
+import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -27,17 +28,27 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class ManagePromotionActivity extends AppCompatActivity implements ActiviteEnAttenteAvecResultat, View.OnClickListener {
+public class ManagePromotionActivity extends AppCompatActivity implements ActiviteEnAttenteAvecResultat, View.OnClickListener, DatePickerDialog.OnDateSetListener {
 
     protected TextView lblPromotion;
+
     protected Button btnOk;
     protected Button btnRetour;
+
     protected EditText pourcentage;
     protected EditText dateDebut;
     protected EditText dateFin;
+
     protected Spinner spinnerArticle;
+
+    private ArrayList<Integer> minimumDate;
     private String method;
     private Promotion newPromotion;
+    private Calendar calendar;
+    protected int currentEditTextId;
+    private int currentYear;
+    private int currentMonth;
+    private int currentDay;
 
     DatePickerDialog datePickerDialog;
 
@@ -45,6 +56,13 @@ public class ManagePromotionActivity extends AppCompatActivity implements Activi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_promotion);
+
+        this.calendar = Calendar.getInstance();
+        this.currentYear = calendar.get(Calendar.YEAR);
+        this.currentMonth = calendar.get(Calendar.MONTH);
+        this.currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+
+        this.minimumDate = new ArrayList<>(3);
     }
 
     @Override
@@ -54,93 +72,49 @@ public class ManagePromotionActivity extends AppCompatActivity implements Activi
         lblPromotion = this.findViewById(R.id.labelPromotion);
         btnOk = this.findViewById(R.id.btnOkPromotion);
         btnRetour = this.findViewById(R.id.btnRetour);
-        spinnerArticle = (Spinner) this.findViewById(R.id.articleSpinner);
-        dateDebut = (EditText) this.findViewById(R.id.dateDebut);
-        dateFin = (EditText) this.findViewById(R.id.dateFin);
-        pourcentage = (EditText) this.findViewById(R.id.editPourcentage);
+        spinnerArticle = this.findViewById(R.id.articleSpinner);
+        dateDebut = this.findViewById(R.id.dateDebut);
+        dateFin = this.findViewById(R.id.dateFin);
+        pourcentage = this.findViewById(R.id.editPourcentage);
 
         // get method PUT or POST
         method = (String) this.getIntent().getExtras().get("method");
 
-        // set btn click
         btnOk.setOnClickListener(this);
+        btnRetour.setOnClickListener(this);
 
         // request to get spinner items
         ArticleDAO articleDAO = ArticleDAO.getInstance(this);
         articleDAO.findAll();
 
         // set calendar pop up for date debut
-        dateDebut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final Calendar c = Calendar.getInstance();
-                int currentYear = c.get(Calendar.YEAR);
-                int currentMonth = c.get(Calendar.MONTH);
-                int currentDay = c.get(Calendar.DAY_OF_MONTH);
-                // date picker dialog
-                datePickerDialog = new DatePickerDialog(view.getContext(), new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                        dateDebut.setText(day + "/"
-                                + (month + 1) + "/" + year);
-                    }
-                }, currentYear, currentMonth, currentDay);
-
-                datePickerDialog.getDatePicker().setMinDate(c.getTimeInMillis());
-
-                datePickerDialog.show();
-            }
-        });
+        dateDebut.setOnClickListener(this);
 
         // set calendar pop up for date fin
-        dateFin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final Calendar c = Calendar.getInstance();
-                int currentYear = c.get(Calendar.YEAR);
-                int currentMonth = c.get(Calendar.MONTH);
-                int currentDay = c.get(Calendar.DAY_OF_MONTH);
-                // date picker dialog
-                datePickerDialog = new DatePickerDialog(view.getContext(), new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                        dateFin.setText(day + "/"
-                                + (month + 1) + "/" + year);
-                    }
-                }, currentYear, currentMonth, currentDay);
-
-                datePickerDialog.getDatePicker().setMinDate(c.getTimeInMillis());
-
-                datePickerDialog.show();
-            }
-        });
+        dateFin.setOnClickListener(this);
 
         // changing layout if request equals PUT and filling inputs with selected item info
         if(method.equals(HTTPRequestMethod.PUT)) {
             Promotion promotion = (Promotion) this.getIntent().getExtras().get("promotion");
             if(promotion != null) {
-                lblPromotion.setText("Modification promotion");
+                lblPromotion.setText(R.string.modif_promotion);
 
                 Calendar calendar = Calendar.getInstance();
 
                 Date edtDateDebut = promotion.getDate_debut();
                 Date edtDateFin = promotion.getDate_fin();
 
-                int year = calendar.get(Calendar.YEAR);
-                int month = calendar.get(Calendar.MONTH);
-                int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-
                 // set date for date debut
                 calendar.setTime(edtDateDebut);
-                dateDebut.setText(calendar.get(Calendar.DAY_OF_MONTH) + "/" + calendar.get(Calendar.MONTH) + "/" + calendar.get(Calendar.YEAR));
+                dateDebut.setText(String.format("%1$d/%2$d/%3$d", calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.MONTH)+1, calendar.get(Calendar.YEAR)));
 
                 // set date for date fin
                 calendar.setTime(edtDateFin);
-                dateFin.setText(calendar.get(Calendar.DAY_OF_MONTH) + "/" + calendar.get(Calendar.MONTH) + "/" + calendar.get(Calendar.YEAR));
+                dateFin.setText(String.format("%1$d/%2$d/%3$d", calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.MONTH)+1, calendar.get(Calendar.YEAR)));
 
                 pourcentage.setText(String.valueOf(promotion.getPourcentage()));
 
-                btnOk.setText("Modifier");
+                btnOk.setText(R.string.modifier);
                 newPromotion = promotion;
             }
         }
@@ -150,73 +124,89 @@ public class ManagePromotionActivity extends AppCompatActivity implements Activi
     public void ajouterPromotion() {
         Article article = (Article) spinnerArticle.getSelectedItem();
         Date newDateDebut = null, newDateFin = null;
-        Float newPourcentage = null;
+        int newPourcentage = 0;
         DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 
         if(!pourcentage.getText().toString().equals("")) {
-            newPourcentage = Float.valueOf(pourcentage.getText().toString());
+            newPourcentage = Integer.valueOf(pourcentage.getText().toString());
         }
 
         try {
-            String date_debut = (dateDebut.getText().toString());
-            String date_fin = (dateFin.getText().toString());
-            newDateDebut = formatter.parse(date_debut);
-            newDateFin = formatter.parse(date_fin);
+            newDateDebut = formatter.parse(dateDebut.getText().toString());
+            newDateFin = formatter.parse(dateFin.getText().toString());
         } catch (ParseException e) {
-            e.printStackTrace();
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG);
         }
 
-        if(article != null && newDateDebut != null && newDateFin != null && newPourcentage > 0 && newPourcentage < 1) {
+        try {
             // ajout catégorie
             Promotion newPromotion = new Promotion(article, newDateDebut, newDateFin, newPourcentage);
             PromotionDAO.getInstance(this).insert(newPromotion);
-            Toast.makeText(this,"Ajout", Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(this,"Les champs saisis sont incorrects !", Toast.LENGTH_LONG).show();
+            this.afficheLoader();
+        } catch (IllegalArgumentException e){
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
 
     public void editPromotion() {
         Article article = (Article) spinnerArticle.getSelectedItem();
         Date newDateDebut = null, newDateFin = null;
+        int newPourcentage = 0;
         DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        Float newPourcentage = null;
 
         if(!pourcentage.getText().toString().equals("")) {
-            newPourcentage = Float.valueOf(pourcentage.getText().toString());
+            newPourcentage = Integer.valueOf(pourcentage.getText().toString());
         }
 
         try {
-            String date_debut = (dateDebut.getText().toString());
-            String date_fin = (dateFin.getText().toString());
-            newDateDebut = formatter.parse(date_debut);
-            newDateFin = formatter.parse(date_fin);
+            newDateDebut = formatter.parse(dateDebut.getText().toString());
+            newDateFin = formatter.parse(dateFin.getText().toString());
         } catch (ParseException e) {
-            e.printStackTrace();
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         }
 
-        if(article != null && newDateDebut != null && newDateFin != null && newPourcentage > 0) {
+        try {
+            // ajout catégorie
             Promotion newPromotion = new Promotion(article, newDateDebut, newDateFin, newPourcentage);
-                PromotionDAO.getInstance(this).update(newPromotion);
-                Toast.makeText(this,"Modification", Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(this,"Les champs saisis sont incorrects !", Toast.LENGTH_LONG).show();
+            PromotionDAO.getInstance(this).update(newPromotion);
+            this.afficheLoader();
+        } catch (IllegalArgumentException e){
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         }
-    }
-
-    public void retour(View view) {
-        this.finish();
     }
 
     @Override
     public void onClick(View view) {
-        if(view.getId() == R.id.dateDebut) {
+        switch (view.getId()){
+            case(R.id.dateDebut):
+                // date picker dialog
+                datePickerDialog = new DatePickerDialog(view.getContext(), this, currentYear, currentMonth, currentDay);
+                datePickerDialog.getDatePicker().setMinDate(this.calendar.getTimeInMillis());
+                datePickerDialog.show();
+                this.currentEditTextId = R.id.dateDebut;
+                break;
+            case(R.id.dateFin):
+                Calendar calendar = Calendar.getInstance();
 
-        }
-        if(method.equals(HTTPRequestMethod.POST)) {
-            ajouterPromotion();
-        } else if(method.equals(HTTPRequestMethod.PUT)) {
-            editPromotion();
+                if(this.minimumDate.size() == 0){
+                    calendar = this.calendar;
+                    datePickerDialog = new DatePickerDialog(view.getContext(), this, this.currentYear, this.currentMonth, this.currentDay);
+                } else {
+                    calendar.set(this.minimumDate.get(2), this.minimumDate.get(1)-1, this.minimumDate.get(0));
+                    datePickerDialog = new DatePickerDialog(view.getContext(), this, this.minimumDate.get(2), this.minimumDate.get(1)-1, this.minimumDate.get(0));
+                }
+
+                datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
+                datePickerDialog.show();
+                this.currentEditTextId = R.id.dateFin;
+                break;
+            case (R.id.btnOkPromotion):
+                if(method.equals(HTTPRequestMethod.POST)) ajouterPromotion();
+                if(method.equals(HTTPRequestMethod.PUT)) editPromotion();
+                break;
+            case(R.id.btnRetour):
+                this.finish();
+                break;
         }
     }
 
@@ -244,5 +234,17 @@ public class ManagePromotionActivity extends AppCompatActivity implements Activi
             int spinnerPosition = list.indexOf(newPromotion.getArticle());
             spinnerArticle.setSelection(spinnerPosition, false);
         }
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        if(this.currentEditTextId == R.id.dateDebut){
+            dateDebut.setText(String.format("%1$d/%2$d/%3$d", dayOfMonth, month+1, year));
+            this.minimumDate.clear();
+            this.minimumDate.add(dayOfMonth);
+            this.minimumDate.add(month+1);
+            this.minimumDate.add(year);
+        }
+        if(this.currentEditTextId == R.id.dateFin) dateFin.setText(String.format("%1$d/%2$d/%3$d", dayOfMonth, month+1, year));
     }
 }

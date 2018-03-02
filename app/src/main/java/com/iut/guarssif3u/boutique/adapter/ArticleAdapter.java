@@ -76,20 +76,6 @@ public class ArticleAdapter extends ArrayAdapter<Article> implements View.OnClic
             ifu.execute("https://infodb.iutmetz.univ-lorraine.fr/~guarssif3u/ppo/ecommerce/images/article/" + article.getVisuel());
         }
 
-        ImageView iconeModifier = btnEdit;
-        if(iconeVisuel.getDrawable() == null){
-            try {
-                iconeModifier.setImageDrawable(Drawable.createFromStream(activity.getAssets().open("crayon.png"), null));
-            } catch (IOException e){}
-        }
-
-        ImageView iconeSupprimer = btnDelete;
-        if(iconeVisuel.getDrawable() == null){
-            try {
-                iconeSupprimer.setImageDrawable(Drawable.createFromStream(activity.getAssets().open("corbeille.png"), null));
-            } catch (IOException e){}
-        }
-
         return convertView;
     }
 

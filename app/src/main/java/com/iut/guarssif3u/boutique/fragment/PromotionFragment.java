@@ -31,7 +31,7 @@ import java.util.ArrayList;
  * Created by younes on 12/01/2018.
  */
 
-public class PromotionFragment extends Fragment implements ActiviteEnAttenteAvecResultat, View.OnClickListener, ObjetMetier<Promotion>, DialogInterface.OnClickListener {
+public class PromotionFragment extends Fragment implements ActiviteEnAttenteAvecResultat<Promotion>, View.OnClickListener, ObjetMetier<Promotion>, DialogInterface.OnClickListener {
 
     protected ArrayList<Promotion> promotions;
     protected Promotion targetPromotion;
@@ -41,12 +41,11 @@ public class PromotionFragment extends Fragment implements ActiviteEnAttenteAvec
     protected ProgressBar loader;
     protected FloatingActionButton addPromotionBtn;
 
-    public PromotionFragment(){};
+    BoutiqueActivity activity;
 
     @Override
     public void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
-        this.promotions = new ArrayList<>();
 
         setRetainInstance(true);
     }
@@ -55,8 +54,12 @@ public class PromotionFragment extends Fragment implements ActiviteEnAttenteAvec
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance){
         View view = inflater.inflate(R.layout.fragment_promotion, null);
 
-        addPromotionBtn = view.findViewById(R.id.add);
-        addPromotionBtn.setOnClickListener(this);
+        this.promotions = new ArrayList<>();
+        this.activity = (BoutiqueActivity)this.getActivity();
+
+        try {
+            this.substitut = Drawable.createFromStream(getActivity().getAssets().open("substitut.png"), null);
+        } catch (IOException e){}
 
         return view;
     }
@@ -65,11 +68,15 @@ public class PromotionFragment extends Fragment implements ActiviteEnAttenteAvec
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        addPromotionBtn = view.findViewById(R.id.add);
+        addPromotionBtn.setOnClickListener(this);
+
         this.listView = view.findViewById(R.id.liste);
         this.loader = view.findViewById(R.id.loader);
 
         PromotionAdapter promotionAdapter = new PromotionAdapter(getActivity(), this, promotions, substitut);
         this.listView.setAdapter(promotionAdapter);
+
         PromotionDAO.getInstance(this).findAll();
         this.afficheLoader();
     }
@@ -87,7 +94,7 @@ public class PromotionFragment extends Fragment implements ActiviteEnAttenteAvec
     }
 
     @Override
-    public void notifyRetourRequete(Object resultat, String method, boolean error) {
+    public void notifyRetourRequete(Promotion resultat, String method, boolean error) {
         if(error){
             Toast.makeText(getContext(), R.string.erreur_serveur, Toast.LENGTH_LONG).show();
             return;
@@ -107,13 +114,18 @@ public class PromotionFragment extends Fragment implements ActiviteEnAttenteAvec
 
         ((BaseAdapter) this.listView.getAdapter()).notifyDataSetChanged();
         this.cacheLoaderAfficheContenu();
+
+        // Si nous étions sur ce fragment avant de lancer une autre activité, nous reviendrons sur ce fragment, au bon niveau de scroll
+        if(this.activity.getCurrentFragment() == this.activity.getViewPagerAdapter().getItemPosition(this)){
+            this.listView.setSelectionFromTop(this.activity.getCurrentItemPosition(), this.activity.getCurrentTopPosition());
+        }
     }
 
     @Override
     public void supprimer(Promotion object) {
         this.targetPromotion = object;
         try{
-            SuppressionDialog dialog = SuppressionDialog.newInstance(((BoutiqueActivity)getActivity()).adapter.getItemPosition(this));
+            SuppressionDialog dialog = SuppressionDialog.newInstance(((BoutiqueActivity)getActivity()).getViewPagerAdapter().getItemPosition(this), getActivity().getString(R.string.supp_promotion_message), getActivity().getString(R.string.supp_promotion_message));
             dialog.show(getActivity().getFragmentManager(), "suppression");
         } catch (IllegalArgumentException e) {
             Toast.makeText(getActivity().getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -121,12 +133,18 @@ public class PromotionFragment extends Fragment implements ActiviteEnAttenteAvec
     }
 
     @Override
-    public void ajouter(Promotion object) {
-        PromotionDAO.getInstance(this).insert(this.targetPromotion);
+    public void ajouter() {
+        this.saveFragmentAndPosition();
+
+        Intent activityLauncher = new Intent(this.getActivity(), ManagePromotionActivity.class);
+        activityLauncher.putExtra("method", HTTPRequestMethod.POST);
+        startActivity(activityLauncher);
     }
 
     @Override
     public void modifier(Promotion object) {
+        this.saveFragmentAndPosition();
+
         Intent activityLauncher = new Intent(getContext(), ManagePromotionActivity.class);
         activityLauncher.putExtra("promotion", object);
         activityLauncher.putExtra("method", HTTPRequestMethod.PUT);
@@ -134,15 +152,11 @@ public class PromotionFragment extends Fragment implements ActiviteEnAttenteAvec
     }
 
     @Override
-    public void recuperer(int id) {
-
-    }
+    public void recuperer(int id) {}
 
     @Override
     public void onClick(View view) {
-        Intent activityLauncher = new Intent(this.getActivity(), ManagePromotionActivity.class);
-        activityLauncher.putExtra("method", HTTPRequestMethod.POST);
-        startActivity(activityLauncher);
+        this.ajouter();
     }
 
     @Override
@@ -153,4 +167,15 @@ public class PromotionFragment extends Fragment implements ActiviteEnAttenteAvec
             return;
         }
     }
+    /**
+     * Sauvegarde le fragment sur lequel nous sommes, et la position du scroll
+     */
+    protected void saveFragmentAndPosition(){
+        int index = this.listView.getFirstVisiblePosition();
+        View v = this.listView.getChildAt(0);
+        int top = (v == null) ? 0 : (v.getTop() - this.listView.getPaddingTop());
+
+        this.activity.saveFragmentAndPosition(this.activity.getViewPagerAdapter().getItemPosition(this), index, top);
+    }
+
 }

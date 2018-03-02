@@ -42,11 +42,11 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
 
     BoutiqueActivity activity;
 
-    public ArticleFragment(){};
-
     @Override
     public void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
+
+        setRetainInstance(true);
     }
 
     @Override
@@ -102,6 +102,7 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
         ((BaseAdapter) this.listView.getAdapter()).notifyDataSetChanged();
         this.cacheLoaderAfficheContenu();
 
+        // Si nous étions sur ce fragment avant de lancer une autre activité, nous reviendrons sur ce fragment, au bon niveau de scroll
         if(this.activity.getCurrentFragment() == this.activity.getViewPagerAdapter().getItemPosition(this)){
             this.listView.setSelectionFromTop(this.activity.getCurrentItemPosition(), this.activity.getCurrentTopPosition());
         }
@@ -117,20 +118,6 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
     public void cacheLoaderAfficheContenu() {
         this.loader.setVisibility(View.INVISIBLE);
         this.listView.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void onClick(View v) {
-        this.ajouter();
-    }
-
-    @Override
-    public void onClick(DialogInterface dialog, int i) {
-        if(i == DialogInterface.BUTTON_POSITIVE){
-            ArticleDAO.getInstance(this).delete(this.targetArticle);
-        } else {
-            return;
-        }
     }
 
     /**
@@ -180,6 +167,20 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
 
     @Override
     public void recuperer(int id) {}
+
+    @Override
+    public void onClick(View v) {
+        this.ajouter();
+    }
+
+    @Override
+    public void onClick(DialogInterface dialog, int i) {
+        if(i == DialogInterface.BUTTON_POSITIVE){
+            ArticleDAO.getInstance(this).delete(this.targetArticle);
+        } else {
+            return;
+        }
+    }
 
     /**
      * Sauvegarde le fragment sur lequel nous sommes, et la position du scroll

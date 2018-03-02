@@ -43,11 +43,10 @@ public class CategorieFragment extends Fragment implements ActiviteEnAttenteAvec
 
     BoutiqueActivity activity;
 
-    public CategorieFragment(){};
-
     @Override
     public void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
+        setRetainInstance(true);
     }
 
     @Override
@@ -104,6 +103,7 @@ public class CategorieFragment extends Fragment implements ActiviteEnAttenteAvec
 
         this.cacheLoaderAfficheContenu();
 
+        // Si nous étions sur ce fragment avant de lancer une autre activité, nous reviendrons sur ce fragment, au bon niveau de scroll
         if(this.activity.getCurrentFragment() == this.activity.getViewPagerAdapter().getItemPosition(this)){
             this.listView.setSelectionFromTop(this.activity.getCurrentItemPosition(), this.activity.getCurrentTopPosition());
         }

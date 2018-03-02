@@ -13,6 +13,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.iut.guarssif3u.boutique.DAO.DAO;
 import com.iut.guarssif3u.boutique.HTTPRequest.HTTPRequestMethod;
+import com.iut.guarssif3u.boutique.Serialiser.DateSerializer;
 import com.iut.guarssif3u.boutique.fragment.ActiviteEnAttenteAvecResultat;
 
 import com.google.gson.Gson;
@@ -27,6 +28,7 @@ import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -182,7 +184,10 @@ public class HTTPRequest<T extends Object> extends AsyncTask<String, Void, Strin
 
     protected StringBuffer doInBackgroundPut(String url){
         StringBuffer resultat = new StringBuffer(1024);
-        Gson gson = new Gson();
+
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(Date.class, new DateSerializer());
+        Gson gson = gsonBuilder.create();
 
         try{
             String json = gson.toJson(this.data);

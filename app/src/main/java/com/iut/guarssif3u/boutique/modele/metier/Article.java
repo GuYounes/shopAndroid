@@ -128,6 +128,7 @@ public class Article implements Parcelable {
      * Catégorie à passer à l'article
      */
     public void setCategorie(Categorie categorie) {
+        if(categorie == null) throw new IllegalArgumentException("La catégorie ne peut pas être null");
         this.categorie = categorie;
     }
 

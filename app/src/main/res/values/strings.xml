@@ -20,6 +20,8 @@
     <string name="supp_categorie_titre">Suppression d\'une catégorie</string>
     <string name="supp_article_message">Êtes vous sur de vouloir supprimer cet article ?</string>
     <string name="supp_article_titre">Suppression d\'un article</string>
+    <string name="supp_promotion_message">Êtes vous sur de vouloir supprimer cette promotion ?</string>
+    <string name="supp_promotion_titre">Suppression d\'une promotion</string>
     <string name="supp_ok">Suppression effectuée</string>
 
     <string name="ajout_ok">Ajout effectué</string>
@@ -42,5 +44,6 @@
     <string name="modifier">Modifier</string>
     <string name="modif_article">Modifier article</string>
     <string name="modif_categorie">Modifier catégorie</string>
+    <string name="modif_promotion">Modifier promotion</string>
 
 </resources>

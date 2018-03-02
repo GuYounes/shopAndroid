@@ -54,7 +54,6 @@ public class CategorieAdapter extends ArrayAdapter<Categorie> implements View.On
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
         Categorie categorie = getItem(position);
 
         if(convertView == null) {
