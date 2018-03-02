@@ -39,10 +39,9 @@ public class ManageArticleActivity extends AppCompatActivity implements Activite
     protected EditText editTarif;
     protected EditText editNom;
     protected EditText editVisuel;
-
-    protected Spinner spinnerCategorie;
-
     protected ProgressBar loader;
+    protected ProgressBar loaderList;
+    protected Spinner spinnerCategorie;
 
     private String method;
     private Article newArticle;
@@ -64,17 +63,19 @@ public class ManageArticleActivity extends AppCompatActivity implements Activite
         lblArticle = this.findViewById(R.id.labelArticle);
         btnOk = this.findViewById(R.id.btnOkArticle);
         btnRetour = this.findViewById(R.id.btnRetour);
-        editNom = this.findViewById(R.id.editNomCategorie);
+        editNom = this.findViewById(R.id.editNomArticle);
         editVisuel = this.findViewById(R.id.editNomVisuel);
         editTarif = this.findViewById(R.id.editTarif);
         editReference = this.findViewById(R.id.editReferenceArticle);
         spinnerCategorie = this.findViewById(R.id.categorieSpinner);
         loader = this.findViewById(R.id.loader);
+        loaderList = this.findViewById(R.id.loaderlist);
 
         method = (String) this.getIntent().getExtras().get("method");
 
         CategorieDAO categorieDAO = CategorieDAO.getInstance(this);
         categorieDAO.findAll();
+        this.afficheLoaderListe();
 
         btnOk.setOnClickListener(this);
         btnRetour.setOnClickListener(this);
@@ -202,6 +203,20 @@ public class ManageArticleActivity extends AppCompatActivity implements Activite
     }
 
     @Override
+    public void afficheLoaderListe() {
+        this.spinnerCategorie.setVisibility(View.INVISIBLE);
+        this.loaderList.setVisibility(View.VISIBLE);
+        btnOk.setEnabled(false);
+    }
+
+    @Override
+    public void cacheLoaderAfficheListe() {
+        this.spinnerCategorie.setVisibility(View.VISIBLE);
+        this.loaderList.setVisibility(View.INVISIBLE);
+        btnOk.setEnabled(true);
+    }
+
+    @Override
     public void notifyRetourRequete(Object resultat, String method, boolean error) {
         this.btnRetour.setEnabled(true);
         if(error){
@@ -231,6 +246,7 @@ public class ManageArticleActivity extends AppCompatActivity implements Activite
 
     @Override
     public void notifyRetourRequeteFindAll(ArrayList list) {
+        this.cacheLoaderAfficheListe();
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCategorie.setAdapter(adapter);

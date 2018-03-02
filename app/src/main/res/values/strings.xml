@@ -9,8 +9,12 @@
     <string name="boutique_content">Boutique Android \nGUARSSIFI Younes \nSKORA Vincent</string>
 
     <string name="euro">€</string>
+    <string name="moins">-</string>
+    <string name="pourcent">%</string>
     <string name="ajouter">Ajouter</string>
     <string name="retour">Retour</string>
+    <string name="du">du</string>
+    <string name="au">au</string>
 
     <string name="ajout_categorie">Ajout d\'une catégorie</string>
     <string name="ajout_article">Ajout d\'un article</string>
@@ -26,7 +30,7 @@
     <string name="supp_en_cours">Suppression en cours</string>
 
     <string name="ajout_ok">Ajout effectué</string>
-    <string name="modif_ok">Modification effectué</string>
+    <string name="modif_ok">Modification effectuée</string>
     <string name="erreur_serveur">Erreur : Impossible de joindre le serveur</string>
     <string name="champs_non_changé">Aucun changement détécté</string>
 

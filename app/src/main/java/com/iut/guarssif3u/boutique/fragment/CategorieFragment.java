@@ -44,6 +44,8 @@ public class CategorieFragment extends Fragment implements ActiviteEnAttenteAvec
     protected ProgressBar loader;
     protected FloatingActionButton addCategorieBtn;
 
+    protected FloatingActionButton btnRefresh;
+
     BoutiqueActivity activity;
 
     @Override
@@ -76,6 +78,9 @@ public class CategorieFragment extends Fragment implements ActiviteEnAttenteAvec
 
         this.listView = view.findViewById(R.id.liste);
         this.loader = view.findViewById(R.id.loader);
+
+        this.btnRefresh = view.findViewById(R.id.refresh);
+        btnRefresh.setOnClickListener(this);
 
         CategorieAdapter categorieAdapter = new CategorieAdapter(getActivity(), this, categories, substitut);
         this.listView.setAdapter(categorieAdapter);
@@ -128,6 +133,16 @@ public class CategorieFragment extends Fragment implements ActiviteEnAttenteAvec
     public void cacheLoaderAfficheContenu() {
         this.loader.setVisibility(View.INVISIBLE);
         this.listView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void afficheLoaderListe() {
+
+    }
+
+    @Override
+    public void cacheLoaderAfficheListe() {
+
     }
 
     @Override
@@ -193,11 +208,16 @@ public class CategorieFragment extends Fragment implements ActiviteEnAttenteAvec
     /**
      * Appelé sur le click du FloatingActionButton
      *
-     * @param view
+     * @param v
      */
     @Override
-    public void onClick(View view) {
-        this.ajouter();
+    public void onClick(View v) {
+        if(v.getId() == R.id.refresh) {
+            saveFragmentAndPosition();
+            activity.recreate();
+        } else {
+            this.ajouter();
+        }
     }
 
     /**

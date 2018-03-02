@@ -2,6 +2,7 @@ package com.iut.guarssif3u.boutique.async;
 
 import android.app.Activity;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -189,7 +190,9 @@ public class HTTPRequest<T extends Object> extends AsyncTask<String, Void, Strin
         StringBuffer resultat = new StringBuffer(1024);
 
         GsonBuilder gsonBuilder = new GsonBuilder();
+
         gsonBuilder.registerTypeAdapter(Date.class, new DateSerializer());
+
         Gson gson = gsonBuilder.create();
 
         try{

@@ -1,5 +1,6 @@
 package com.iut.guarssif3u.boutique.adapter;
 
+import android.annotation.SuppressLint;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -14,6 +15,9 @@ import android.widget.TextView;
 import com.iut.guarssif3u.boutique.R;
 import com.iut.guarssif3u.boutique.fragment.ObjetMetier;
 import com.iut.guarssif3u.boutique.modele.metier.Promotion;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**
@@ -40,6 +44,7 @@ public class PromotionAdapter extends ArrayAdapter<Promotion> implements View.On
         this.parent = parent;
     }
 
+    @SuppressLint("ResourceAsColor")
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
         Promotion promotion = getItem(position);
@@ -57,8 +62,30 @@ public class PromotionAdapter extends ArrayAdapter<Promotion> implements View.On
         btnEdit.setOnClickListener(this);
         btnDelete.setOnClickListener(this);
 
-        TextView tvNom = convertView.findViewById(R.id.nom);
-        tvNom.setText(promotion.getArticle().getNom());
+        TextView tvNomArticle = convertView.findViewById(R.id.nom);
+        tvNomArticle.setText(promotion.getArticle().getNom());
+
+        TextView tvPourcentage = convertView.findViewById(R.id.pourcentage);
+        tvPourcentage.setText(getContext().getResources().getString(R.string.moins) + promotion.getPourcentage() + getContext().getResources().getString(R.string.pourcent));
+
+        TextView tvTarif = convertView.findViewById(R.id.tarif);
+        tvTarif.setText(String.valueOf(promotion.getArticle().getTarif() + " " + getContext().getResources().getString(R.string.euro)));
+        tvTarif.getPaint().setStrikeThruText(true);
+
+        TextView tvTarifPromotion = convertView.findViewById(R.id.tarifpromotion);
+        float tarif = promotion.getArticle().getTarif();
+        float reduction = promotion.getPourcentage() / 100.0f;
+        float tarifReduit = tarif - tarif * reduction;
+        tvTarifPromotion.setText(String.valueOf(Math.round(tarifReduit * Math.pow(10,2)) / Math.pow(10,2) + " " + getContext().getResources().getString(R.string.euro)));
+
+
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+
+        TextView tvDateDebut = convertView.findViewById(R.id.dateDebut);
+        tvDateDebut.setText(getContext().getResources().getString(R.string.du) + " " + String.valueOf(formatter.format(promotion.getDate_debut())));
+
+        TextView tvDateFin = convertView.findViewById(R.id.dateFin);
+        tvDateFin.setText(getContext().getResources().getString(R.string.au) + " " + String.valueOf(formatter.format(promotion.getDate_fin())));
 
         return convertView;
     }
