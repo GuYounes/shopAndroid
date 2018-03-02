@@ -260,7 +260,7 @@ public class Article implements Parcelable {
 
     @Override
     public String toString() {
-        return nom;
+        return reference;
     }
 
     @Override
