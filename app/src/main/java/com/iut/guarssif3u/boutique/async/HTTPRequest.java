@@ -240,12 +240,35 @@ public class HTTPRequest<T extends Object> extends AsyncTask<String, Void, Strin
     protected StringBuffer doInBackgroundDelete(String url){
         StringBuffer resultat = new StringBuffer(1024);
 
+        GsonBuilder gsonBuilder = new GsonBuilder();
+
+        gsonBuilder.registerTypeAdapter(Date.class, new DateSerializer());
+
+        Gson gson = gsonBuilder.create();
+
         try{
+            String json = gson.toJson(this.data);
+
             final HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
             connection.setReadTimeout(1000);
             connection.setConnectTimeout(1500);
             connection.setRequestMethod(this.method);
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setAllowUserInteraction(false);
             connection.setDoInput(true);
+
+            if (json != null) {
+                //set the content length of the body
+                connection.setRequestProperty("Content-length", json.getBytes().length + "");
+                connection.setDoInput(true);
+                connection.setDoOutput(true);
+                connection.setUseCaches(false);
+
+                //send the json as body of the request
+                OutputStream outputStream = connection.getOutputStream();
+                outputStream.write(json.getBytes("UTF-8"));
+                outputStream.close();
+            }
 
             connection.connect();
             InputStream input = connection.getInputStream();

@@ -16,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.iut.guarssif3u.boutique.BoutiqueActivity;
+import com.iut.guarssif3u.boutique.DAO.ArticleDAO;
 import com.iut.guarssif3u.boutique.DAO.CategorieDAO;
 import com.iut.guarssif3u.boutique.HTTPRequest.HTTPRequestMethod;
 import com.iut.guarssif3u.boutique.R;
@@ -206,15 +207,15 @@ public class CategorieFragment extends Fragment implements ActiviteEnAttenteAvec
     public void recuperer(int id) {}
 
     /**
-     * Appelé sur le click du FloatingActionButton
+     * Appelé sur le click des FloatingActionButtons
      *
      * @param v
      */
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.refresh) {
-            saveFragmentAndPosition();
-            activity.recreate();
+            CategorieDAO.getInstance(this).findAll();
+            this.afficheLoader();
         } else {
             this.ajouter();
         }

@@ -44,6 +44,7 @@ public class ManagePromotionActivity extends AppCompatActivity implements Activi
     protected Spinner spinnerArticle;
 
     private ArrayList<Integer> minimumDate;
+    private ArrayList<Integer> maximmumDate;
     private String method;
     private Promotion newPromotion;
     private Calendar calendar;
@@ -73,6 +74,7 @@ public class ManagePromotionActivity extends AppCompatActivity implements Activi
         this.currentDay = calendar.get(Calendar.DAY_OF_MONTH);
 
         this.minimumDate = new ArrayList<>(3);
+        this.maximmumDate = new ArrayList<>(3);
     }
 
     @Override
@@ -209,8 +211,16 @@ public class ManagePromotionActivity extends AppCompatActivity implements Activi
     public void onClick(View view) {
         switch (view.getId()){
             case(R.id.dateDebut):
-                // date picker dialog
                 datePickerDialog = new DatePickerDialog(view.getContext(), this, currentYear, currentMonth, currentDay);
+
+                if(this.maximmumDate.size() == 0){
+                    datePickerDialog = new DatePickerDialog(view.getContext(), this, currentYear, currentMonth, currentDay);
+                } else {
+                    Calendar c = Calendar.getInstance();
+                    c.set(this.maximmumDate.get(2), this.maximmumDate.get(1)-1, this.maximmumDate.get(0));
+                    datePickerDialog.getDatePicker().setMaxDate(c.getTimeInMillis());
+                }
+
                 datePickerDialog.getDatePicker().setMinDate(this.calendar.getTimeInMillis());
                 datePickerDialog.show();
                 this.currentEditTextId = R.id.dateDebut;
@@ -311,6 +321,12 @@ public class ManagePromotionActivity extends AppCompatActivity implements Activi
             this.minimumDate.add(month+1);
             this.minimumDate.add(year);
         }
-        if(this.currentEditTextId == R.id.dateFin) dateFin.setText(String.format("%1$d/%2$d/%3$d", dayOfMonth, month+1, year));
+        if(this.currentEditTextId == R.id.dateFin){
+            dateFin.setText(String.format("%1$d/%2$d/%3$d", dayOfMonth, month+1, year));
+            this.maximmumDate.clear();
+            this.maximmumDate.add(dayOfMonth);
+            this.maximmumDate.add(month+1);
+            this.maximmumDate.add(year);
+        }
     }
 }
