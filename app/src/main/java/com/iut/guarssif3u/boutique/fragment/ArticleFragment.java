@@ -40,6 +40,8 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
     protected ProgressBar loader;
     protected FloatingActionButton addArticleBtn;
 
+    protected FloatingActionButton btnRefresh;
+
     BoutiqueActivity activity;
 
     @Override
@@ -72,6 +74,9 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
 
         this.listView = view.findViewById(R.id.liste);
         this.loader = view.findViewById(R.id.loader);
+
+        this.btnRefresh = view.findViewById(R.id.refresh);
+        btnRefresh.setOnClickListener(this);
 
         ArticleAdapter articleAdapter = new ArticleAdapter(getActivity(), this, articles, substitut);
         this.listView.setAdapter(articleAdapter);
@@ -118,6 +123,16 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
     public void cacheLoaderAfficheContenu() {
         this.loader.setVisibility(View.INVISIBLE);
         this.listView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void afficheLoaderListe() {
+
+    }
+
+    @Override
+    public void cacheLoaderAfficheListe() {
+
     }
 
     /**
@@ -170,7 +185,12 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
 
     @Override
     public void onClick(View v) {
-        this.ajouter();
+        if(v.getId() == R.id.refresh) {
+            saveFragmentAndPosition();
+            activity.recreate();
+        } else {
+            this.ajouter();
+        }
     }
 
     @Override

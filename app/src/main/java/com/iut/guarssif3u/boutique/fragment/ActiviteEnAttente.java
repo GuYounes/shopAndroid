@@ -8,4 +8,6 @@ public interface ActiviteEnAttente {
 
     void afficheLoader();
     void cacheLoaderAfficheContenu();
+    void afficheLoaderListe();
+    void cacheLoaderAfficheListe();
 }

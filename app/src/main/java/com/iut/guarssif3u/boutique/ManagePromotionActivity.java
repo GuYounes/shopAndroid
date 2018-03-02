@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,7 +39,8 @@ public class ManagePromotionActivity extends AppCompatActivity implements Activi
     protected EditText pourcentage;
     protected EditText dateDebut;
     protected EditText dateFin;
-
+    protected ProgressBar loader;
+    protected ProgressBar loaderList;
     protected Spinner spinnerArticle;
 
     private ArrayList<Integer> minimumDate;
@@ -76,6 +78,8 @@ public class ManagePromotionActivity extends AppCompatActivity implements Activi
         dateDebut = this.findViewById(R.id.dateDebut);
         dateFin = this.findViewById(R.id.dateFin);
         pourcentage = this.findViewById(R.id.editPourcentage);
+        loader = this.findViewById(R.id.loader);
+        loaderList = this.findViewById(R.id.loaderlist);
 
         // get method PUT or POST
         method = (String) this.getIntent().getExtras().get("method");
@@ -86,6 +90,7 @@ public class ManagePromotionActivity extends AppCompatActivity implements Activi
         // request to get spinner items
         ArticleDAO articleDAO = ArticleDAO.getInstance(this);
         articleDAO.findAll();
+        this.afficheLoaderListe();
 
         // set calendar pop up for date debut
         dateDebut.setOnClickListener(this);
@@ -211,22 +216,55 @@ public class ManagePromotionActivity extends AppCompatActivity implements Activi
     }
 
     @Override
-    public void afficheLoader() {
+    public void afficheLoaderListe() {
+        this.spinnerArticle.setVisibility(View.INVISIBLE);
+        this.loaderList.setVisibility(View.VISIBLE);
+        btnOk.setEnabled(false);
+    }
 
+    @Override
+    public void cacheLoaderAfficheListe() {
+        this.spinnerArticle.setVisibility(View.VISIBLE);
+        this.loaderList.setVisibility(View.INVISIBLE);
+        btnOk.setEnabled(true);
+    }
+
+    @Override
+    public void afficheLoader() {
+        this.btnOk.setVisibility(View.GONE);
+        this.loader.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void cacheLoaderAfficheContenu() {
-
+        this.loader.setVisibility(View.GONE);
+        this.btnOk.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void notifyRetourRequete(Object resultat, String method, boolean error) {
-
+        this.cacheLoaderAfficheContenu();
+        if(error){
+            Toast.makeText(this, R.string.erreur_serveur, Toast.LENGTH_LONG).show();
+            return;
+        }
+        switch (method){
+            case HTTPRequestMethod.POST:
+                Toast.makeText(this, R.string.ajout_ok, Toast.LENGTH_LONG).show();
+                this.pourcentage.setText("");
+                this.dateDebut.setText("");
+                this.dateFin.setText("");
+                break;
+            case HTTPRequestMethod.PUT:
+                Toast.makeText(this, R.string.modif_ok, Toast.LENGTH_LONG).show();
+                this.finish();
+                break;
+        }
     }
 
     @Override
     public void notifyRetourRequeteFindAll(ArrayList list) {
+        this.cacheLoaderAfficheListe();
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerArticle.setAdapter(adapter);

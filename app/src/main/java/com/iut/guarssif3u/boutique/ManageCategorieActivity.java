@@ -127,6 +127,16 @@ public class ManageCategorieActivity extends AppCompatActivity implements Activi
     }
 
     @Override
+    public void afficheLoaderListe() {
+
+    }
+
+    @Override
+    public void cacheLoaderAfficheListe() {
+
+    }
+
+    @Override
     public void notifyRetourRequete(Object resultat, String method, boolean error) {
         this.cacheLoaderAfficheContenu();
         if(error){

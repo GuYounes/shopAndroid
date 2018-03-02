@@ -24,26 +24,76 @@
         android:visibility="gone"
         />
 
-    <TextView
-        android:id="@+id/nom"
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:layout_weight="30"/>
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_weight="30">
 
-    <TextView
-        android:id="@+id/reference"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:layout_weight="20"/>
+        <TextView
+            android:id="@+id/nom"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textStyle="bold"
+            />
 
-    <TextView
-        android:id="@+id/tarif"
+        <TextView
+            android:id="@+id/pourcentage"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
+            />
+
+    </RelativeLayout>
+
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:layout_weight="10"/>
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_weight="10">
+
+        <TextView
+            android:id="@+id/tarif"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            />
+
+        <TextView
+            android:id="@+id/tarifpromotion"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textColor="@color/colorRed"
+            android:layout_marginTop="20dp"
+            />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_weight="40">
+
+        <TextView
+            android:id="@+id/dateDebut"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            />
+
+        <TextView
+            android:id="@+id/dateFin"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
+            />
+
+    </RelativeLayout>
 
     <ImageView
         android:id="@+id/modifier"
@@ -51,12 +101,16 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="10"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:src="@drawable/ic_item_list_edit"/>
 
     <ImageView
         android:id="@+id/supprimer"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:layout_weight="10"
         android:src="@drawable/ic_item_list_delete"/>
 

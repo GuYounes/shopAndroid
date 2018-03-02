@@ -41,6 +41,8 @@ public class PromotionFragment extends Fragment implements ActiviteEnAttenteAvec
     protected ProgressBar loader;
     protected FloatingActionButton addPromotionBtn;
 
+    protected FloatingActionButton btnRefresh;
+
     BoutiqueActivity activity;
 
     @Override
@@ -74,6 +76,9 @@ public class PromotionFragment extends Fragment implements ActiviteEnAttenteAvec
         this.listView = view.findViewById(R.id.liste);
         this.loader = view.findViewById(R.id.loader);
 
+        this.btnRefresh = view.findViewById(R.id.refresh);
+        btnRefresh.setOnClickListener(this);
+
         PromotionAdapter promotionAdapter = new PromotionAdapter(getActivity(), this, promotions, substitut);
         this.listView.setAdapter(promotionAdapter);
 
@@ -91,6 +96,16 @@ public class PromotionFragment extends Fragment implements ActiviteEnAttenteAvec
     public void cacheLoaderAfficheContenu() {
         this.loader.setVisibility(View.INVISIBLE);
         this.listView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void afficheLoaderListe() {
+
+    }
+
+    @Override
+    public void cacheLoaderAfficheListe() {
+
     }
 
     @Override
@@ -155,8 +170,13 @@ public class PromotionFragment extends Fragment implements ActiviteEnAttenteAvec
     public void recuperer(int id) {}
 
     @Override
-    public void onClick(View view) {
-        this.ajouter();
+    public void onClick(View v) {
+        if(v.getId() == R.id.refresh) {
+            saveFragmentAndPosition();
+            activity.recreate();
+        } else {
+            this.ajouter();
+        }
     }
 
     @Override
