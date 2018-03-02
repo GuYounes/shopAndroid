@@ -52,6 +52,8 @@ public class ManagePromotionActivity extends AppCompatActivity implements Activi
     private int currentMonth;
     private int currentDay;
 
+    protected ArrayList articles;
+
     DatePickerDialog datePickerDialog;
 
     @Override
@@ -59,12 +61,24 @@ public class ManagePromotionActivity extends AppCompatActivity implements Activi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_promotion);
 
+        if (savedInstanceState != null) {
+            articles = savedInstanceState.getStringArrayList("articlesArray");
+        } else {
+            articles = new ArrayList();
+        }
+
         this.calendar = Calendar.getInstance();
         this.currentYear = calendar.get(Calendar.YEAR);
         this.currentMonth = calendar.get(Calendar.MONTH);
         this.currentDay = calendar.get(Calendar.DAY_OF_MONTH);
 
         this.minimumDate = new ArrayList<>(3);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putStringArrayList("articlesArray", articles);
     }
 
     @Override
@@ -81,16 +95,23 @@ public class ManagePromotionActivity extends AppCompatActivity implements Activi
         loader = this.findViewById(R.id.loader);
         loaderList = this.findViewById(R.id.loaderlist);
 
+        // request to get spinner items
+        if(articles.isEmpty()) {
+            this.afficheLoaderListe();
+            ArticleDAO articleDAO = ArticleDAO.getInstance(this);
+            articleDAO.findAll();
+        } else {
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, this.articles);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinnerArticle.setAdapter(adapter);
+            this.cacheLoaderAfficheListe();
+        }
+
         // get method PUT or POST
         method = (String) this.getIntent().getExtras().get("method");
 
         btnOk.setOnClickListener(this);
         btnRetour.setOnClickListener(this);
-
-        // request to get spinner items
-        ArticleDAO articleDAO = ArticleDAO.getInstance(this);
-        articleDAO.findAll();
-        this.afficheLoaderListe();
 
         // set calendar pop up for date debut
         dateDebut.setOnClickListener(this);
@@ -101,6 +122,10 @@ public class ManagePromotionActivity extends AppCompatActivity implements Activi
         // changing layout if request equals PUT and filling inputs with selected item info
         if(method.equals(HTTPRequestMethod.PUT)) {
             Promotion promotion = (Promotion) this.getIntent().getExtras().get("promotion");
+
+            spinnerArticle.setEnabled(false);
+            dateDebut.setEnabled(false);
+
             if(promotion != null) {
                 lblPromotion.setText(R.string.modif_promotion);
 
@@ -265,7 +290,10 @@ public class ManagePromotionActivity extends AppCompatActivity implements Activi
     @Override
     public void notifyRetourRequeteFindAll(ArrayList list) {
         this.cacheLoaderAfficheListe();
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
+        this.articles.clear();
+        this.articles.addAll(list);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, this.articles);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerArticle.setAdapter(adapter);
         if(method.equals(HTTPRequestMethod.PUT)) {
