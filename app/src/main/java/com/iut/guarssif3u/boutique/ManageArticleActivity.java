@@ -129,6 +129,7 @@ public class ManageArticleActivity extends AppCompatActivity implements Activite
             // ajout article
             Article newArticle = new Article(reference, nom, tarif, visuel, categorie);
             ArticleDAO.getInstance(this).insert(newArticle);
+            this.btnRetour.setEnabled(false);
             this.afficheLoader();
         } catch (IllegalArgumentException e){
             Toast.makeText(this,e.getMessage(), Toast.LENGTH_LONG).show();
@@ -155,6 +156,7 @@ public class ManageArticleActivity extends AppCompatActivity implements Activite
                 // modification article
                 this.newArticle = new Article(this.newArticle.getId(), reference, nom, tarif, visuel, categorie);
                 ArticleDAO.getInstance(this).update(newArticle);
+                this.btnRetour.setEnabled(false);
                 this.afficheLoader();
             } catch (IllegalArgumentException e) {
                 Toast.makeText(this,e.getMessage(), Toast.LENGTH_LONG).show();

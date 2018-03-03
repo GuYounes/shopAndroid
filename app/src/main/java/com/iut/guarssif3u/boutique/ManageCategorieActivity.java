@@ -164,6 +164,7 @@ public class ManageCategorieActivity extends AppCompatActivity implements Activi
     public void afficheLoader() {
         this.btnOk.setVisibility(View.GONE);
         this.loader.setVisibility(View.VISIBLE);
+        this.btnRetour.setEnabled(false);
     }
 
     @Override
@@ -184,6 +185,7 @@ public class ManageCategorieActivity extends AppCompatActivity implements Activi
 
     @Override
     public void notifyRetourRequete(Object resultat, String method, boolean error) {
+        this.btnRetour.setEnabled(true);
         if(error){
             this.cacheLoaderAfficheContenu();
             Toast.makeText(this, R.string.erreur_serveur, Toast.LENGTH_LONG).show();
