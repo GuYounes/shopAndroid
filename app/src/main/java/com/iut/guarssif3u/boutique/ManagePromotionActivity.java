@@ -49,6 +49,7 @@ public class ManagePromotionActivity extends AppCompatActivity implements Activi
 
     private ArrayList<Integer> minimumDate;
     private ArrayList<Integer> maximmumDate;
+    private ArrayList<Promotion> promotions;
     private String method;
     private Promotion newPromotion;
     private Calendar calendar;
@@ -153,6 +154,8 @@ public class ManagePromotionActivity extends AppCompatActivity implements Activi
                 btnOk.setText(R.string.modifier);
                 newPromotion = promotion;
             }
+        } else {
+            this.promotions = this.getIntent().getParcelableArrayListExtra("promotions");
         }
 
     }
@@ -177,6 +180,12 @@ public class ManagePromotionActivity extends AppCompatActivity implements Activi
         try {
             // ajout catégorie
             Promotion newPromotion = new Promotion(article, newDateDebut, newDateFin, newPourcentage);
+            for(Promotion promotion : this.promotions){
+                if(promotion.equals(newPromotion)){
+                    Toast.makeText(this, R.string.erreur_promotion, Toast.LENGTH_LONG).show();
+                    return;
+                }
+            }
             PromotionDAO.getInstance(this).insert(newPromotion);
             this.afficheLoader();
         } catch (IllegalArgumentException e){

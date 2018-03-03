@@ -163,6 +163,8 @@ public class PromotionFragment extends Fragment implements ActiviteEnAttenteAvec
 
         Intent activityLauncher = new Intent(this.getActivity(), ManagePromotionActivity.class);
         activityLauncher.putExtra("method", HTTPRequestMethod.POST);
+        activityLauncher.putParcelableArrayListExtra("promotions", this.promotions);
+
         startActivity(activityLauncher);
     }
 

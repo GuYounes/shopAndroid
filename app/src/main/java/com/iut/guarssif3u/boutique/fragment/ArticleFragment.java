@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,13 +40,12 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
 
     private static final int MODIFICATION = 0;
     private static final int CREATION = 1;
-    private static final int HAUTEUR_BANDEAU = 225;
-
 
     protected ArrayList<Article> articles;
     protected ArrayList<Article> filteredArticles;
     protected Article targetArticle;
     protected Categorie categorie;
+    protected int hauteurBandeau;
 
     protected ListView listView;
     protected Drawable substitut;
@@ -72,7 +72,6 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
         View view = inflater.inflate(R.layout.fragment_article, null);
 
         this.articles = new ArrayList<>();
-
         this.activity = (BoutiqueActivity)this.getActivity();
 
         try {
@@ -300,7 +299,7 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
         this.bandeau.setVisibility(View.VISIBLE);
         this.filtre.setText(categorie.getNom());
         ConstraintLayout.LayoutParams lp = (ConstraintLayout.LayoutParams) this.listView.getLayoutParams();
-        lp.setMargins(0, HAUTEUR_BANDEAU, 0, 0);
+        lp.setMargins(0, this.bandeau.getMaxHeight(), 0, 0);
         this.listView.setLayoutParams(lp);
     }
 

@@ -32,6 +32,7 @@
     <string name="ajout_ok">Ajout effectué</string>
     <string name="modif_ok">Modification effectuée</string>
     <string name="erreur_serveur">Erreur : Impossible de joindre le serveur</string>
+    <string name="erreur_promotion">Une promotion sur le même article avec la même date de début existe déja</string>
     <string name="champs_non_changé">Aucun changement détécté</string>
 
     <string name="reference">Référence: </string>
