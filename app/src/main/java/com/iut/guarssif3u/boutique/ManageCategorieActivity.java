@@ -185,7 +185,6 @@ public class ManageCategorieActivity extends AppCompatActivity implements Activi
 
     @Override
     public void notifyRetourRequete(Object resultat, String method, boolean error) {
-        this.btnRetour.setEnabled(true);
         if(error){
             this.cacheLoaderAfficheContenu();
             Toast.makeText(this, R.string.erreur_serveur, Toast.LENGTH_LONG).show();
@@ -206,6 +205,7 @@ public class ManageCategorieActivity extends AppCompatActivity implements Activi
                 this.finish();
                 break;
         }
+        this.btnRetour.setEnabled(true);
     }
 
     @Override

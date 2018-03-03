@@ -288,11 +288,11 @@ public class ManagePromotionActivity extends AppCompatActivity implements Activi
     public void cacheLoaderAfficheContenu() {
         this.loader.setVisibility(View.GONE);
         this.btnOk.setVisibility(View.VISIBLE);
+        this.btnRetour.setEnabled(true);
     }
 
     @Override
     public void notifyRetourRequete(Object resultat, String method, boolean error) {
-        this.btnRetour.setEnabled(true);
         this.cacheLoaderAfficheContenu();
         if(error){
             Toast.makeText(this, R.string.erreur_serveur, Toast.LENGTH_LONG).show();
@@ -310,6 +310,7 @@ public class ManagePromotionActivity extends AppCompatActivity implements Activi
                 this.finish();
                 break;
         }
+        this.btnRetour.setEnabled(true);
     }
 
     @Override

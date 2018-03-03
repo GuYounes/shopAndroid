@@ -156,7 +156,6 @@ public class ManageArticleActivity extends AppCompatActivity implements Activite
                 // modification article
                 this.newArticle = new Article(this.newArticle.getId(), reference, nom, tarif, visuel, categorie);
                 ArticleDAO.getInstance(this).update(newArticle);
-                this.btnRetour.setEnabled(false);
                 this.afficheLoader();
             } catch (IllegalArgumentException e) {
                 Toast.makeText(this,e.getMessage(), Toast.LENGTH_LONG).show();
@@ -218,12 +217,14 @@ public class ManageArticleActivity extends AppCompatActivity implements Activite
     public void afficheLoader() {
         this.btnOk.setVisibility(View.GONE);
         this.loader.setVisibility(View.VISIBLE);
+        this.btnRetour.setEnabled(false);
     }
 
     @Override
     public void cacheLoaderAfficheContenu() {
         this.loader.setVisibility(View.GONE);
         this.btnOk.setVisibility(View.VISIBLE);
+        this.btnRetour.setEnabled(true);
     }
 
     @Override
@@ -242,7 +243,6 @@ public class ManageArticleActivity extends AppCompatActivity implements Activite
 
     @Override
     public void notifyRetourRequete(Object resultat, String method, boolean error) {
-        this.btnRetour.setEnabled(true);
         if(error){
             this.cacheLoaderAfficheContenu();
             Toast.makeText(this, R.string.erreur_serveur, Toast.LENGTH_LONG).show();
@@ -266,6 +266,7 @@ public class ManageArticleActivity extends AppCompatActivity implements Activite
                 this.finish();
                 break;
         }
+        this.btnRetour.setEnabled(true);
     }
 
     @Override
