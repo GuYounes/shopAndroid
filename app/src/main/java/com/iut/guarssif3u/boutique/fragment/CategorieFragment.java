@@ -216,6 +216,7 @@ public class CategorieFragment extends Fragment implements ActiviteEnAttenteAvec
     public void onClick(View v) {
         if(v.getId() == R.id.refresh) {
             CategorieDAO.getInstance(this).findAll();
+            this.saveFragmentAndPosition();
             this.afficheLoader();
         } else {
             this.ajouter();

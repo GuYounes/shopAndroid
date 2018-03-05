@@ -185,6 +185,7 @@ public class PromotionFragment extends Fragment implements ActiviteEnAttenteAvec
     public void onClick(View v) {
         if(v.getId() == R.id.refresh) {
             PromotionDAO.getInstance(this).findAll();
+            this.saveFragmentAndPosition();
             this.afficheLoader();
         } else {
             this.ajouter();

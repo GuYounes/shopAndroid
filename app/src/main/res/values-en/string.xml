@@ -1,0 +1,54 @@
+<resources>
+    <string name="app_name">Shop</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="boutique_content">Shop Android \nGUARSSIFI Younes \nSKORA Vincent</string>
+
+    <string name="euro">€</string>
+    <string name="moins">-</string>
+    <string name="pourcent">%</string>
+    <string name="ajouter">Add</string>
+    <string name="retour">Back</string>
+    <string name="du">from</string>
+    <string name="au">to</string>
+
+    <string name="ajout_categorie">Add a category</string>
+    <string name="ajout_article">Add an article</string>
+    <string name="ajout_promotion">Add a promotion</string>
+
+    <string name="supp_categorie_message">Delete this category ?</string>
+    <string name="supp_categorie_titre">Deleting category</string>
+    <string name="supp_article_message">Delete this article</string>
+    <string name="supp_article_titre">Deleting article</string>
+    <string name="supp_promotion_message">Delete this promotion ?</string>
+    <string name="supp_promotion_titre">Deleting promotion</string>
+    <string name="supp_ok">Deletion complete</string>
+    <string name="supp_en_cours">Deleting&#8230;</string>
+
+    <string name="ajout_ok">Addition done</string>
+    <string name="modif_ok">Changes done</string>
+    <string name="erreur_serveur">Error : Impossible de communicate with the server</string>
+    <string name="erreur_promotion">A promotion on the same article with the same begin date already exists</string>
+    <string name="champs_non_changé">No changes detected</string>
+
+    <string name="reference">Reference: </string>
+    <string name="nom">Name: </string>
+    <string name="visuel">Visual: </string>
+    <string name="tarif">Price: </string>
+    <string name="categorie">Category: </string>
+    <string name="article">Article: </string>
+    <string name="date_debut">Begin\'s date: </string>
+    <string name="date_fin">End\'s date: </string>
+    <string name="pourcentage">Discount: </string>
+    <string name="positif">Yes</string>
+    <string name="negatif">No</string>
+    <string name="cancel">Cancel</string>
+    <string name="modifier">Update</string>
+    <string name="modif_article">Update article</string>
+    <string name="modif_categorie">Update category</string>
+    <string name="modif_promotion">Update promotion</string>
+</resources>

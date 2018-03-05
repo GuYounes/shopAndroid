@@ -251,6 +251,7 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
     public void onClick(View v) {
         if(v.getId() == R.id.refresh) {
             ArticleDAO.getInstance(this).findAll();
+            this.saveFragmentAndPosition();
             this.afficheLoader();
         }
         if(v.getId() == R.id.add){
