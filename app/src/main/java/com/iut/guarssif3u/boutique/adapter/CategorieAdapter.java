@@ -45,7 +45,7 @@ public class CategorieAdapter extends ArrayAdapter<Categorie> implements View.On
     protected ImageView btnDelete;
 
     protected ArrayList<Categorie> categories;
-    protected int rowId;
+    protected boolean update;
 
     public CategorieAdapter(FragmentActivity activity, CategorieFragment parent, ArrayList<Categorie> liste, Drawable subsitut){
         super(activity, 0, liste);
@@ -53,6 +53,7 @@ public class CategorieAdapter extends ArrayAdapter<Categorie> implements View.On
         this.activity = activity;
         this.substitut = subsitut;
         this.parent = parent;
+        this.update = false;
     }
 
     @Override
@@ -87,10 +88,12 @@ public class CategorieAdapter extends ArrayAdapter<Categorie> implements View.On
         ImageView iconeVisuel = convertView.findViewById(R.id.visuel);
         iconeVisuel.setTag(position);
 
-        if(iconeVisuel.getDrawable() == null){
-            ImageFromURL<Categorie> ifu = new ImageFromURL<>(this, iconeVisuel, substitut, loader);
+        if(iconeVisuel.getDrawable() == null || this.update){
+            ImageFromURL<Categorie> ifu = new ImageFromURL<>(this, iconeVisuel, substitut, loader, this.update);
             ifu.execute("https://infodb.iutmetz.univ-lorraine.fr/~guarssif3u/ppo/ecommerce/images/categorie/" + categorie.getVisuel());
         }
+
+        if(position == this.categories.size()-1) this.update = false;
 
         return convertView;
     }
@@ -112,6 +115,10 @@ public class CategorieAdapter extends ArrayAdapter<Categorie> implements View.On
                 this.parent.modifier(categorie);
                 break;
         }
+    }
+
+    public void forceUpdate(){
+        this.update = true;
     }
 
 }

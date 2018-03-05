@@ -21,6 +21,7 @@ import com.iut.guarssif3u.boutique.DAO.ArticleDAO;
 import com.iut.guarssif3u.boutique.DAO.CategorieDAO;
 import com.iut.guarssif3u.boutique.HTTPRequest.HTTPRequestMethod;
 import com.iut.guarssif3u.boutique.R;
+import com.iut.guarssif3u.boutique.adapter.ArticleAdapter;
 import com.iut.guarssif3u.boutique.adapter.CategorieAdapter;
 import com.iut.guarssif3u.boutique.ManageCategorieActivity;
 import com.iut.guarssif3u.boutique.dialog.SuppressionDialog;
@@ -215,6 +216,9 @@ public class CategorieFragment extends Fragment implements ActiviteEnAttenteAvec
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.refresh) {
+            CategorieAdapter adapter = ((CategorieAdapter) this.listView.getAdapter());
+            adapter.forceUpdate();
+
             CategorieDAO.getInstance(this).findAll();
             this.saveFragmentAndPosition();
             this.afficheLoader();

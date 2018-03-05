@@ -31,6 +31,7 @@ public class ArticleAdapter extends ArrayAdapter<Article> implements View.OnClic
     protected ImageView btnDelete;
 
     protected ArrayList<Article> articles;
+    protected boolean update;
 
     public ArticleAdapter(FragmentActivity activity, ObjetMetier<Article> parent, ArrayList<Article> liste, Drawable subsitut){
         super(activity, 0, liste);
@@ -38,6 +39,7 @@ public class ArticleAdapter extends ArrayAdapter<Article> implements View.OnClic
         this.articles = liste;
         this.activity = activity;
         this.substitut = subsitut;
+        this.update = false;
     }
 
     @Override
@@ -70,10 +72,12 @@ public class ArticleAdapter extends ArrayAdapter<Article> implements View.OnClic
         tvTarif.setText(String.format("%s %s", Float.toString(article.getTarif()), activity.getResources().getString(R.string.euro)));
 
         ImageView iconeVisuel = convertView.findViewById(R.id.visuel);
-        if(iconeVisuel.getDrawable() == null){
-            ImageFromURL<Article> ifu = new ImageFromURL<>(this, iconeVisuel, substitut, loader);
+        if(iconeVisuel.getDrawable() == null || this.update){
+            ImageFromURL<Article> ifu = new ImageFromURL<>(this, iconeVisuel, substitut, loader, this.update);
             ifu.execute("https://infodb.iutmetz.univ-lorraine.fr/~guarssif3u/ppo/ecommerce/images/article/" + article.getVisuel());
         }
+
+        if(position == this.articles.size()-1) this.update = false;
 
         return convertView;
     }
@@ -91,5 +95,9 @@ public class ArticleAdapter extends ArrayAdapter<Article> implements View.OnClic
                 this.parent.modifier(article);
                 break;
         }
+    }
+
+    public void forceUpdate(){
+        this.update = true;
     }
 }

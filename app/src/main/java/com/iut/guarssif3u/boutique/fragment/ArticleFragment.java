@@ -250,6 +250,9 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.refresh) {
+            ArticleAdapter adapter = ((ArticleAdapter) this.listView.getAdapter());
+            adapter.forceUpdate();
+
             ArticleDAO.getInstance(this).findAll();
             this.saveFragmentAndPosition();
             this.afficheLoader();
@@ -261,6 +264,8 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
             this.cacherBandeau();
             this.filteredArticles.clear();
             this.filteredArticles.addAll(this.articles);
+
+            ((ArticleAdapter) this.listView.getAdapter()).notifyDataSetChanged();
         }
     }
 
@@ -293,7 +298,11 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
             if(article.getCategorie().equals(categorie)) this.filteredArticles.add(article);
         }
 
-        ((BaseAdapter) this.listView.getAdapter()).notifyDataSetChanged();
+        this.afficheLoader();
+        ArticleAdapter adapter = ((ArticleAdapter) this.listView.getAdapter());
+        adapter.forceUpdate();
+        adapter.notifyDataSetChanged();
+        this.cacheLoaderAfficheContenu();
     }
 
     protected void afficherBandeau(){

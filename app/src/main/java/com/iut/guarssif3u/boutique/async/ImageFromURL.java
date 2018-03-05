@@ -31,11 +31,22 @@ public class ImageFromURL<T> extends AsyncTask<String, Integer, Bitmap> {
     protected Drawable substitut;
     protected ProgressBar loader;
 
+    protected boolean force;
+
+    public ImageFromURL(ArrayAdapter<T> adapter, ImageView imageView, Drawable substitut, ProgressBar loader, boolean force){
+        this.adapter = adapter;
+        this.imageView = imageView;
+        this.substitut = substitut;
+        this.loader = loader;
+        this.force = force;
+    }
+
     public ImageFromURL(ArrayAdapter<T> adapter, ImageView imageView, Drawable substitut, ProgressBar loader){
         this.adapter = adapter;
         this.imageView = imageView;
         this.substitut = substitut;
         this.loader = loader;
+        this.force = false;
     }
 
     @Override
@@ -49,17 +60,13 @@ public class ImageFromURL<T> extends AsyncTask<String, Integer, Bitmap> {
 
     @Override
     protected void onPostExecute(Bitmap result){
-        try{
-            int tag = (int)imageView.getTag();
-        } catch (Exception e){
-
-        }
-        if(imageView.getDrawable() == null){
+        if(imageView.getDrawable() == null || this.force){
             if(result == null){
                 imageView.setImageDrawable(substitut);
             }
             else {
                 imageView.setImageBitmap(result);
+                this.force = false;
             }
         }
 
@@ -85,6 +92,7 @@ public class ImageFromURL<T> extends AsyncTask<String, Integer, Bitmap> {
 
     public void afficheLoad(){
         this.loader.setVisibility(View.VISIBLE);
+        this.imageView.setVisibility(View.GONE);
     }
 
     public void cacheLoadDisplayImage(){
