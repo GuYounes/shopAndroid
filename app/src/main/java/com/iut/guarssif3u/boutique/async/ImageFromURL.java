@@ -41,14 +41,6 @@ public class ImageFromURL<T> extends AsyncTask<String, Integer, Bitmap> {
         this.force = force;
     }
 
-    public ImageFromURL(ArrayAdapter<T> adapter, ImageView imageView, Drawable substitut, ProgressBar loader){
-        this.adapter = adapter;
-        this.imageView = imageView;
-        this.substitut = substitut;
-        this.loader = loader;
-        this.force = false;
-    }
-
     @Override
     protected void onPreExecute(){
         this.afficheLoad();

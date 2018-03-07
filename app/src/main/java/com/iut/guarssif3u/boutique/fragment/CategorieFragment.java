@@ -117,7 +117,6 @@ public class CategorieFragment extends Fragment implements ActiviteEnAttenteAvec
         this.categories.addAll(liste);
 
         ((BaseAdapter) this.listView.getAdapter()).notifyDataSetChanged();
-
         this.cacheLoaderAfficheContenu();
 
         // Si nous étions sur ce fragment avant de lancer une autre activité, nous reviendrons sur ce fragment, au bon niveau de scroll

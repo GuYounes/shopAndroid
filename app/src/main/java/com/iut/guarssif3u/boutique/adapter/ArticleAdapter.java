@@ -14,6 +14,7 @@ import com.iut.guarssif3u.boutique.async.ImageFromURL;
 import com.iut.guarssif3u.boutique.fragment.ObjetMetier;
 import com.iut.guarssif3u.boutique.modele.metier.Article;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -31,6 +32,7 @@ public class ArticleAdapter extends ArrayAdapter<Article> implements View.OnClic
     protected ImageView btnDelete;
 
     protected ArrayList<Article> articles;
+    protected boolean[] updated;
     protected boolean update;
 
     public ArticleAdapter(FragmentActivity activity, ObjetMetier<Article> parent, ArrayList<Article> liste, Drawable subsitut){
@@ -40,6 +42,7 @@ public class ArticleAdapter extends ArrayAdapter<Article> implements View.OnClic
         this.activity = activity;
         this.substitut = subsitut;
         this.update = false;
+        this.initializeUpdatedArray(this.articles.size());
     }
 
     @Override
@@ -72,12 +75,22 @@ public class ArticleAdapter extends ArrayAdapter<Article> implements View.OnClic
         tvTarif.setText(String.format("%s %s", Float.toString(article.getTarif()), activity.getResources().getString(R.string.euro)));
 
         ImageView iconeVisuel = convertView.findViewById(R.id.visuel);
+
         if(iconeVisuel.getDrawable() == null || this.update){
-            ImageFromURL<Article> ifu = new ImageFromURL<>(this, iconeVisuel, substitut, loader, this.update);
-            ifu.execute("https://infodb.iutmetz.univ-lorraine.fr/~guarssif3u/ppo/ecommerce/images/article/" + article.getVisuel());
+            if(!this.updated[position]){
+                iconeVisuel.setTag(position);
+                ImageFromURL<Article> ifu = new ImageFromURL<>(this, iconeVisuel, substitut, loader, this.update);
+                ifu.execute("https://infodb.iutmetz.univ-lorraine.fr/~guarssif3u/ppo/ecommerce/images/article/" + article.getVisuel());
+            }
         }
 
-        if(position == this.articles.size()-1) this.update = false;
+        if(this.update){
+            this.update = false;
+            for(int i = 0; i < this.articles.size(); i++){
+                if(!this.updated[i]) this.update = true;
+            }
+        }
+
 
         return convertView;
     }
@@ -97,7 +110,15 @@ public class ArticleAdapter extends ArrayAdapter<Article> implements View.OnClic
         }
     }
 
+    public void initializeUpdatedArray(int size){
+        this.updated = new boolean[size];
+        for(int i = 0; i < this.articles.size(); i++){
+            this.updated[i] = false;
+        }
+    }
+
     public void forceUpdate(){
         this.update = true;
     }
+
 }

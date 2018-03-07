@@ -123,7 +123,10 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
                 case HTTPRequestMethod.DELETE:
                     this.articles.remove(resultat);
                     this.filteredArticles.remove(resultat);
-                    ((BaseAdapter) this.listView.getAdapter()).notifyDataSetChanged();
+
+                    ArticleAdapter adapter = ((ArticleAdapter) this.listView.getAdapter());
+                    adapter.initializeUpdatedArray(this.filteredArticles.size());
+                    adapter.notifyDataSetChanged();
                     Toast.makeText(getContext(), R.string.supp_ok, Toast.LENGTH_LONG).show();
             }
         } catch (NullPointerException e){}
@@ -141,7 +144,9 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
             this.filteredArticles.addAll(this.articles);
         }
 
-        ((BaseAdapter) this.listView.getAdapter()).notifyDataSetChanged();
+        ArticleAdapter adapter = ((ArticleAdapter) this.listView.getAdapter());
+        adapter.initializeUpdatedArray(this.filteredArticles.size());
+        adapter.notifyDataSetChanged();
         this.cacheLoaderAfficheContenu();
 
         // Si nous étions sur ce fragment avant de lancer une autre activité, nous reviendrons sur ce fragment, au bon niveau de scroll
@@ -228,8 +233,6 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
                     this.filteredArticles.add(article);
                 }
             }
-            this.articles.addAll(articles);
-            this.filteredArticles.addAll(articles);
         }
         if(resultCode == ManageArticleActivity.MODIFIE){
             Toast.makeText(getActivity().getApplicationContext(), R.string.modif_ok, Toast.LENGTH_LONG).show();
@@ -238,10 +241,17 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
             this.articles.remove(index);
             this.articles.add(index, article);
 
+            index = this.filteredArticles.indexOf(article);
+            this.filteredArticles.remove(index);
+            this.filteredArticles.add(index, article);
+
             if(this.categorie != null) this.filtrerParCategorie(this.categorie);
         }
 
-        ((BaseAdapter) this.listView.getAdapter()).notifyDataSetChanged();
+        ArticleAdapter adapter = ((ArticleAdapter) this.listView.getAdapter());
+        adapter.forceUpdate();
+        adapter.initializeUpdatedArray(this.filteredArticles.size());
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -265,7 +275,9 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
             this.filteredArticles.clear();
             this.filteredArticles.addAll(this.articles);
 
-            ((ArticleAdapter) this.listView.getAdapter()).notifyDataSetChanged();
+            ArticleAdapter adapter = ((ArticleAdapter) this.listView.getAdapter());
+            adapter.initializeUpdatedArray(this.filteredArticles.size());
+            adapter.notifyDataSetChanged();
         }
     }
 
@@ -298,11 +310,10 @@ public class ArticleFragment extends Fragment implements ActiviteEnAttenteAvecRe
             if(article.getCategorie().equals(categorie)) this.filteredArticles.add(article);
         }
 
-        this.afficheLoader();
         ArticleAdapter adapter = ((ArticleAdapter) this.listView.getAdapter());
         adapter.forceUpdate();
+        adapter.initializeUpdatedArray(this.filteredArticles.size());
         adapter.notifyDataSetChanged();
-        this.cacheLoaderAfficheContenu();
     }
 
     protected void afficherBandeau(){
